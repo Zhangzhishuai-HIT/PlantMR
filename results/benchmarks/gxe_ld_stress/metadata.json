@@ -1,0 +1,9 @@
+{
+  "seed": 20260919,
+  "replicates_per_scenario": 500,
+  "n_snp": 20,
+  "n_environment": 4,
+  "environment_rho": 0.5,
+  "ld_ar1_rho": 0.6,
+  "interpretation": "The diagonal comparator intentionally ignores true SNP-LD and environment correlation."
+}

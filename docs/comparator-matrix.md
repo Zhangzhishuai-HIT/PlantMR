@@ -16,5 +16,7 @@ This matrix defines the v1.1 engineering scope; it is not a claim that any exter
 Key comparator sources:
 
 - MRBIGR: https://doi.org/10.1016/j.xplc.2024.101197
-- MR-GxE: https://doi.org/10.1371/journal.pone.0271933
+- MR-GxE: https://doi.org/10.1093/ije/dyy204
+- MR-GENIUS / interaction-based MR: https://doi.org/10.1371/journal.pone.0271933
 - MR-EILLS: https://www.nature.com/articles/s41467-025-62823-6
+- Nature code/software guidance: https://media.nature.com/full/nature-cms/documents/GuidelinesCodePublication.pdf

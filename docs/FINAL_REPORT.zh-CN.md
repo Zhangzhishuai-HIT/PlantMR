@@ -21,6 +21,7 @@ The final release accepts two summary-statistics tables and a JSON plant metadat
 - 分层流程生成 `environment_results.tsv`、`results.json`和 `report.md`；
 - `run-gxe`真实执行通过，生成GxE摘要、协方差来源、完整网格QC和报告；
 - 500次/场景的零模型、G×E功效和方向性多效性模拟已执行，生成TSV、JSON、PNG和PDF；
+- 额外LD+环境相关压力测试已执行：正确协方差零假阳性率0.044、覆盖率0.956；独立性错配零假阳性率0.126、覆盖率0.874；
 - Arabidopsis真实数据契约案例已执行，包含48个标准QC工具、LD协方差主分析和环境相关敏感性分析；
 - Git工作区在提交前后均通过范围和空白检查。
 

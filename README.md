@@ -16,6 +16,14 @@ PlantMR 是面向植物和作物GWAS/QTL摘要数据的本地因果组学工具�
 - JSON、TSV、Markdown报告；
 - 合成数据、自动化测试、Conda环境和Docker入口。
 
+v1.1.0的可复现证据还包括：
+
+- `pytest -q`：23个测试；
+- `scripts/run_gxe_simulation.py`：零模型、G×E和方向性多效性模拟；
+- `scripts/run_gxe_ld_stress.py`：LD+环境相关错配压力测试；
+- `scripts/benchmark_runtime.py`：验证主机上的运行时间/RSS记录；
+- `LICENSE`：MIT许可。
+
 ## 安装
 
 ```bash
@@ -71,6 +79,8 @@ plantmr run-gxe \
 ```
 
 模型对每个SNP×环境单元计算 `beta_outcome / beta_exposure`，用两列设计 `[1, environment_value]` 做广义最小二乘（GLS）。截距是 `environment_value=0` 时的总体MR效应，斜率是每增加一个环境值单位时MR效应的变化。环境相关矩阵和SNP-LD相关矩阵必须是带符号的相关矩阵；未提供时不会假装独立，而是在报告中写入警告并使用对角近似。
+
+这个模型不是MR-GxE的多效性校正实现，也不把截距解释成多效性项；它估计的是预先指定环境分数下的MR效应异质性。MR-GxE、MR-GENIUS和MR-EILLS是不同估计量，不能由`run-gxe`静默替代。
 
 ## 输入列
 

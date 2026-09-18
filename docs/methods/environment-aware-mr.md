@@ -79,8 +79,10 @@ These assumptions are stronger than simply running independent environment-speci
 - It does not support polyploid dosage, PAV or SV instruments by silently recoding them as SNPs.
 - The model is not a replacement for MR-GxE, MR-GENIUS or MR-EILLS; those methods have different estimands and assumptions and must be compared as separate adapters.
 
-## Simulation gate
+## Simulation gates
 
 The checked benchmark uses 20 instruments, 4 environments, environment correlation 0.5, 500 replicates per scenario and a fixed seed. It includes a null slope, a true slope of 0.25, and directional pleiotropy. It compares the covariance-aware estimator with a diagonal covariance comparator. Results are under `results/benchmarks/gxe_simulation/`; the figure is `docs/figures/gxe_simulation.png` and `.pdf`.
+
+A separate LD stress benchmark uses 20 instruments, 4 environments, environmental correlation 0.5, AR(1) signed LD correlation with rho=0.6, and 500 replicates per scenario. Under the null, correct covariance specification gives rejection 0.044 and 95% coverage 0.956; the independence approximation gives rejection 0.126 and coverage 0.874. These are controlled calibration results, not a guarantee for an arbitrary plant LD panel. The raw and summarized results are under `results/benchmarks/gxe_ld_stress/`.
 
 Simulation results are method verification only. They are not evidence that any maize gene or environmental response is causal.

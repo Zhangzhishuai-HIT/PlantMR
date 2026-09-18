@@ -1,0 +1,4 @@
+task	real_seconds	peak_rss_kb	return_code
+validate	9.7034	126664	0
+gxe_synthetic	9.7974	129736	0
+gxe_arabidopsis	9.9300	133424	0
