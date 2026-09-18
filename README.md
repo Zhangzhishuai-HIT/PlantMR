@@ -1,15 +1,19 @@
-# PlantMR
+# PlantMR v1.0.0
 
-PlantMR 是一个面向植物和作物遗传数据的因果组学工具。当前开发中的 v0.1 提供本地命令行工作流：
+PlantMR 是面向植物和作物GWAS/QTL摘要数据的本地因果组学工具。v1.0.0 的最终产品边界是：在明确声明植物物种、参考组装、环境和LD假设的前提下，完成可复现的摘要数据MR与环境分层MR。
 
-- 植物摘要统计输入规范与元数据；
-- 暴露/结局等位基因协调；
-- 工具变量P值、MAF和F统计量质控；
-- Wald ratio、固定/随机效应IVW、MR-Egger和异质性Q检验；
-- 逐工具变量留一分析；
-- JSON、TSV和Markdown可复现报告。
+## 已实现功能
 
-当前版本是可运行的基础版，不把普通MR结果直接命名为“因果基因”。环境感知MR、SMR/GSMR适配器、多倍体、PAV/SV和泛基因组支持列在 `PLAN.md` 中，尚未伪装成已完成功能。
+- 摘要统计输入规范和植物元数据；
+- effect allele / other allele 协调、反向效应翻转、互补链识别；
+- 回文位点的等位基因频率判定；
+- P值、MAF、F统计量和非有限值检查；
+- 可选LD相关矩阵的贪心clumping（默认r²阈值0.01）；
+- Wald ratio、固定效应IVW、随机效应IVW、MR-Egger；
+- Cochran异质性Q检验、MR-Egger截距和逐工具变量留一分析；
+- `run-stratified` 按环境分别估计结果；
+- JSON、TSV、Markdown报告；
+- 合成数据、自动化测试、Conda环境和Docker入口。
 
 ## 安装
 
@@ -17,9 +21,9 @@ PlantMR 是一个面向植物和作物遗传数据的因果组学工具。当前
 python -m pip install -e .
 ```
 
-Python要求 >= 3.10。
+Python >= 3.10，依赖 NumPy、pandas、SciPy。
 
-## 最小示例
+## 普通摘要MR
 
 ```bash
 plantmr validate \
@@ -31,15 +35,25 @@ plantmr run \
   --exposure examples/synthetic/exposure.tsv \
   --outcome examples/synthetic/outcome.tsv \
   --metadata examples/synthetic/metadata.json \
+  --ld-matrix examples/synthetic/ld.tsv \
   --outdir examples/synthetic/result
 ```
 
-输出：
+`--ld-matrix` 为可选的方阵，第一列为SNP，表头为SNP，数值为带符号LD相关系数。没有LD矩阵时工具会保留分析，但在报告中明确警告没有重新验证工具变量独立性。
 
-- `harmonized.tsv`：等位基因协调后、通过工具变量筛选的数据；
-- `leave_one_out.tsv`：至少保留两个工具变量时的逐工具变量留一结果；
-- `results.json`：机器可读结果、参数、审计计数和警告；
-- `report.md`：中文/英文混合的简洁结果报告。
+## 环境分层MR
+
+暴露和结局文件都需要增加 `environment` 列，同一SNP可以在不同环境重复出现：
+
+```bash
+plantmr run-stratified \
+  --exposure exposure_by_environment.tsv \
+  --outcome outcome_by_environment.tsv \
+  --metadata metadata.json \
+  --outdir stratified_result
+```
+
+输出 `environment_results.tsv` 和 `results.json`，分别保存每个环境的估计、审计计数和警告。
 
 ## 输入列
 
@@ -47,26 +61,26 @@ plantmr run \
 
 `SNP`, `effect_allele`, `other_allele`, `beta`, `se`, `pval`
 
-可选列：
+建议列：
 
-`eaf`, `n`, `trait`, `species`, `assembly`, `tissue`, `stage`, `environment`, `ploidy`
+`eaf`, `n`
 
-`metadata.json` 用于声明物种、参考组装、组织、发育时期、环境、倍性和LD参考面板。例如：
+植物元数据至少应说明：
 
-```json
-{
-  "species": "Zea mays",
-  "assembly": "Zm-B73-REFERENCE-NAM-5.0",
-  "environment": "WW",
-  "tissue": "kernel",
-  "stage": "15_DAP",
-  "ploidy": 2,
-  "ld_panel": "not_supplied_in_synthetic_example"
-}
-```
+`species`, `assembly`, `trait`, `tissue`, `stage`, `environment`, `ploidy`, `ld_panel`
 
-## 科学边界
+## 结果解释边界
 
-v0.1要求用户确认输入已经按研究设计完成GWAS并处理了相关性问题。没有LD参考面板时，PlantMR会显式警告，不会假装完成LD独立性验证。MR结果是遗传工具变量条件下的因果证据，不等于已经完成基因编辑或转基因验证。
+- 工具输出的是工具变量假设下的MR证据，不是自动确认的“因果基因”；
+- MR-Egger和随机效应IVW不能消除所有水平多效性；
+- 环境分层结果是条件性估计，不等同于完整的结构化G×E因果模型；
+- v1.0不内置SMR/HEIDI、GSMR、共定位、精细定位、MVMR、MR-PRESSO或泛基因组SV因果模型；这些需要独立方法和版本锁定，不能静默替代；
+- 没有LD参考面板时，不应把结果解释为已经完成独立工具变量验证；
+- 真实研究仍需要跨群体/跨环境重复和实验功能验证。
 
-详细研究路线、验收门和后续环境感知MR设计见 `PLAN.md`。
+完整的输入契约、统计假设和最终验收记录见：
+
+- `PLAN.md`
+- `docs/methods/estimands.md`
+- `docs/methods/assumptions.md`
+- `docs/FINAL_REPORT.zh-CN.md`

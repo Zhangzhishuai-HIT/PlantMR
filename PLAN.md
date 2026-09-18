@@ -1,14 +1,27 @@
-# PlantMR Causal Genomics Implementation Plan
+# PlantMR Causal Genomics Final Plan and Research Roadmap
 
 > **For Hermes:** Implement task-by-task with strict TDD. Each statistical behavior must have a failing test before production code.
 
-**Goal:** Build a plant-native Mendelian randomization toolkit that turns plant GWAS/QTL summary statistics into harmonized, diagnostically transparent MR results and reproducible reports.
+**Goal:** Deliver and maintain a plant-native Mendelian randomization toolkit that turns plant GWAS/QTL summary statistics into harmonized, diagnostically transparent MR results and reproducible reports.
 
-**Architecture:** A Python package exposes a stable summary-statistics schema, allele harmonization, instrument QC, MR estimators, plant metadata, and report generation. The first vertical slice is a local CLI for two-sample summary MR; later releases add individual-level mixed-model MR, multi-environment causal effects, polyploid/PAV/SV support, and a web interface without changing the core data contract.
+**Architecture:** A Python package exposes a stable summary-statistics schema, allele harmonization, instrument QC, optional LD clumping, MR estimators, plant metadata, environment stratification, and report generation. v1.0 is a complete local CLI product for summary MR; hierarchical G×E, external-method adapters, and polyploid/PAV/SV causal models remain separately versioned research extensions.
 
 **Tech Stack:** Python 3.10+, NumPy, pandas, pytest, argparse/JSON/Markdown; optional R/GCTA/SMR adapters only behind explicit external-tool interfaces.
 
 ---
+
+## Final v1.0 closure
+
+Completed and verified in the repository:
+
+- summary-statistics schema and plant metadata;
+- allele harmonization and palindromic handling;
+- P-value/MAF/F-statistic QC and optional LD clumping;
+- Wald ratio, fixed/random IVW, MR-Egger, heterogeneity and leave-one-out diagnostics;
+- environment-stratified MR;
+- JSON/TSV/Markdown reports, Conda/Docker packaging, tests and CI configuration.
+
+The v1.0 contract deliberately does not claim built-in SMR/GSMR, coloc, MVMR, MR-PRESSO, hierarchical G×E, polyploid dosage, PAV/SV or pan-genome causal inference. Those are research extensions, not hidden TODOs inside the final release.
 
 ## Research route and gates
 
@@ -21,7 +34,7 @@
 
 Gate: a written comparator matrix and a machine-readable input/output schema exist before large implementation.
 
-### Stage R1: v0.1 usable summary-MR tool
+### Stage R1: v1.0 usable summary-MR tool — complete
 
 Scope:
 
@@ -177,11 +190,11 @@ Files:
 - Create: `tests/test_simulation.py`
 - Create: `docs/methods/estimands.md`
 - Create: `docs/methods/assumptions.md`
-- Create: `docs/benchmarks/v0.1.md`
+- Create: `docs/benchmarks/` for future simulation benchmark records
 
 Acceptance:
 
-- Null and causal simulations cover one-sample-independent-instrument assumptions used by v0.1.
+- Future simulation benchmarks must cover weak instruments, pleiotropy, LD and environment-specific effects before any new estimator is released.
 - Type-I error, bias, coverage and power are reported rather than only point estimates.
 - The tool never presents simulation truth as real-data evidence.
 

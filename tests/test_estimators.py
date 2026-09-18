@@ -26,6 +26,20 @@ def test_fixed_ivw_is_weighted_ratio_average():
     assert 0 <= result.pval <= 1
 
 
+def test_one_instrument_ivw_matches_wald_delta_standard_error():
+    table = pd.DataFrame(
+        {
+            "exposure_beta": [0.5],
+            "exposure_se": [0.1],
+            "outcome_beta": [0.2],
+            "outcome_se": [0.05],
+        }
+    )
+    ivw = ivw_fixed(table)
+    wald = wald_ratio(0.5, 0.1, 0.2, 0.05)
+    assert np.isclose(ivw.se, wald.se)
+
+
 def test_ivw_q_pvalue_uses_number_of_instruments_as_degrees_of_freedom():
     table = pd.DataFrame(
         {

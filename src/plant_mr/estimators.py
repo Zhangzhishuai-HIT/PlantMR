@@ -56,10 +56,11 @@ def _check_table(table: pd.DataFrame) -> None:
 def _ratios_and_variances(table: pd.DataFrame):
     bx = table["exposure_beta"].to_numpy(dtype=float)
     by = table["outcome_beta"].to_numpy(dtype=float)
+    sx = table["exposure_se"].to_numpy(dtype=float)
     sy = table["outcome_se"].to_numpy(dtype=float)
-    if np.any(bx == 0) or np.any(sy <= 0):
-        raise ValueError("MR requires nonzero exposure beta and positive outcome se")
-    return by / bx, (sy / bx) ** 2
+    if np.any(bx == 0) or np.any(sx <= 0) or np.any(sy <= 0):
+        raise ValueError("MR requires nonzero exposure beta and positive standard errors")
+    return by / bx, (sy ** 2 / bx ** 2) + (by ** 2 * sx ** 2 / bx ** 4)
 
 
 def wald_ratio(beta_exposure: float, se_exposure: float, beta_outcome: float, se_outcome: float) -> MRResult:
