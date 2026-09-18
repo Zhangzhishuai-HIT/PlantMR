@@ -47,9 +47,9 @@ plantmr run \
 
 ```bash
 plantmr run-stratified \
-  --exposure exposure_by_environment.tsv \
-  --outcome outcome_by_environment.tsv \
-  --metadata metadata.json \
+  --exposure examples/synthetic/environment_exposure.tsv \
+  --outcome examples/synthetic/environment_outcome.tsv \
+  --metadata examples/synthetic/environment_metadata.json \
   --outdir stratified_result
 ```
 
