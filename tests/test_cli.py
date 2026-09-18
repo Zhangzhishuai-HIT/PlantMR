@@ -54,6 +54,7 @@ def test_cli_run_creates_reproducible_outputs(tmp_path):
     assert "Zea mays" in report
     assert "LD" in report
     results = json.loads((output / "results.json").read_text(encoding="utf-8"))
+    assert results["tool_version"] == "1.0.0"
     assert results["audit"]["selected"] == 3
     assert results["methods"][0]["method"] == "ivw_fixed"
     assert {item["method"] for item in results["methods"]} == {"ivw_fixed", "ivw_random", "mr_egger"}
