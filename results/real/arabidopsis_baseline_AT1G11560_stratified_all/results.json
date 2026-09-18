@@ -1,0 +1,162 @@
+{
+  "audits": {
+    "10C": {
+      "excluded_f": 0,
+      "excluded_ld": 0,
+      "excluded_maf": 0,
+      "excluded_pval": 121,
+      "input": 169,
+      "selected": 48
+    },
+    "16C": {
+      "excluded_f": 0,
+      "excluded_ld": 0,
+      "excluded_maf": 0,
+      "excluded_pval": 121,
+      "input": 169,
+      "selected": 48
+    }
+  },
+  "config": {
+    "command": "run-stratified",
+    "f_threshold": 10.0,
+    "input_exposure": "exposure.tsv",
+    "input_outcome": "outcome.tsv",
+    "ld_matrix": null,
+    "ld_r2": 0.01,
+    "maf_threshold": 0.01,
+    "p_threshold": 5e-08,
+    "tool_version": "1.0.0"
+  },
+  "environments": [
+    "10C",
+    "16C"
+  ],
+  "harmonization_dropped": {
+    "10C": {
+      "ambiguous_palindromic": 3,
+      "duplicate": 0,
+      "incompatible_alleles": 0,
+      "missing_outcome": 0
+    },
+    "16C": {
+      "ambiguous_palindromic": 3,
+      "duplicate": 0,
+      "incompatible_alleles": 0,
+      "missing_outcome": 0
+    }
+  },
+  "metadata": {
+    "allele_mapped_snps": 188,
+    "assembly": "TAIR10-compatible 1001 Genomes v3.1",
+    "complete_grid_snps": 172,
+    "environment_values": {
+      "10C": -3.0,
+      "16C": 3.0
+    },
+    "exposure": "GSE80744 normalized expression, log1p, local OLS adjusted for PC1-PC5; same baseline exposure copied to both outcome environments",
+    "expression_accessions": 665,
+    "gene": "AT1G11560",
+    "limitations": [
+      "Application/data-contract demonstration, not independent causal validation.",
+      "Expression and flowering phenotypes share accessions; sample-overlap covariance is not estimated.",
+      "This local OLS re-analysis is not a replacement for published LMM/SMR/HEIDI results.",
+      "Baseline exposure is not an environment-specific eQTL; the GxE slope refers to heterogeneity of the outcome MR relation across FT10/FT16."
+    ],
+    "outcome": "AraPheno FT10 and FT16, local OLS adjusted for PC1-PC5",
+    "species": "Arabidopsis thaliana"
+  },
+  "results": [
+    {
+      "beta": 6.600138214014155,
+      "environment": "10C",
+      "intercept": null,
+      "intercept_pval": null,
+      "intercept_se": null,
+      "method": "ivw_fixed",
+      "nsnp": 48,
+      "pval": 4.999382844686337e-230,
+      "q": 84.89547983512671,
+      "q_pval": 0.0005892759350130559,
+      "se": 0.20382432051141885,
+      "tau2": null
+    },
+    {
+      "beta": 7.084223904717743,
+      "environment": "10C",
+      "intercept": null,
+      "intercept_pval": null,
+      "intercept_se": null,
+      "method": "ivw_random",
+      "nsnp": 48,
+      "pval": 1.0301489791348692e-125,
+      "q": 84.89547983512671,
+      "q_pval": 0.0005892759350130559,
+      "se": 0.2970413853182396,
+      "tau2": 1.6310852070124902
+    },
+    {
+      "beta": 4.2258748005725195,
+      "environment": "10C",
+      "intercept": 2.928131072975006,
+      "intercept_pval": 3.585351502991037e-08,
+      "intercept_se": 0.5314071175085756,
+      "method": "mr_egger",
+      "nsnp": 48,
+      "pval": 3.7579343344292634e-16,
+      "q": null,
+      "q_pval": null,
+      "se": 0.5187593403233974,
+      "tau2": null
+    },
+    {
+      "beta": 8.237873296562102,
+      "environment": "16C",
+      "intercept": null,
+      "intercept_pval": null,
+      "intercept_se": null,
+      "method": "ivw_fixed",
+      "nsnp": 48,
+      "pval": 1.4018485328401513e-173,
+      "q": 97.69926041641187,
+      "q_pval": 2.0452909741383486e-05,
+      "se": 0.2932957361299372,
+      "tau2": null
+    },
+    {
+      "beta": 8.866669207769716,
+      "environment": "16C",
+      "intercept": null,
+      "intercept_pval": null,
+      "intercept_se": null,
+      "method": "ivw_random",
+      "nsnp": 48,
+      "pval": 3.5977061027023646e-84,
+      "q": 97.69926041641187,
+      "q_pval": 2.0452909741383486e-05,
+      "se": 0.45612328483626213,
+      "tau2": 4.513634674328443
+    },
+    {
+      "beta": 6.755197066656308,
+      "environment": "16C",
+      "intercept": 2.016034174730734,
+      "intercept_pval": 0.0102983289294631,
+      "intercept_se": 0.7857797355235735,
+      "method": "mr_egger",
+      "nsnp": 48,
+      "pval": 1.465522899078266e-18,
+      "q": null,
+      "q_pval": null,
+      "se": 0.7683098681272119,
+      "tau2": null
+    }
+  ],
+  "tool_version": "1.0.0",
+  "warnings": [
+    "No LD correlation matrix was supplied; independence/clumping was not re-verified.",
+    "LD panel provenance is absent from metadata.",
+    "Environment-specific estimates are not a substitute for a preregistered G×E causal model.",
+    "MR evidence does not replace colocalization, functional validation, or gene editing."
+  ]
+}

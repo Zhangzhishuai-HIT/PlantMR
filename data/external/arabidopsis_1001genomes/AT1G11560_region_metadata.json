@@ -1,0 +1,11 @@
+{
+  "assembly": "TAIR10-compatible 1001 Genomes v3.1 matrix",
+  "target_position_chr1": 3881093,
+  "window_bp": 20000,
+  "region_rows": 3352,
+  "accessions": 1135,
+  "chromosome1_end_index": 2597825,
+  "source_tar_sha256": "015fec67d8de2048f8a46d7f3abac848ecb1e002340cbdc98eccaae5fc69ca0a",
+  "source_matrix_md5": "6857bf13f35d3e36d555958ef33d7b77",
+  "pc_marker_stride": 1000
+}

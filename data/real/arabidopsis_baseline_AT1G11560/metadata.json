@@ -1,0 +1,20 @@
+{
+  "species": "Arabidopsis thaliana",
+  "assembly": "TAIR10-compatible 1001 Genomes v3.1",
+  "gene": "AT1G11560",
+  "exposure": "GSE80744 normalized expression, log1p, local OLS adjusted for PC1-PC5; same baseline exposure copied to both outcome environments",
+  "outcome": "AraPheno FT10 and FT16, local OLS adjusted for PC1-PC5",
+  "environment_values": {
+    "10C": -3.0,
+    "16C": 3.0
+  },
+  "expression_accessions": 665,
+  "complete_grid_snps": 172,
+  "allele_mapped_snps": 188,
+  "limitations": [
+    "Application/data-contract demonstration, not independent causal validation.",
+    "Expression and flowering phenotypes share accessions; sample-overlap covariance is not estimated.",
+    "This local OLS re-analysis is not a replacement for published LMM/SMR/HEIDI results.",
+    "Baseline exposure is not an environment-specific eQTL; the GxE slope refers to heterogeneity of the outcome MR relation across FT10/FT16."
+  ]
+}

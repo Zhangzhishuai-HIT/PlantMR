@@ -1,0 +1,13 @@
+{
+  "seed": 20260918,
+  "replicates_per_scenario": 500,
+  "n_snp": 20,
+  "n_environment": 4,
+  "environment_correlation": 0.5,
+  "scenarios": [
+    "null",
+    "causal_gxe",
+    "directional_pleiotropy"
+  ],
+  "interpretation": "Simulation-only evidence; no row is a biological result."
+}

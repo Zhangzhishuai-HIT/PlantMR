@@ -1,0 +1,82 @@
+{
+  "audit": {
+    "excluded_f": 106,
+    "excluded_incomplete_qc": 121,
+    "excluded_maf": 0,
+    "excluded_pval": 121,
+    "input_rows": 338,
+    "input_snps": 169,
+    "selected": 48,
+    "selected_rows": 96
+  },
+  "config": {
+    "environment_correlation": "environment_correlation_phenotype_proxy.tsv",
+    "f_threshold": 10.0,
+    "ld_correlation": "ld_correlation.tsv",
+    "maf_threshold": 0.01,
+    "p_threshold": 5e-08
+  },
+  "harmonization": {
+    "dropped": {
+      "10C": {
+        "ambiguous_palindromic": 3,
+        "duplicate": 0,
+        "incompatible_alleles": 0,
+        "missing_outcome": 0
+      },
+      "16C": {
+        "ambiguous_palindromic": 3,
+        "duplicate": 0,
+        "incompatible_alleles": 0,
+        "missing_outcome": 0
+      }
+    },
+    "environments": [
+      "10C",
+      "16C"
+    ]
+  },
+  "metadata": {
+    "allele_mapped_snps": 188,
+    "assembly": "TAIR10-compatible 1001 Genomes v3.1",
+    "complete_grid_snps": 172,
+    "environment_values": {
+      "10C": -3.0,
+      "16C": 3.0
+    },
+    "exposure": "GSE80744 normalized expression, log1p, local OLS adjusted for PC1-PC5; same baseline exposure copied to both outcome environments",
+    "expression_accessions": 665,
+    "gene": "AT1G11560",
+    "limitations": [
+      "Application/data-contract demonstration, not independent causal validation.",
+      "Expression and flowering phenotypes share accessions; sample-overlap covariance is not estimated.",
+      "This local OLS re-analysis is not a replacement for published LMM/SMR/HEIDI results.",
+      "Baseline exposure is not an environment-specific eQTL; the GxE slope refers to heterogeneity of the outcome MR relation across FT10/FT16."
+    ],
+    "outcome": "AraPheno FT10 and FT16, local OLS adjusted for PC1-PC5",
+    "species": "Arabidopsis thaliana"
+  },
+  "method": "gxe_ivw",
+  "result": {
+    "covariance_rank": 62,
+    "covariance_source": "environment_and_ld_correlation",
+    "intercept": 1.8027414988087394,
+    "intercept_pval": 0.003737402266728353,
+    "intercept_se": 0.62173893775761,
+    "method": "gxe_ivw",
+    "n_environment": 2,
+    "n_observation": 96,
+    "n_snp": 48,
+    "q": 189.66571763984393,
+    "q_df": 94,
+    "q_pval": 1.9709162285210512e-08,
+    "slope": -0.08227708305167697,
+    "slope_pval": 0.21491365508982158,
+    "slope_se": 0.06634355476730719
+  },
+  "tool_version": "1.1.0",
+  "warnings": [
+    "GxE-IVW is a summary-statistics GLS model under supplied covariance assumptions.",
+    "MR evidence does not replace colocalization, functional validation, or gene editing."
+  ]
+}

@@ -1,0 +1,2 @@
+6857bf13f35d3e36d555958ef33d7b77  imputed_snps_binary.hdf5
+d15c69f64c29be8a5caecbce19107eae  kinship_ibs_mac5.hdf5

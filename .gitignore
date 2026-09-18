@@ -6,3 +6,5 @@ __pycache__/
 build/
 dist/
 examples/**/result/
+data/external/arabidopsis_1001genomes/*.tar.gz
+data/external/arabidopsis_1001genomes/**/*.hdf5

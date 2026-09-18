@@ -1,0 +1,9 @@
+{
+  "series": "GSE54680",
+  "target": "AT1G11560",
+  "input_samples": 323,
+  "successes": 323,
+  "failures": 0,
+  "workers": 8,
+  "source": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE54680"
+}

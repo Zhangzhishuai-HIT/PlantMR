@@ -1,6 +1,6 @@
-# PlantMR v1.0.0
+# PlantMR v1.1.0
 
-PlantMR 是面向植物和作物GWAS/QTL摘要数据的本地因果组学工具。v1.0.0 的最终产品边界是：在明确声明植物物种、参考组装、环境和LD假设的前提下，完成可复现的摘要数据MR与环境分层MR。
+PlantMR 是面向植物和作物GWAS/QTL摘要数据的本地因果组学工具。v1.1.0 的产品边界是：在明确声明植物物种、参考组装、环境和LD假设的前提下，完成可复现的摘要数据MR、环境分层MR和协方差感知的环境交互MR。
 
 ## 已实现功能
 
@@ -12,6 +12,7 @@ PlantMR 是面向植物和作物GWAS/QTL摘要数据的本地因果组学工具�
 - Wald ratio、固定效应IVW、随机效应IVW、MR-Egger；
 - Cochran异质性Q检验、MR-Egger截距和逐工具变量留一分析；
 - `run-stratified` 按环境分别估计结果；
+- `run-gxe` 用完整SNP×环境网格和显式协方差估计总体效应与环境交互斜率；
 - JSON、TSV、Markdown报告；
 - 合成数据、自动化测试、Conda环境和Docker入口。
 
@@ -55,6 +56,22 @@ plantmr run-stratified \
 
 输出 `environment_results.tsv` 和 `results.json`，分别保存每个环境的估计、审计计数和警告。
 
+## 协方差感知的环境交互MR
+
+暴露和结局文件都需要增加 `environment` 列；暴露文件还需要每个环境唯一的数值列 `environment_value`。同一SNP必须在所有环境都有记录，工具会在每个环境内协调等位基因，再只保留所有环境均通过P值、F统计量和MAF筛选的SNP。
+
+```bash
+plantmr run-gxe \
+  --exposure examples/synthetic/environment_exposure.tsv \
+  --outcome examples/synthetic/environment_outcome.tsv \
+  --metadata examples/synthetic/environment_metadata.json \
+  --environment-correlation environment_corr.tsv \
+  --ld-correlation ld_corr.tsv \
+  --outdir gxe_result
+```
+
+模型对每个SNP×环境单元计算 `beta_outcome / beta_exposure`，用两列设计 `[1, environment_value]` 做广义最小二乘（GLS）。截距是 `environment_value=0` 时的总体MR效应，斜率是每增加一个环境值单位时MR效应的变化。环境相关矩阵和SNP-LD相关矩阵必须是带符号的相关矩阵；未提供时不会假装独立，而是在报告中写入警告并使用对角近似。
+
 ## 输入列
 
 必需列：
@@ -84,3 +101,4 @@ plantmr run-stratified \
 - `docs/methods/estimands.md`
 - `docs/methods/assumptions.md`
 - `docs/FINAL_REPORT.zh-CN.md`
+- `docs/methods/environment-aware-mr.md`

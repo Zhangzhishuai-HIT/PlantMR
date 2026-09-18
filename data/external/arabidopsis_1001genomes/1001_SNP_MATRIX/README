@@ -1,0 +1,4 @@
+1001 Imputed SNP matrix + kinship
+
+Kinship (kinship_ibs_mac5.hdf5) and SNP matrix (imputed_snps_binary.hdf5) 
+were generated with h5py (https://github.com/h5py/h5py)  using the lzf filter (https://github.com/h5py/h5py/tree/master/lzf). 

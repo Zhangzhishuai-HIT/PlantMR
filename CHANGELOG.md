@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.1.0 - covariance-aware plant GxE extension
+
+- 增加 `run-gxe` 命令和 `gxe_ivw` API。
+- 使用完整SNP×环境网格估计总体MR效应和环境交互斜率。
+- 可显式输入环境相关矩阵和SNP-LD相关矩阵；缺失时在报告中警告并使用对角近似。
+- 增加500次/场景的零模型、G×E功效和方向性多效性模拟，模拟结果与真实植物数据分开保存。
+- 明确MR-GxE、MR-EILLS等现有方法，PlantMR不宣称环境交互MR理论首创。
+
 ## 1.0.0 - final release
 
 - 固化摘要统计输入契约和植物元数据契约。

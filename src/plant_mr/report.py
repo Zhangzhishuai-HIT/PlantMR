@@ -6,7 +6,7 @@ from typing import Iterable, Mapping
 def write_report(outdir: Path, metadata: Mapping, audit: Mapping, dropped: Mapping,
                  methods: Iterable[Mapping], warnings: Iterable[str], config: Mapping) -> None:
     payload = {
-        "tool_version": str(config.get("tool_version", "1.0.0")),
+        "tool_version": str(config.get("tool_version", "1.1.0")),
         "metadata": dict(metadata),
         "audit": dict(audit),
         "harmonization_dropped": dict(dropped),

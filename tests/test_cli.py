@@ -54,7 +54,7 @@ def test_cli_run_creates_reproducible_outputs(tmp_path):
     assert "Zea mays" in report
     assert "LD" in report
     results = json.loads((output / "results.json").read_text(encoding="utf-8"))
-    assert results["tool_version"] == "1.0.0"
+    assert results["tool_version"] == "1.1.0"
     assert results["audit"]["selected"] == 3
     assert results["methods"][0]["method"] == "ivw_fixed"
     assert {item["method"] for item in results["methods"]} == {"ivw_fixed", "ivw_random", "mr_egger"}
@@ -92,3 +92,31 @@ def test_cli_ld_matrix_is_applied_and_audited(tmp_path):
     result = json.loads((output / "results.json").read_text(encoding="utf-8"))
     assert result["audit"]["excluded_ld"] == 1
     assert result["audit"]["selected"] == 2
+
+
+def test_cli_gxe_writes_covariance_aware_result(tmp_path):
+    exposure, outcome, metadata = _write_inputs(tmp_path)
+    exp = pd.read_csv(exposure, sep="\t")
+    out = pd.read_csv(outcome, sep="\t")
+    exp = pd.concat([exp.assign(environment="WW", environment_value=-1.0),
+                     exp.assign(environment="DS", environment_value=1.0)], ignore_index=True)
+    out = pd.concat([out.assign(environment="WW", environment_value=-1.0),
+                     out.assign(environment="DS", environment_value=1.0)], ignore_index=True)
+    exp.to_csv(exposure, sep="\t", index=False)
+    out.to_csv(outcome, sep="\t", index=False)
+    env_corr = tmp_path / "environment_corr.tsv"
+    env_corr.write_text("environment\tDS\tWW\nDS\t1\t0.4\nWW\t0.4\t1\n", encoding="utf-8")
+    ld = tmp_path / "ld_corr.tsv"
+    ld.write_text("SNP\ts1\ts2\ts3\ns1\t1\t0\t0\ns2\t0\t1\t0\ns3\t0\t0\t1\n", encoding="utf-8")
+    output = tmp_path / "gxe"
+    assert main([
+        "run-gxe", "--exposure", str(exposure), "--outcome", str(outcome),
+        "--metadata", str(metadata), "--outdir", str(output),
+        "--environment-correlation", str(env_corr), "--ld-correlation", str(ld),
+    ]) == 0
+    result = json.loads((output / "results.json").read_text(encoding="utf-8"))
+    assert result["method"] == "gxe_ivw"
+    assert result["result"]["n_environment"] == 2
+    assert result["result"]["covariance_source"] == "environment_and_ld_correlation"
+    assert (output / "gxe_harmonized.tsv").exists()
+    assert (output / "report.md").exists()

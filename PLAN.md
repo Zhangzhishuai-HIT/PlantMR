@@ -4,7 +4,7 @@
 
 **Goal:** Deliver and maintain a plant-native Mendelian randomization toolkit that turns plant GWAS/QTL summary statistics into harmonized, diagnostically transparent MR results and reproducible reports.
 
-**Architecture:** A Python package exposes a stable summary-statistics schema, allele harmonization, instrument QC, optional LD clumping, MR estimators, plant metadata, environment stratification, and report generation. v1.0 is a complete local CLI product for summary MR; hierarchical G×E, external-method adapters, and polyploid/PAV/SV causal models remain separately versioned research extensions.
+**Architecture:** A Python package exposes a stable summary-statistics schema, allele harmonization, instrument QC, optional LD clumping, MR estimators, plant metadata, environment stratification, covariance-aware G×E GLS, report generation, and tests. v1.1 is a complete local CLI product for summary MR plus a narrowly defined environment-slope estimand; external-method adapters and polyploid/PAV/SV causal models remain separately versioned research extensions.
 
 **Tech Stack:** Python 3.10+, NumPy, pandas, pytest, argparse/JSON/Markdown; optional R/GCTA/SMR adapters only behind explicit external-tool interfaces.
 
@@ -57,17 +57,17 @@ Gate: synthetic end-to-end test passes; malformed allele orientation and weak-in
 
 Gate: identical input plus identical configuration gives byte-stable machine-readable results; external-tool failures are surfaced rather than silently replaced.
 
-### Stage R3: environment- and tissue-aware MR
+### Stage R3: environment- and tissue-aware MR — implemented with bounded scope
 
 Research hypothesis: causal effects of molecular traits on crop phenotypes can vary across environments, tissues, or developmental stages, and this heterogeneity should be estimated rather than averaged away.
 
-- Define environment-specific beta/se inputs and covariance metadata.
-- Implement pooled effect, condition-specific effect, heterogeneity, and effect-by-environment models.
+- Define environment-specific beta/se inputs and covariance metadata. [done]
+- Implement pooled effect, condition-specific effect, heterogeneity, and effect-by-environment models. [done for linear two-parameter GLS]
 - Add cross-environment replication and sign-consistency reports.
 - Compare against plant multi-environment GWAS/meta-analysis baselines and ordinary MR.
 - Simulate realistic plant LD, population structure, sample overlap, weak instruments, and directional pleiotropy.
 
-Gate: calibrated type-I error under null simulations, power curves across instrument strengths, and a held-out real crop dataset with predefined success criteria.
+Gate: calibrated type-I error under null simulations, power curves across instrument strengths, and a held-out real crop dataset with predefined success criteria. The current Arabidopsis case is an executable application demonstration with explicit sample-overlap and local-OLS limitations; it is not independent causal validation.
 
 ### Stage R4: plant genome complexity
 
