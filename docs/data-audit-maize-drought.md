@@ -59,6 +59,26 @@ PRJNA637522约0.75 TB，CRA002002本身约812 GB。方法学第一阶段不应�
 
 只有在这些文件无法恢复、必须从原始reads重建时，才启动大规模原始数据下载和CPU重算。
 
+## NCBI运行清单实测结果
+
+已从 NCBI SRA `PRJNA637522` 直接取得 `runinfo`，并在项目内生成：
+
+- `data/audit/PRJNA637522_runinfo.csv`
+- `data/audit/PRJNA637522_sample_manifest.tsv`
+- `data/audit/PRJNA637522_sample_summary.json`
+
+实际结果：
+
+- 685个运行；
+- 224个基因型ID；
+- WW=228、WS1=229、WS2=228；
+- 627个普通样本，58个`_REP`重复样本；
+- 685个运行均为Illumina paired-end RNA-seq；
+- 论文筛选规则：当前仍需核对论文“224个accessions”和NCBI运行清单中重复/缺失组合之间的最终样本纳入规则；
+- 清单解析后没有环境缺失，但只有185个基因型在三种环境中均出现，不能直接把685条运行当作完整平衡设计。
+
+这一步发现了一个必须写进正式方法的边界：NCBI raw-run数量、论文最终627个高质量转录组和224个accession不是同一个统计单位，后续必须按论文过滤规则和样本ID映射重建，不能只按运行数统计样本量。
+
 ## 下一道数据Gate
 
 必须形成一份机器清单，至少包含：

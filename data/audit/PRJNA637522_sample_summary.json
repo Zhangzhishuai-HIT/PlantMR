@@ -1,0 +1,23 @@
+{
+  "source": "PRJNA637522 SRA runinfo",
+  "n_runs": 685,
+  "n_manifest_rows": 685,
+  "environment_counts": {
+    "WS1": 229,
+    "WS2": 228,
+    "WW": 228
+  },
+  "n_genotypes": 224,
+  "genotypes_with_all_three": 185,
+  "replicate_flag_counts": {
+    "": 627,
+    "REP": 58
+  },
+  "library_layout": {
+    "PAIRED": 685
+  },
+  "platform": {
+    "ILLUMINA": 685
+  },
+  "missing_environment": 0
+}
