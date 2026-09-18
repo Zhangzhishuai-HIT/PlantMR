@@ -12,7 +12,7 @@ The final release accepts two summary-statistics tables and a JSON plant metadat
 
 本次最终验收实际返回：
 
-- `pytest -q`：22 passed；
+- `pytest -q`：23 passed；
 - `python -m compileall -q src`：通过；
 - 安装后的 `plantmr validate`：通过；
 - 安装后的普通 `plantmr run`：通过，LD clumping 移除1个高LD工具变量并保留2个；

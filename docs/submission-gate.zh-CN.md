@@ -19,7 +19,7 @@
 ### 软件
 
 - [x] v1.1.0版本号、CHANGELOG、Python包入口同步；
-- [x] 22个自动化测试通过；
+- [x] 23个自动化测试通过；
 - [x] `compileall`通过；
 - [x] 普通MR、环境分层MR、GxE CLI均真实执行；
 - [x] JSON/TSV/Markdown输出；
