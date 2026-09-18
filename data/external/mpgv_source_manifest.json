@@ -1,0 +1,21 @@
+{
+  "source": "https://github.com/whweve/MPGV",
+  "commit": "6b378ba7ea74cf6c73f2a9faeffa546ce72b6430",
+  "license": "GPL-3.0",
+  "script": "20170509 MR analysis.R",
+  "upstream_readme": "The script does not ship with demo data.",
+  "required_environment_inputs": ["ww", "70", "58"],
+  "required_file_roles": {
+    "FPKM": ["ww_genes_FPKM_197.txt", "70_FPKM_186.txt", "58_FPKM_189.txt"],
+    "phenotype_expression": ["WW_50_0.05_normalizeQuantiles.qqnorm", "70_50_0.05_normalizeQuantiles.qqnorm", "58_50_0.05_normalizeQuantiles.qqnorm"],
+    "top_eqtl": ["ww.csv", "70.csv", "58.csv"],
+    "snp_genotype": ["WW_eGWAS.genotype", "70-70R_eGWAS.genotype", "58-58R_eGWAS.genotype"],
+    "outcome_blup": ["pheno2-r.txt with inbred and BLUP columns"]
+  },
+  "method_notes": [
+    "Selects one most significant eQTL SNP per gene from the top-eQTL table.",
+    "Fits genotype-expression and genotype-outcome linear models.",
+    "Computes a ratio estimate and chi-square P value.",
+    "Uses the original paper's 2SLS-style single-instrument workflow, not a multi-SNP LD-aware model."
+  ]
+}
