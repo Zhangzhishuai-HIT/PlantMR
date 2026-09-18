@@ -1,0 +1,9 @@
+{
+  "species": "Zea mays",
+  "assembly": "Zm-B73-REFERENCE-NAM-5.0",
+  "environment": "WW",
+  "tissue": "kernel",
+  "stage": "15_DAP",
+  "ploidy": 2,
+  "ld_panel": "not_supplied_in_synthetic_example"
+}
