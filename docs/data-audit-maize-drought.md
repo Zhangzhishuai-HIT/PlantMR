@@ -79,6 +79,18 @@ PRJNA637522约0.75 TB，CRA002002本身约812 GB。方法学第一阶段不应�
 
 这一步发现了一个必须写进正式方法的边界：NCBI raw-run数量、论文最终627个高质量转录组和224个accession不是同一个统计单位，后续必须按论文过滤规则和样本ID映射重建，不能只按运行数统计样本量。
 
+## Figshare补充表核验
+
+论文补充Excel已通过Figshare公开API取得并保存到 `data/external/figshare/`：
+
+- 原始Excel约6.34 MB，SHA-256已写入同目录README；
+- Table S2解析出73,579条eQTL记录；
+- Table S5过滤脚注后得到97条MR候选基因记录；
+- Table S5包含原论文报告的treatment、表达效应和P值；
+- Table S2包含lead SNP、treatment、P值和候选基因注释，但不包含完整beta/SE摘要统计。
+
+因此，当前已经可以做原论文候选清单复现和标签审计，但还不能只靠S2直接重算新的环境MR效应。新方法仍需要恢复完整eQTL/GWAS beta、SE、EAF和样本/环境协方差，或从表达矩阵、基因型和表型重新构建。
+
 ## 下一道数据Gate
 
 必须形成一份机器清单，至少包含：

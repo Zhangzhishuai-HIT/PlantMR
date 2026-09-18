@@ -1,0 +1,98 @@
+Trait (B73_v4_gene_model)	Treatments	Lead_SNPa	Effect of expression on survival rate	TbMR	P-valuec	B73_v3_gene_modeld	Arabidopsis homolog gene IDe	Arabidopsis gene symbole	Arabidopsis anotatione
+Zm00001d053919	WW ; WS1 ; WS2	- ; - ; 4_243648711	- ; - ; -11.61	- ; - ; 19.10	- ; - ; 1.24E-05	GRMZM2G060669	AT2G45640.1	ATSAP18,SAP18	SIN3 associated polypeptide P18
+Zm00001d053648	WW ; WS1 ; WS2	- ; - ; 4_202391070	- ; - ; 15.75	- ; - ; 18.80	- ; - ; 1.45E-05				
+Zm00001d053404	WW ; WS1 ; WS2	4_230294228 ; - ; -	14.34 ; - ; -	19.22 ; - ; -	1.17E-05 ; - ; -	GRMZM2G060896	AT5G53120.1	ATSPDS3,SPDS3,SPMS	spermidine synthase 3
+Zm00001d053053	WW ; WS1 ; WS2	- ; - ; 4_210734231	- ; - ; -7.49	- ; - ; 17.46	- ; - ; 2.94E-05				
+Zm00001d052938	WW ; WS1 ; WS2	- ; - ; 4_205515613	- ; - ; -9.94	- ; - ; 20.26	- ; - ; 6.76E-06	GRMZM2G079477	AT3G55010.1	ATPURM,PUR5	phosphoribosylformylglycinamidine cyclo-ligase, chloroplast / phosphoribosyl-aminoimidazole synthetase / AIR synthase (PUR5)
+Zm00001d052886	WW ; WS1 ; WS2	- ; - ; 4_203407216	- ; - ; -12.28	- ; - ; 20.65	- ; - ; 5.53E-06				
+Zm00001d052321	WW ; WS1 ; WS2	4_187091504 ; 4_187040316 ; -	-14.86 ; -17.67 ; -	17.95 ; 22.86 ; -	2.26E-05 ; 1.74E-06 ; -	GRMZM2G088847	AT5G01650.1		Tautomerase/MIF superfamily protein
+Zm00001d051561	WW ; WS1 ; WS2	- ; 4_162800555 ; -	- ; -16.35 ; -	- ; 22.80 ; -	- ; 1.8E-06 ; -	GRMZM2G110287	AT5G66450.1		Phosphatidic acid phosphatase (PAP2) family protein
+Zm00001d051554	WW ; WS1 ; WS2	4_162657346 ; 4_162898448 ; 4_162657066	-9.39 ; -9.36 ; -8.96	22.13 ; 20.86 ; 26.72	2.54E-06 ; 4.95E-06 ; 2.35E-07	GRMZM2G126505	AT4G19230.1	CYP707A1	cytochrome P450, family 707, subfamily A, polypeptide 1
+Zm00001d051553	WW ; WS1 ; WS2	- ; - ; 4_162534046	- ; - ; -9.61	- ; - ; 23.91	- ; - ; 1.01E-06	GRMZM2G147780	AT1G31650.1	ATROPGEF14,ROPGEF14	RHO guanyl-nucleotide exchange factor 14
+Zm00001d051552	WW ; WS1 ; WS2	4_162887485 ; 4_162657647 ; 4_162882968	-9.80 ; -12.20 ; -9.64	20.19 ; 23.91 ; 27.53	7.02E-06 ; 1.01E-06 ; 1.55E-07	GRMZM2G147701	AT5G19200.1		NAD(P)-binding Rossmann-fold superfamily protein
+Zm00001d051550	WW ; WS1 ; WS2	- ; - ; 4_162654720	- ; - ; -12.23	- ; - ; 18.36	- ; - ; 1.82E-05	GRMZM2G138683	AT1G30650.1	AR411,ATWRKY14,WRKY14	WRKY DNA-binding protein 14
+Zm00001d051544	WW ; WS1 ; WS2	- ; 4_162685794 ; -	- ; -17.59 ; -	- ; 27.76 ; -	- ; 1.37E-07 ; -	GRMZM2G421513	AT5G17160.1		
+Zm00001d049582	WW ; WS1 ; WS2	- ; - ; 4_36131913	- ; - ; -11.15	- ; - ; 27.75	- ; - ; 1.38E-07				
+Zm00001d048841	WW ; WS1 ; WS2	- ; - ; 4_6223157	- ; - ; 10.89	- ; - ; 17.98	- ; - ; 2.24E-05	GRMZM2G154523	AT2G26560.1	PLA IIA,PLA2A,PLP2	phospholipase A 2A
+Zm00001d048441	WW ; WS1 ; WS2	- ; 9_156575033 ; -	- ; 14.75 ; -	- ; 18.44 ; -	- ; 1.75E-05 ; -	AC149810.2_FG004	AT4G19100.1		Protein of unknown function (DUF3464)
+Zm00001d048332	WW ; WS1 ; WS2	- ; 9_154588984 ; -	- ; -14.21 ; -	- ; 17.95 ; -	- ; 2.27E-05 ; -	GRMZM2G058133	AT5G15300.1		Pentatricopeptide repeat (PPR) superfamily protein
+Zm00001d047612	WW ; WS1 ; WS2	- ; 9_137007448 ; 9_137007448	- ; 8.30 ; 9.88	- ; 19.77 ; 20.98	- ; 8.71E-06 ; 4.64E-06	GRMZM2G024293	AT4G21800.1	QQT2	P-loop containing nucleoside triphosphate hydrolases superfamily protein
+Zm00001d047532	WW ; WS1 ; WS2	9_134017761 ; - ; -	-13.13954568 ; - ; -	17.47 ; - ; -	2.92E-05 ; - ; -	GRMZM2G005984	AT1G03600.1	PSB27	photosystem II family protein
+Zm00001d047517	WW ; WS1 ; WS2	9_133211466 ; 9_133211466 ; 9_133211466	13.67 ; 12.82 ; 10.02	20.78 ; 23.57 ; 26.50	5.15E-06 ; 1.2E-06 ; 2.63E-07	GRMZM2G023992	AT3G10915.2		Reticulon family protein
+Zm00001d047446	WW ; WS1 ; WS2	- ; - ; 9_130346209	- ; - ; 10.87	- ; - ; 17.30	- ; - ; 3.19E-05	GRMZM2G157749	AT3G07950.1		rhomboid protein-related
+Zm00001d047256	WW ; WS1 ; WS2	9_124516738 ; 9_124516738 ; -	-8.43 ; -7.77 ; -	19.64 ; 20.20 ; -	9.36E-06 ; 6.99E-06 ; -	GRMZM2G044180	AT5G11850.1		Protein kinase superfamily protein
+Zm00001d046883	WW ; WS1 ; WS2	9_108781363 ; - ; -	10.45 ; - ; -	18.08 ; - ; -	2.12E-05 ; - ; -	GRMZM2G331015	AT2G15910.2		CSL zinc finger domain-containing protein
+Zm00001d046745	WW ; WS1 ; WS2	- ; 9_103123435 ; -	- ; 13.68 ; -	- ; 18.19 ; -	- ; 2E-05 ; -	GRMZM2G041068	AT2G18690.1		
+Zm00001d046592	WW ; WS1 ; WS2	9_97676127 ; 9_97676127 ; 9_97676127	-11.02 ; -9.27 ; -10.41	23.27 ; 17.68 ; 20.03	1.41E-06 ; 2.61E-05 ; 7.61E-06	GRMZM2G105167	AT2G25310.1		Protein of unknown function (DUF2012)
+Zm00001d046591	WW ; WS1 ; WS2	- ; 9_97237537 ; 9_97603984	- ; 14.18 ; 19.39	- ; 20.51 ; 17.62	- ; 5.93E-06 ; 2.7E-05	GRMZM2G170927	AT1G15690.1	ATAVP3,AtVHP1;1,AVP-3,AVP1	Inorganic H pyrophosphatase family protein
+Zm00001d046586	WW ; WS1 ; WS2	- ; - ; 9_97426546	- ; - ; 14.60	- ; - ; 19.72	- ; - ; 8.96E-06	GRMZM2G087635	AT1G80510.1		Transmembrane amino acid transporter family protein
+Zm00001d046581	WW ; WS1 ; WS2	- ; 9_96896047 ; -	- ; 13.81 ; -	- ; 24.09 ; -	- ; 9.2E-07 ; -	GRMZM2G348666	AT4G10320.1		tRNA synthetase class I (I, L, M and V) family protein
+Zm00001d045759	WW ; WS1 ; WS2	9_35862829 ; - ; -	11.27 ; - ; -	17.75 ; - ; -	2.52E-05 ; - ; -				
+Zm00001d045650	WW ; WS1 ; WS2	- ; 9_30986628 ; -	- ; -17.61 ; -	- ; 19.11 ; -	- ; 1.24E-05 ; -	GRMZM2G058407	AT3G49100.1		Signal recognition particle, SRP9/SRP14 subunit
+Zm00001d045649	WW ; WS1 ; WS2	9_30986628 ; 9_30986628 ; -	-12.81 ; -12.23 ; -	19.51 ; 17.90 ; -	1E-05 ; 2.33E-05 ; -	GRMZM2G060163	AT3G27060.1	ATTSO2,TSO2	Ferritin/ribonucleotide reductase-like family protein
+Zm00001d045606	WW ; WS1 ; WS2	9_28460730 ; 9_28459872 ; 9_28460730	9.99 ; 10.60 ; 14.16	17.52 ; 17.32 ; 19.06	2.84E-05 ; 3.16E-05 ; 1.27E-05	GRMZM2G052389	AT4G16760.1	ACX1,ATACX1	acyl-CoA oxidase 1
+Zm00001d045581	WW ; WS1 ; WS2	9_27258991 ; - ; -	10.32 ; - ; -	25.92 ; - ; -	3.57E-07 ; - ; -	GRMZM2G135052	AT5G52660.2		Homeodomain-like superfamily protein
+Zm00001d045369	WW ; WS1 ; WS2	- ; - ; 9_21682786	- ; - ; 21.92	- ; - ; 19.81	- ; - ; 8.56E-06	GRMZM2G077040			
+Zm00001d045194	WW ; WS1 ; WS2	- ; 9_15741227 ; -	- ; 15.99 ; -	- ; 17.90 ; -	- ; 2.33E-05 ; -	GRMZM2G005080	AT3G22110.1	PAC1	20S proteasome alpha subunit C1
+Zm00001d045190	WW ; WS1 ; WS2	- ; - ; 9_21679842	- ; - ; 117.22	- ; - ; 20.96	- ; - ; 4.7E-06				
+Zm00001d045147	WW ; WS1 ; WS2	- ; 9_14539344 ; -	- ; 15.40 ; -	- ; 17.39 ; -	- ; 3.05E-05 ; -	GRMZM2G000371	AT1G27900.1		RNA helicase family protein
+Zm00001d044235	WW ; WS1 ; WS2	- ; 3_222548354 ; -	- ; -8.13 ; -	- ; 19.27 ; -	- ; 1.13E-05 ; -	GRMZM2G125571			
+Zm00001d044130	WW ; WS1 ; WS2	3_219981702 ; - ; -	22.85 ; - ; -	23.37 ; - ; -	1.34E-06 ; - ; -	GRMZM2G130358	AT1G75350.1	emb2184	Ribosomal protein L31
+Zm00001d044127	WW ; WS1 ; WS2	- ; 3_219917091 ; -	- ; 12.14 ; -	- ; 17.83 ; -	- ; 2.41E-05 ; -	GRMZM2G160032	AT3G48670.1	IDN2,RDM12	XH/XS domain-containing protein
+Zm00001d043902	WW ; WS1 ; WS2	- ; 3_213346225 ; 3_213346225	- ; -16.30 ; -17.05	- ; 21.27 ; 29.70	- ; 3.99E-06 ; 5.04E-08	GRMZM2G080583	AT3G14180.1		sequence-specific DNA binding transcription factors
+Zm00001d042113	WW ; WS1 ; WS2	3_152712590 ; 3_152712766 ; -	9.73 ; 11.97 ; -	17.65 ; 18.84 ; -	2.66E-05 ; 1.42E-05 ; -	GRMZM2G368738	AT4G12600.2		Ribosomal protein L7Ae/L30e/S12e/Gadd45 family protein
+Zm00001d041180	WW ; WS1 ; WS2	- ; - ; 3_102862542	- ; - ; 41.36	- ; - ; 19.46	- ; - ; 1.03E-05	GRMZM2G377079	AT5G55390.1	EDM2	ENHANCED DOWNY MILDEW 2
+Zm00001d040235	WW ; WS1 ; WS2	- ; - ; 3_33208830	- ; - ; 9.91	- ; - ; 18.56	- ; - ; 1.65E-05	GRMZM2G328893	AT2G43750.1	ACS1,ATCS-B,CPACS1,OASB	O-acetylserine (thiol) lyase B
+Zm00001d037507	WW ; WS1 ; WS2	- ; - ; 6_127631631	- ; - ; -9.57	- ; - ; 21.43	- ; - ; 3.67E-06				
+Zm00001d036123	WW ; WS1 ; WS2	- ; - ; 6_73403731	- ; - ; -16.92	- ; - ; 25.92	- ; - ; 3.56E-07	GRMZM2G163798	AT1G75500.1	WAT1	Walls Are Thin 1
+Zm00001d035598	WW ; WS1 ; WS2	- ; 6_35988108 ; 6_35988108	- ; 13.81 ; 12.99	- ; 20.02 ; 25.01	- ; 7.68E-06 ; 5.71E-07	GRMZM2G034598	AT3G55260.1	ATHEX2,HEXO1	beta-hexosaminidase 1
+Zm00001d033830	WW ; WS1 ; WS2	- ; - ; 1_275161434	- ; - ; 8.98	- ; - ; 19.39	- ; - ; 1.07E-05	GRMZM2G150166	AT4G34490.1	ATCAP1,CAP 1,CAP1	cyclase associated protein 1
+Zm00001d033593	WW ; WS1 ; WS2	- ; - ; 1_46899423	- ; - ; 11.40	- ; - ; 18.27	- ; - ; 1.92E-05				
+Zm00001d032376	WW ; WS1 ; WS2	- ; - ; 1_224516646	- ; - ; -8.32	- ; - ; 18.17	- ; - ; 2.02E-05	GRMZM2G077068	AT3G07040.1	RPM1,RPS3	NB-ARC domain-containing disease resistance protein
+Zm00001d032366	WW ; WS1 ; WS2	- ; - ; 1_224035716	- ; - ; -14.18	- ; - ; 17.40	- ; - ; 3.03E-05	GRMZM2G101130	AT5G38060.1		
+Zm00001d032346	WW ; WS1 ; WS2	- ; 1_223350600 ; 1_223334036	- ; 19.55 ; 16.60	- ; 21.72 ; 26.84	- ; 3.15E-06 ; 2.21E-07				
+Zm00001d031790	WW ; WS1 ; WS2	1_201948841 ; - ; -	14.92 ; - ; -	20.86 ; - ; -	4.94E-06 ; - ; -				
+Zm00001d031747	WW ; WS1 ; WS2	1_200678053 ; 1_200676997 ; 1_200676931	-12.77 ; -12.67 ; -11.41	18.99 ; 19.91 ; 20.07	1.31E-05 ; 8.14E-06 ; 7.48E-06	GRMZM2G318475	AT3G55620.1	emb1624	Translation initiation factor IF6
+Zm00001d031334	WW ; WS1 ; WS2	1_186379766 ; 1_186379530 ; 1_186379766	-11.05 ; -12.99 ; -12.12	20.68 ; 26.85 ; 28.55	5.44E-06 ; 2.2E-07 ; 9.12E-08				
+Zm00001d031323	WW ; WS1 ; WS2	- ; - ; 1_185981643	- ; - ; 25.90	- ; - ; 37.36	- ; - ; 9.8E-10	GRMZM2G080652	AT5G56280.1	CSN6A	COP9 signalosome subunit 6A
+Zm00001d030129	WW ; WS1 ; WS2	- ; - ; 1_107865657	- ; - ; -9.15	- ; - ; 17.51	- ; - ; 2.85E-05				
+Zm00001d030117	WW ; WS1 ; WS2	- ; 1_107091466 ; -	- ; 13.64 ; -	- ; 17.87 ; -	- ; 2.36E-05 ; -				
+Zm00001d030074	WW ; WS1 ; WS2	1_103634021 ; - ; -	-22.43 ; - ; -	17.32 ; - ; -	3.17E-05 ; - ; -	GRMZM2G003318	AT2G35490.1		Plastid-lipid associated protein PAP / fibrillin family protein
+Zm00001d029410	WW ; WS1 ; WS2	- ; 1_69016371 ; -	- ; 14.09 ; -	- ; 17.99 ; -	- ; 2.23E-05 ; -	GRMZM2G120587	AT2G27920.1	SCPL51	serine carboxypeptidase-like 51
+Zm00001d028813	WW ; WS1 ; WS2	- ; 1_47400984 ; -	- ; -13.60 ; -	- ; 17.29 ; -	- ; 3.21E-05 ; -	GRMZM2G095043	AT5G11240.1		transducin family protein / WD-40 repeat family protein
+Zm00001d028140	WW ; WS1 ; WS2	- ; - ; 1_23976250	- ; - ; -7.46	- ; - ; 18.08	- ; - ; 2.12E-05	AC205725.3_FG010	AT3G55510.1	RBL	Noc2p family
+Zm00001d027487	WW ; WS1 ; WS2	- ; - ; 1_6319549	- ; - ; -12.50	- ; - ; 17.94	- ; - ; 2.28E-05	GRMZM2G031859	AT2G17510.1	EMB2763	ribonuclease II family protein
+Zm00001d027486	WW ; WS1 ; WS2	- ; - ; 1_6320066	- ; - ; -14.21	- ; - ; 18.16	- ; - ; 2.03E-05	GRMZM2G032219	AT2G39200.1	ATMLO12,MLO12	Seven transmembrane MLO family protein
+Zm00001d027257	WW ; WS1 ; WS2	1_561550 ; - ; -	8.49 ; - ; -	18.86 ; - ; -	1.41E-05 ; - ; -	GRMZM2G330436	AT5G46560.1		
+Zm00001d027256	WW ; WS1 ; WS2	1_561550 ; 1_564086 ; -	7.71 ; 7.77 ; -	17.86 ; 17.88 ; -	2.38E-05 ; 2.35E-05 ; -				
+Zm00001d027142	WW ; WS1 ; WS2	9_97237055 ; - ; 9_97237101	12.12 ; - ; 16.50	18.12 ; - ; 25.07	2.08E-05 ; - ; 5.51E-07				
+Zm00001d022924	WW ; WS1 ; WS2	- ; - ; 1_224116303	- ; - ; -8.44	- ; - ; 20.95	- ; - ; 4.73E-06				
+Zm00001d022649	WW ; WS1 ; WS2	1_561550 ; - ; -	9.475373134 ; - ; -	18.56 ; - ; -	1.64E-05 ; - ; -				
+Zm00001d022194	WW ; WS1 ; WS2	- ; - ; 7_172576834	- ; - ; 15.15	- ; - ; 17.38	- ; - ; 3.06E-05	GRMZM2G407361	AT5G43822.1		Pentatricopeptide repeat (PPR) superfamily protein
+Zm00001d021565	WW ; WS1 ; WS2	7_156185074 ; - ; 7_156183181	-7.41 ; - ; -8.06	17.78 ; - ; 20.03	2.48E-05 ; - ; 7.62E-06	GRMZM2G009370	AT1G48590.2		Calcium-dependent lipid-binding (CaLB domain) family protein
+Zm00001d021232	WW ; WS1 ; WS2	- ; 7_146620215 ; -	- ; 7.96 ; -	- ; 17.81 ; -	- ; 2.44E-05 ; -	GRMZM2G417963	AT4G33495.1	RPD1	Ubiquitin carboxyl-terminal hydrolase family protein
+Zm00001d020568	WW ; WS1 ; WS2	- ; 7_122397310 ; -	- ; 16.30 ; -	- ; 18.21 ; -	- ; 1.98E-05 ; -	GRMZM2G416943	AT2G29100.1	ATGLR2.9,GLR2.9	glutamate receptor 2.9
+Zm00001d020563	WW ; WS1 ; WS2	7_122333052 ; - ; -	7.74 ; - ; -	19.09 ; - ; -	1.25E-05 ; - ; -	GRMZM2G302673	AT2G29120.1	ATGLR2.7,GLR2.7	glutamate receptor 2.7
+Zm00001d019946	WW ; WS1 ; WS2	- ; 7_78561176 ; -	- ; 14.54 ; -	- ; 21.83 ; -	- ; 2.97E-06 ; -				
+Zm00001d018192	WW ; WS1 ; WS2	5_216138908 ; 5_216138908 ; 5_216138908	10.90 ; 12.64 ; 12.04	17.54 ; 18.85 ; 19.48	2.82E-05 ; 1.41E-05 ; 1.02E-05	GRMZM2G113418	AT4G08280.1		Thioredoxin superfamily protein
+Zm00001d017378	WW ; WS1 ; WS2	- ; - ; 5_193867484	- ; - ; -16.43	- ; - ; 19.01402052	- ; - ; 1.3E-05	GRMZM2G169994	AT4G03510.1	ATRMA1,RMA1	RING membrane-anchor 1
+Zm00001d016167	WW ; WS1 ; WS2	- ; 5_148252320 ; -	- ; 10.47 ; -	- ; 19.18 ; -	- ; 1.19E-05 ; -				
+Zm00001d014543	WW ; WS1 ; WS2	- ; 5_194108031 ; 5_194089158	- ; 14.58 ; 14.68	- ; 18.05 ; 19.73	- ; 2.16E-05 ; 8.9E-06				
+Zm00001d013976	WW ; WS1 ; WS2	- ; 5_26950052 ; 5_26950052	- ; 10.45 ; 13.20	- ; 19.11 ; 21.57	- ; 1.23E-05 ; 3.4E-06	GRMZM2G006246	AT3G02680.1	ATNBS1,NBS1	nijmegen breakage syndrome 1
+Zm00001d012296	WW ; WS1 ; WS2	- ; - ; 8_145258652	- ; - ; 13.11	- ; - ; 18.16	- ; - ; 2.03E-05	GRMZM2G168079	AT1G49720.2	ABF1	abscisic acid responsive element-binding factor 1
+Zm00001d011773	WW ; WS1 ; WS2	- ; - ; 8_161295098	- ; - ; -13.90	- ; - ; 18.28	- ; - ; 1.91E-05	GRMZM2G438673	AT5G57300.1		S-adenosyl-L-methionine-dependent methyltransferases superfamily protein
+Zm00001d011530	WW ; WS1 ; WS2	8_153645284 ; 8_153626202 ; 8_153645284	-9.48 ; -7.34 ; -9.04	22.60 ; 17.63 ; 21.53	2E-06 ; 2.69E-05 ; 3.48E-06				
+Zm00001d011204	WW ; WS1 ; WS2	- ; - ; 8_142922050	- ; - ; 12.67	- ; - ; 27.30	- ; - ; 1.74E-07	GRMZM2G116083	AT1G55160.2		
+Zm00001d009657	WW ; WS1 ; WS2	- ; - ; 8_74613871	- ; - ; 13.46	- ; - ; 19.10	- ; - ; 1.24E-05	GRMZM2G105712	AT3G44590.1		60S acidic ribosomal protein family
+Zm00001d009365	WW ; WS1 ; WS2	- ; - ; 8_59321902	- ; - ; -20.98	- ; - ; 26.79	- ; - ; 2.27E-07	GRMZM2G324903	AT3G14770.1		Nodulin MtN3 family protein
+Zm00001d009364	WW ; WS1 ; WS2	8_59886825 ; 8_58313104 ; 8_60084275	-12.27 ; -13.53 ; -17.86	17.99 ; 20.74 ; 20.44	2.23E-05 ; 5.27E-06 ; 6.17E-06	GRMZM2G006554	AT2G40860.1		protein kinase family protein / protein phosphatase 2C ( PP2C) family protein
+Zm00001d008916	WW ; WS1 ; WS2	8_25254636 ; - ; -	-10.45 ; - ; -	20.20 ; - ; -	6.98E-06 ; - ; -	GRMZM2G014091	AT2G18740.1		Small nuclear ribonucleoprotein family protein
+Zm00001d008817	WW ; WS1 ; WS2	- ; 8_21499149 ; -	- ; 16.81 ; -	- ; 23.92 ; -	- ; 1E-06 ; -	GRMZM2G112681	AT4G29230.1	anac075,NAC075	NAC domain containing protein 75
+Zm00001d008388	WW ; WS1 ; WS2	8_6992735 ; 8_6992852 ; 8_6992782	-11.01 ; -9.28 ; -10.19	19.95 ; 17.40 ; 17.47	7.97E-06 ; 3.03E-05 ; 2.92E-05	GRMZM2G147587	AT1G24265.1		Protein of unknown function (DUF1664)
+Zm00001d007708	WW ; WS1 ; WS2	2_237887716 ; - ; -	11.30 ; - ; -	19.66 ; - ; -	9.23E-06 ; - ; -				
+Zm00001d007667	WW ; WS1 ; WS2	- ; - ; 2_237887878	- ; - ; -10.66	- ; - ; 18.64	- ; - ; 1.58E-05	GRMZM2G360494	AT4G03090.2		sequence-specific DNA binding;sequence-specific DNA binding transcription factors
+Zm00001d004517	WW ; WS1 ; WS2	- ; 2_115918099 ; -	- ; -15.65 ; -	- ; 18.29 ; -	- ; 1.9E-05 ; -	GRMZM2G162353	AT2G17975.1		zinc finger (Ran-binding) family protein
+Zm00001d004021	WW ; WS1 ; WS2	- ; 2_45569895 ; -	- ; -54.18 ; -	- ; 20.41 ; -	- ; 6.24E-06 ; -	GRMZM2G027219	AT1G08550.1	AVDE1,NPQ1	non-photochemical quenching 1
+Zm00001d003617	WW ; WS1 ; WS2	- ; 2_50622583 ; -	- ; -21.22 ; -	- ; 20.63 ; -	- ; 5.56E-06 ; -				
+Zm00001d001972	WW ; WS1 ; WS2	- ; - ; 2_3718119	- ; - ; 8.00	- ; - ; 18.65	- ; - ; 1.57E-05	GRMZM2G009653	AT1G06010.1		
+ENSRNA049478426	WW ; WS1 ; WS2	9_128470469 ; 9_128470469 ; -	-9.40 ; -9.71 ; -	22.31 ; 18.91 ; -	2.32E-06 ; 1.37E-05 ; -				
