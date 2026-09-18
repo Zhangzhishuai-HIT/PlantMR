@@ -203,7 +203,7 @@ def gxe_ivw(
     params = information_inverse @ (design.T @ covariance_inverse @ ratios)
     residual = ratios - design @ params
     q = float(residual.T @ covariance_inverse @ residual)
-    q_df = max(int(len(ratios) - 2), 1)
+    q_df = max(int(covariance_rank - np.linalg.matrix_rank(design)), 1)
     covariance_source = "diagonal_ratio_variance"
     if environment_correlation is not None and ld_correlation is not None:
         covariance_source = "environment_and_ld_correlation"

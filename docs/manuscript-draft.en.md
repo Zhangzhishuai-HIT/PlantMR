@@ -78,9 +78,9 @@ Under directional pleiotropy, the covariance-aware slope mean was 0.00014 when t
 
 ### Arabidopsis case
 
-The primary LD-aware, diagonal-environment-covariance run used 48 SNPs and 96 SNP×environment observations. The pooled intercept was 2.3601 (SE 0.4685, P=4.72×10−7). The environment slope was −0.03705 (SE 0.15617, P=0.81249). Residual heterogeneity was significant (Q=192.89, df=94, P=8.42×10−9).
+The primary LD-aware, diagonal-environment-covariance run used 48 SNPs and 96 SNP×environment observations. The pooled intercept was 2.3601 (SE 0.4685, P=4.72×10−7). The environment slope was −0.03705 (SE 0.15617, P=0.81249). Residual heterogeneity was significant (Q=192.89, df=60, P=7.33×10−16).
 
-When the phenotype-correlation proxy was supplied as an environment covariance sensitivity, the intercept was 1.8027 (SE 0.6217, P=0.00374) and the slope was −0.08228 (SE 0.06634, P=0.21491); residual Q remained significant (P=1.97×10−8). The independent, LD-unaware stratified IVW comparator produced 6.6001 at 10°C and 8.2379 at 16°C, with significant heterogeneity in both environments. These differences show why the LD and covariance assumptions must be visible in the report.
+When the phenotype-correlation proxy was supplied as an environment covariance sensitivity, the intercept was 1.8027 (SE 0.6217, P=0.00374) and the slope was −0.08228 (SE 0.06634, P=0.21491); residual Q remained significant (P=2.27×10−15). The independent, LD-unaware stratified IVW comparator produced 6.6001 at 10°C and 8.2379 at 16°C, with significant heterogeneity in both environments. These differences show why the LD and covariance assumptions must be visible in the report.
 
 The Arabidopsis case is an application and data-contract demonstration. It is not an independent causal validation: the expression and flowering datasets share accessions, exposure–outcome covariance was not estimated, local OLS differs from the published mixed model, and residual heterogeneity remains.
 

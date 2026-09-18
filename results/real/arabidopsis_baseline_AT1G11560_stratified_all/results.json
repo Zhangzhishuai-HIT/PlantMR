@@ -26,7 +26,7 @@
     "ld_r2": 0.01,
     "maf_threshold": 0.01,
     "p_threshold": 5e-08,
-    "tool_version": "1.0.0"
+    "tool_version": "1.1.0"
   },
   "environments": [
     "10C",
@@ -152,7 +152,7 @@
       "tau2": null
     }
   ],
-  "tool_version": "1.0.0",
+  "tool_version": "1.1.0",
   "warnings": [
     "No LD correlation matrix was supplied; independence/clumping was not re-verified.",
     "LD panel provenance is absent from metadata.",

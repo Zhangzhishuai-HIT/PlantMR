@@ -55,7 +55,7 @@ If either matrix is omitted, its factor is an identity matrix. The estimator is
 
 `theta_hat = (X' V^-1 X)^-1 X' V^-1 r`,
 
-with `X=[1,z]`. The reported standard errors come from `(X'V^-1X)^-1`; the report also records the covariance source and numerical rank. Cochran-style residual heterogeneity is `Q=(r-X theta)'V^-1(r-X theta)` with `n-2` degrees of freedom.
+with `X=[1,z]`. The reported standard errors come from `(X'V^-1X)^-1`; the report also records the covariance source and numerical rank. Cochran-style residual heterogeneity is `Q=(r-X theta)'V^-1(r-X theta)` with `rank(V)-rank(X)` degrees of freedom when the covariance is singular (and the usual `n-2` value when it is full rank).
 
 The current implementation uses a first-order summary-statistics approximation. It does not estimate cross-environment exposure–outcome covariance from individual-level data. If the exposure and outcome associations are estimated in overlapping samples, the user must provide an appropriate covariance model or treat the result as sensitivity analysis rather than exact inference.
 

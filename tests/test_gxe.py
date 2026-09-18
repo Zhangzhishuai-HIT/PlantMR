@@ -64,3 +64,12 @@ def test_gxe_rejects_incomplete_environment_grid():
     table = _table().query("not (SNP == 's3' and environment == 'REC')")
     with pytest.raises(ValueError, match="complete environment grid"):
         gxe_ivw(table)
+
+
+def test_gxe_q_degrees_of_freedom_uses_covariance_rank_for_singular_ld():
+    table = _table()
+    snps = ["s1", "s2", "s3"]
+    ld = pd.DataFrame(np.ones((3, 3)), index=snps, columns=snps)
+    result = gxe_ivw(table, ld_correlation=ld)
+    assert result.covariance_rank == 3
+    assert result.q_df == 1

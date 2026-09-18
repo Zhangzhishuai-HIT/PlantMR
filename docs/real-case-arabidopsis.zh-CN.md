@@ -49,7 +49,7 @@ Command output directory: `results/real/arabidopsis_baseline_AT1G11560_diag/`.
 - LD covariance supplied; environment-error covariance not supplied;
 - intercept: 2.3601, SE 0.4685, P=4.72×10^-7;
 - environment slope: −0.03705, SE 0.1562, P=0.8125;
-- residual Q=192.89 on 94 degrees of freedom, P=8.42×10^-9.
+- residual Q=192.89 on 60 degrees of freedom, P=7.33×10^-16.
 
 ### Environment-correlation sensitivity
 
@@ -59,7 +59,7 @@ The proxy correlation is the Pearson correlation of FT10 and FT16 across 1,122 s
 
 - intercept: 1.8027, SE 0.6217, P=0.00374;
 - environment slope: −0.08228, SE 0.06634, P=0.2149;
-- residual Q=189.67 on 94 degrees of freedom, P=1.97×10^-8.
+- residual Q=189.67 on 60 degrees of freedom, P=2.27×10^-15.
 
 ### Independent-environment baseline
 
