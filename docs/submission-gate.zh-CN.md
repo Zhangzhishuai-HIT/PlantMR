@@ -9,7 +9,7 @@
 - 可安装、可测试的植物/作物摘要MR软件版本；
 - 有明确统计估计量、环境/LD协方差输入和限制；
 - 有500次/场景模拟、PNG/PDF图和机器结果；
-- 有4张论文图、6张结果/方法表和35篇可核验科学参考文献；
+- 有4张论文图、8张编号表和36篇可核验科学参考文献；
 - 有一个真实Arabidopsis数据契约案例和公开来源回执；
 - 有完整英文投稿稿 `docs/PlantMR_submission_manuscript.docx` 和同步Markdown稿 `docs/manuscript-draft.en.md`；
 - 有包含代码、测试、环境、图表和稿件的 `release/PlantMR_v1.1.0-paper_source.zip`。
@@ -52,11 +52,11 @@
 
 ### 投稿稿件
 
-- [x] Abstract、Introduction、Results、Discussion、Methods、Declarations和Availability齐全；
+- [x] Structured abstract（Background/Results/Conclusions）、Background、Implementation、Results、Discussion、Conclusions、Availability、List of abbreviations和Declarations齐全；
 - [x] Discussion扩展为主要发现、方法比较、协方差意义、植物应用、局限和验证路线；
-- [x] 所有正文引用编号均能对应35条参考文献；
-- [x] 35个DOI全部通过Crossref解析；
-- [x] DOCX结构、4张嵌入图、10个表格和源码归档通过机器检查；
+- [x] 所有正文引用编号均能对应36条参考文献；
+- [x] 36个DOI全部通过Crossref解析；
+- [x] DOCX结构、4张嵌入图、12个表格和源码归档通过机器检查；
 - [x] 旧的错误DOI `10.1093/ije/dyx233` 和 `10.1038/s41467-018-03940-5` 已删除。
 
 ## 投稿前仍不能伪造的事项

@@ -10,11 +10,21 @@ Submission manuscript | PlantMR v1.1.0-paper | 19 September 2026
 
 # Abstract
 
-Plant Mendelian randomization (MR) analyses can connect molecular traits to agronomic phenotypes, but plant reference assemblies, environmental strata, linkage disequilibrium (LD) and sample overlap are often left implicit. We developed PlantMR 1.1, an open-source local toolkit with a plant summary-statistics schema, allele harmonization, instrument quality control, signed LD handling, standard MR estimators and a narrowly defined environment-slope analysis. The environment-slope estimator models SNP-by-environment ratio estimates by generalized least squares, accepts signed environment and SNP-LD correlation matrices, requires a complete SNP-by-environment grid and reports covariance rank. In 500-replicate simulations with environmental correlation, the covariance-aware estimator had a null rejection rate of 0.054 and 95% coverage of 0.946; under a true slope of 0.25, its mean estimate was 0.2498, bias −0.00018, coverage 0.952 and power 1.00. In an additional LD stress test with AR(1) LD correlation rho=0.6, correct covariance modeling gave a null rejection rate of 0.044 and coverage of 0.956, whereas an independence approximation gave 0.126 and 0.874. Directional pleiotropy remained a limitation: the slope was approximately unbiased, but the pooled intercept was biased by 0.216. We executed an Arabidopsis data-contract case using AT1G11560 baseline expression, 1001 Genomes local genotypes and flowering-time phenotypes at 10°C and 16°C. Forty-eight LD-correlated instruments passed prespecified exposure thresholds. The primary LD-aware analysis estimated a slope of −0.0371 (SE 0.1562, P=0.812), with residual heterogeneity (Q=192.89, df=60, P=7.33×10−16). This case demonstrates reproducibility and diagnostics, not independent causal validation. PlantMR is positioned as a plant-focused implementation and audit workflow, not as the first environment-interaction MR method.
+## Background
+
+Plant Mendelian randomization (MR) can connect molecular traits to agronomic phenotypes, but plant reference assemblies, environmental strata, linkage disequilibrium (LD) and sample overlap are often implicit. We developed PlantMR 1.1 as a local, open-source toolkit for auditable plant and crop summary-statistics MR with a narrowly defined environment-effect-heterogeneity analysis.
+
+## Results
+
+PlantMR validates plant metadata and summary statistics, harmonizes alleles, enforces complete SNP-by-environment instrument grids, accepts signed SNP-LD and environment-correlation matrices, and reports rank-aware heterogeneity diagnostics. In 500-replicate simulations, the covariance-aware estimator had a null rejection rate of 0.054 and 95% coverage of 0.946; for a true environment slope of 0.25, the mean estimate was 0.2498, bias −0.00018, coverage 0.952 and power 1.00. In an LD stress test with AR(1) LD correlation ρ=0.6, correct covariance modeling gave rejection 0.044 and coverage 0.956, whereas an independence approximation gave 0.126 and 0.874. A real Arabidopsis data-contract case retained 48 LD-correlated instruments for AT1G11560 and flowering time at 10°C and 16°C. The primary slope was −0.0371 (SE 0.1562, P=0.812), with residual heterogeneity Q=192.89, df=60, P=7.33×10−16.
+
+## Conclusions
+
+PlantMR provides a reproducible plant-focused implementation and audit workflow. The simulations support covariance-aware calibration under the tested scenarios, but the Arabidopsis case is a software demonstration rather than independent causal validation. PlantMR does not replace colocalization, formal interaction-MR methods, mixed-model GWAS or functional validation.
 
 Keywords: Mendelian randomization; plant genomics; crop genomics; genotype–environment interaction; eQTL; linkage disequilibrium; summary statistics; reproducibility
 
-# Introduction
+# Background
 
 Mendelian randomization uses genetic associations as instrumental variables to estimate genetically proxied exposure effects on outcomes.[1,2] The relevance, exchangeability and exclusion-restriction assumptions provide the foundation for interpretation, but their implementation depends on the study population, phenotype, molecular exposure and data-generating design. Summary-statistics MR has enabled large-scale analyses using public genome-wide association studies (GWAS) and platforms such as MR-Base,[10] yet summarized associations are also vulnerable to weak instruments, horizontal pleiotropy, LD and sample overlap.[3–9]
 
@@ -24,7 +34,7 @@ Existing plant-oriented software demonstrates the value of integrated workflows.
 
 Here we develop PlantMR as a plant/crop summary-statistics software and reporting workflow. The contribution is deliberately narrower than a new general theory of interaction MR: (i) an explicit plant metadata and summary-statistics contract; (ii) complete SNP-by-environment instrument selection; (iii) signed LD and environment-correlation inputs; (iv) rank-aware heterogeneity diagnostics; and (v) a reproducible local implementation with simulations and a real Arabidopsis data-contract case. We evaluate calibration, LD-misspecification risk and failure boundaries rather than claiming a new causal gene discovery.
 
-# Results
+# Implementation
 
 ## Study questions and workflow
 
@@ -60,6 +70,28 @@ Table 1. PlantMR components, boundaries and audit outputs.
 
 The command-line interface exposes validate, run, run-stratified and run-gxe commands. The software does not silently substitute SMR, GSMR, colocalization, MVMR, MR-PRESSO, MR-GxE, MR-GENIUS or MR-EILLS.
 
+## Comparison with related tools
+
+Following the structure used in recent Plant Methods software articles, we compare PlantMR with functionally adjacent tools before presenting the benchmarks. This is a scope and contract comparison based on the cited software papers and public documentation, not a fabricated head-to-head runtime experiment. PlantMR’s distinct target is the combination of plant metadata, complete SNP-by-environment grids, signed LD/environment covariance and auditable summary-statistics outputs.
+
+Table 2. Functional positioning against related tools. “Not the primary focus” means that a tool may support a related analysis but does not expose the same contract or estimand.
+
+| Tool | Primary scope | Plant context | Environment / LD handling | Evidence used here |
+
+| --- | --- | --- | --- | --- |
+
+| PlantMR 1.1 | Plant summary-statistics MR and environment-effect heterogeneity | Native metadata, assembly, tissue, stage, ploidy and LD provenance | Signed LD and optional environment covariance; complete grid required | Simulations, LD stress and Arabidopsis case |
+
+| MRBIGR [17] | Population-scale multi-omics, GWAS and MR toolbox | Maize and rice case studies; broad multi-omics workflow | Different MR/network estimands; not the present G×E covariance contract | Literature scope comparison |
+
+| MR-Base / TwoSampleMR [10] | Human GWAS repository and two-sample MR automation | Human-oriented public GWAS ecosystem | Standard MR sensitivity analyses; plant metadata not the primary contract | Literature scope comparison |
+
+| metaGE [25] | Multi-environment GWAS meta-analysis | Plant METs and G×E QTL detection | Models heterogeneity and environmental covariates at GWAS meta-analysis level | Estimand comparison; not reimplemented |
+
+| MAPtools [36] | Mapping-by-sequencing and QTL-Seq command-line analysis | Plant-tested, multi-species mapping workflows | Variant/QTL mapping rather than summary-statistics MR covariance | Workflow/software-article comparison |
+
+
+
 ## Environment-effect-heterogeneity model
 
 For SNP j and environment k, the ratio estimate is r_jk = beta_y,jk / beta_x,jk. Let z_k be a prespecified numeric environmental score. PlantMR fits r_jk = theta_0 + theta_1 z_k + epsilon_jk. theta_0 is the genetically proxied effect at z=0 and theta_1 is the change in the MR effect per unit increase in z. This is an effect-heterogeneity model. Its intercept is not the MR-GxE pleiotropy intercept and is not interpreted as a correction for horizontal pleiotropy.
@@ -68,11 +100,41 @@ The first-order delta variance is v_jk = se_y,jk² / beta_x,jk² + beta_y,jk² s
 
 The model requires a complete environment grid for each SNP and retains only SNPs that pass exposure P value, F statistic and MAF requirements in every environment. This prevents an apparent environmental slope from being caused solely by changing instrument composition. Missing environment correlation is not treated as verified independence; the report states that a diagonal approximation was used.
 
+## Implementation details
+
+The study was organized as a software/methods evaluation. We did not use the real-data case to select a favorable estimator, define a new gene-level claim or tune simulation truth. The main claims concern input validation, covariance-aware estimation and diagnostic transparency.
+
+### Input schema and harmonization
+
+Required summary columns were SNP, effect_allele, other_allele, beta, se and pval. Optional columns were eaf and n. The schema rejects empty/duplicate SNP identifiers, non-finite values, non-positive SE, invalid P values, invalid allele characters and equal effect/other alleles. Harmonization recognizes aligned, reversed, complemented and complemented-reversed alleles and uses allele frequencies to retain only resolvable palindromic variants.
+
+### Instrument selection
+
+The primary thresholds were exposure P≤5×10−8, F≥10 and MAF≥0.05 in the Arabidopsis case. The GxE selector requires every retained SNP to pass these filters in every environment. This prevents environment-specific tool composition from masquerading as effect heterogeneity. LD is represented by signed correlations, not r² values.
+
+### Estimators and diagnostics
+
+Standard methods include Wald ratio, fixed-effects IVW, random-effects IVW, MR-Egger, Cochran Q and leave-one-out analysis. The environment-slope estimator uses the delta-method ratio variance and GLS covariance described above. If the covariance is singular, a Moore–Penrose inverse is used for the quadratic form and Q degrees of freedom are rank adjusted.
+
+### Simulation design
+
+All simulations used fixed seeds recorded in metadata JSON files. The base benchmark used 20 SNPs and four environment scores (−1.5, −0.5, 0.5, 1.5). Exposure effects were generated as positive strong instruments. Outcome effects were generated from a pooled effect plus a known environment slope, with multivariate normal sampling errors. The LD stress benchmark additionally used an AR(1) LD correlation matrix with rho=0.6.
+
+### Arabidopsis data processing
+
+The GSE80744 normalized matrix was downloaded from GEO and the AT1G11560 row extracted. The 1001 Genomes HDF5 matrix was used to extract the local region; five PCs were calculated from every 1000th marker. A public accession VCF supplied REF/ALT labels. AraPheno FT10 and FT16 values were merged by accession ID. Local association regressions included genotype and PC1–PC5. Source URLs, hashes, generated tables and limitations are recorded with the case.
+
+### Statistical reporting
+
+All numerical results are reported with effect estimates, standard errors, P values, instrument counts, covariance source and heterogeneity diagnostics, following the reporting principles of STROBE-MR.[13] No genome-wide multiple-testing claim is made for the single-gene Arabidopsis demonstration. Any future genome-wide run must prespecify gene-level aggregation, multiple-testing control and an independent validation set.
+
+# Results
+
 ## Simulation calibration and LD stress
 
 The primary simulation benchmark used 20 instruments, four environments, environmental correlation 0.5, exposure SE 0.01, outcome SE 0.04 and 500 replicates per scenario. It included a null slope, a true slope of 0.25 and a common directional-pleiotropic component. The LD stress benchmark used the same dimensions with AR(1) signed LD correlation rho=0.6 and compared correct covariance specification with a diagonal independence approximation.
 
-Table 2. Primary simulation calibration and LD-stress summary. Dashed lines in Figures 2 and 3 mark nominal 0.05 rejection and 0.95 coverage targets where applicable.
+Table 3. Primary simulation calibration and LD-stress summary. Dashed lines in Figures 2 and 3 mark nominal 0.05 rejection and 0.95 coverage targets where applicable.
 
 | Scenario | Covariance | Mean/bias | Coverage | Rejection or power |
 
@@ -110,7 +172,7 @@ Figure 3. LD stress benchmark. Treating correlated SNP and environment errors as
 
 The Arabidopsis case was designed as a reproducibility and diagnostics demonstration rather than a new causal discovery. Baseline leaf expression of AT1G11560 was extracted from the GSE80744 normalized expression matrix, local genotypes were taken from the 1001 Genomes v3.1 matrix and flowering time at 10°C and 16°C was taken from AraPheno. The local association model used ordinary least squares with five whole-genome PCs, following the general principle that population structure and kinship must be modeled in plant association analyses,[29–34] but it was not presented as a reimplementation of the published mixed-model/SMR analysis.[19–24]
 
-Table 3. Arabidopsis data-contract inputs and local processing.
+Table 4. Arabidopsis data-contract inputs and local processing.
 
 | Layer | Public source | Local processing |
 
@@ -130,7 +192,7 @@ Table 3. Arabidopsis data-contract inputs and local processing.
 
 At P≤5×10−8, F≥10 and MAF≥0.05, 48 SNPs passed in both environments. They were strongly correlated, so the primary analysis supplied a signed LD correlation matrix. The primary diagonal-environment-covariance run estimated an intercept of 2.3601 (SE 0.4685, P=4.72×10−7) and an environment slope of −0.03705 (SE 0.15617, P=0.81249). Residual heterogeneity was Q=192.89 on 60 rank-adjusted degrees of freedom (P=7.33×10−16).
 
-Table 4. Instrument audit for the Arabidopsis case. Exclusion counts are overlapping diagnostics and must not be added as if they were mutually exclusive.
+Table 5. Instrument audit for the Arabidopsis case. Exclusion counts are overlapping diagnostics and must not be added as if they were mutually exclusive.
 
 | Audit stage | Count | Interpretation |
 
@@ -150,7 +212,7 @@ Table 4. Instrument audit for the Arabidopsis case. Exclusion counts are overlap
 
 
 
-Table 5. Environment-stratified comparator estimates. Estimates are local OLS summary-statistics demonstrations and are not independent validation of the causal model.
+Table 6. Environment-stratified comparator estimates. Estimates are local OLS summary-statistics demonstrations and are not independent validation of the causal model.
 
 | Environment | Estimator | Estimate | SE | P value | Q (P value) |
 
@@ -188,7 +250,7 @@ Figure 4. Arabidopsis data-contract case. (A) Environment-stratified comparator 
 
 The local runtime benchmark completed validation, a synthetic G×E run and the Arabidopsis case with return code 0. The three tasks required 9.70–9.93 seconds and peak resident memory of 126,664–133,424 KB in the frozen environment. These are reproducibility benchmarks on one host, not claims of universal performance or genome-wide scalability.
 
-Table 6. Local runtime benchmark for the frozen PlantMR implementation.
+Table 7. Local runtime benchmark for the frozen PlantMR implementation.
 
 | Task | Wall time (s) | Peak RSS (KB) | Return code |
 
@@ -218,7 +280,7 @@ PlantMR should be interpreted alongside, not as a replacement for, established M
 
 The distinction from MR-GxE is substantive. MR-GxE was developed to use gene-by-covariate interactions in the instrument–exposure association to detect or correct bias under assumptions about pleiotropy.[14] Interaction-based MR and MR-GENIUS use a different identification logic and have their own requirements for interaction strength and heterogeneity.[15] MR-EILLS targets an invariant causal effect across heterogeneous GWAS summaries and is not equivalent to fitting an environment score to two ratio estimates.[16] PlantMR instead supplies a plant-focused data contract and estimates effect heterogeneity along an observed environmental scale. It should not be marketed as a novel general interaction-MR theory or as an implementation of those methods.
 
-The distinction from plant-oriented software is also deliberate. MRBIGR integrates population-scale multi-omics analysis in maize and is a relevant comparator for software breadth.[17] The present work is narrower in biological scope but more explicit about the summary-statistics contract, signed LD, environmental covariance, complete SNP-by-environment grids and rank-aware Q degrees of freedom. The aim is not to win a feature-count comparison. It is to make a plant MR run inspectable, rerunnable and difficult to misinterpret.
+The distinction from plant-oriented software is deliberate. MRBIGR integrates population-scale multi-omics analysis in maize and is a relevant comparator for software breadth.[17] PlantMR is narrower in biological scope but more explicit about plant summary-statistics metadata, signed LD, environmental covariance, complete SNP-by-environment grids and rank-aware Q degrees of freedom. Recent Plant Methods software articles such as MAPtools combine a workflow figure, implementation details, command-level outputs, published-data tests and an explicit availability block.[36] PlantMR follows that reader path: the workflow comes before the statistical details, the tool contract is separated from biological claims, and the real case is presented as a reproducibility demonstration. The remaining difference is important: MAPtools includes direct testing across published mapping datasets, whereas PlantMR currently provides a literature-scope matrix and controlled calibration rather than a formal head-to-head comparison against external MR implementations. This is a submission limitation, not evidence that PlantMR outperforms those tools.
 
 ## Why LD, environmental dependence and rank matter
 
@@ -266,45 +328,65 @@ A credible next-stage biological application should proceed in layers. First, re
 
 Software development should add condition-number and positive-semidefinite diagnostics, sample-overlap covariance interfaces, weak-instrument sensitivity, nonlinear environmental bases, multi-environment mixed-model importers, and explicit polyploid/SV schemas. Every extension should be accompanied by null calibration, misspecification stress tests and a negative-control scenario. The current v1.1.0 boundary is therefore a stable foundation for a broader platform, not a claim that the plant MR problem is solved.
 
-## Overall conclusion
+# Conclusions
 
 PlantMR is a reproducible plant-focused implementation for auditable summary-statistics MR and a narrowly defined environment-effect-heterogeneity analysis. Its strongest evidence is software-level: explicit provenance, complete-grid selection, covariance-aware GLS, rank-aware heterogeneity reporting, calibrated simulations and a real-data contract that preserves limitations. The evidence does not support calling AT1G11560 a causal gene or calling PlantMR the first plant environment-interaction MR method. A Plant Methods software submission is defensible after adding a public repository/DOI, clean-environment verification and completed author declarations; a biological discovery claim would require a substantially stronger validation program.
 
-# Methods
-
-## Study design and claim ceiling
-
-The study was organized as a software/methods evaluation. We did not use the real-data case to select a favorable estimator, define a new gene-level claim or tune simulation truth. The main claims concern input validation, covariance-aware estimation and diagnostic transparency.
-
-## Input schema and harmonization
-
-Required summary columns were SNP, effect_allele, other_allele, beta, se and pval. Optional columns were eaf and n. The schema rejects empty/duplicate SNP identifiers, non-finite values, non-positive SE, invalid P values, invalid allele characters and equal effect/other alleles. Harmonization recognizes aligned, reversed, complemented and complemented-reversed alleles and uses allele frequencies to retain only resolvable palindromic variants.
-
-## Instrument selection
-
-The primary thresholds were exposure P≤5×10−8, F≥10 and MAF≥0.05 in the Arabidopsis case. The GxE selector requires every retained SNP to pass these filters in every environment. This prevents environment-specific tool composition from masquerading as effect heterogeneity. LD is represented by signed correlations, not r² values.
-
-## Estimators and diagnostics
-
-Standard methods include Wald ratio, fixed-effects IVW, random-effects IVW, MR-Egger, Cochran Q and leave-one-out analysis. The environment-slope estimator uses the delta-method ratio variance and GLS covariance described above. If the covariance is singular, a Moore–Penrose inverse is used for the quadratic form and Q degrees of freedom are rank adjusted.
-
-## Simulation design
-
-All simulations used fixed seeds recorded in metadata JSON files. The base benchmark used 20 SNPs and four environment scores (−1.5, −0.5, 0.5, 1.5). Exposure effects were generated as positive strong instruments. Outcome effects were generated from a pooled effect plus a known environment slope, with multivariate normal sampling errors. The LD stress benchmark additionally used an AR(1) LD correlation matrix with rho=0.6.
-
-## Arabidopsis data processing
-
-The GSE80744 normalized matrix was downloaded from GEO and the AT1G11560 row extracted. The 1001 Genomes HDF5 matrix was used to extract the local region; five PCs were calculated from every 1000th marker. A public accession VCF supplied REF/ALT labels. AraPheno FT10 and FT16 values were merged by accession ID. Local association regressions included genotype and PC1–PC5. Source URLs, hashes, generated tables and limitations are recorded with the case.
-
-## Statistical reporting
-
-All numerical results are reported with effect estimates, standard errors, P values, instrument counts, covariance source and heterogeneity diagnostics, following the reporting principles of STROBE-MR.[13] No genome-wide multiple-testing claim is made for the single-gene Arabidopsis demonstration. Any future genome-wide run must prespecify gene-level aggregation, multiple-testing control and an independent validation set.
-
-# Data, code and materials availability
+# Availability and requirements
 
 PlantMR is released under the MIT License. The software snapshot is v1.1.0 and the complete manuscript/benchmark/Word-document package is frozen at tag v1.1.0-paper. The source archive `release/PlantMR_v1.1.0-paper_source.zip` is suitable for submission as supplementary software. Before publication, the archive should be mirrored to a public repository and assigned a DOI.
 
 Public data sources include GSE80744 normalized expression data, AraPheno FT10/FT16, 1001 Genomes v3.1 and the Arabidopsis source publications. The large 1001 Genomes provider archive is not redistributed; the derived local genotype region, PC scores, allele mapping and provider checksums are included. The maize supplementary workbook, eQTL table and candidate table are included for audit but not used as a new causal result.
+
+Table 8. Plant Methods software availability and requirements.
+
+| Field | Current value |
+
+| --- | --- |
+
+| Project name | PlantMR 1.1 |
+
+| Project home page | Public GitHub/GitLab URL to be supplied before submission; local frozen source archive is included. |
+
+| Operating system(s) | Linux verified; platform-independent Python code intended. |
+
+| Programming language | Python 3.10 or later. |
+
+| Dependencies | NumPy, pandas, SciPy, statsmodels, matplotlib and psutil; declared in environment.yml. |
+
+| License | MIT License. |
+
+| Restrictions for non-academic use | No additional restriction stated in the local license. |
+
+
+
+# List of abbreviations
+
+| Abbreviation | Definition |
+
+| --- | --- |
+
+| MR | Mendelian randomization |
+
+| GWAS | Genome-wide association study |
+
+| eQTL | Expression quantitative trait locus |
+
+| G×E / GxE | Genotype-by-environment interaction or environment-effect heterogeneity |
+
+| LD | Linkage disequilibrium |
+
+| GLS | Generalized least squares |
+
+| IVW | Inverse-variance weighted |
+
+| MAF | Minor allele frequency |
+
+| SNP | Single-nucleotide polymorphism |
+
+| Q | Cochran-type heterogeneity statistic |
+
+
 
 # Declarations
 
@@ -312,7 +394,11 @@ Public data sources include GSE80744 normalized expression data, AraPheno FT10/F
 
 | --- | --- |
 
-| Ethics approval | Not applicable: public plant accessions and public aggregate/processed data were used. |
+| Ethics approval and consent to participate | Not applicable: public plant accessions and public aggregate/processed data were used. |
+
+| Consent for publication | Not applicable. |
+
+| Availability of data and materials | Public source data and derived audit materials are described above; public repository URL/DOI to be added. |
 
 | Competing interests | To be completed by authors. |
 
@@ -320,9 +406,9 @@ Public data sources include GSE80744 normalized expression data, AraPheno FT10/F
 
 | Author contributions | To be completed by authors. |
 
-| Corresponding author | To be completed by authors. |
+| Acknowledgements | To be completed by authors or marked Not applicable. |
 
-| Data/code availability | Source archive included; public repository and DOI to be added before submission. |
+| Authors’ information | Author names, affiliations and corresponding author to be supplied. |
 
 
 
@@ -398,20 +484,4 @@ Public data sources include GSE80744 normalized expression data, AraPheno FT10/F
 
 35. Kang, M. et al. The pan-genome and local adaptation of Arabidopsis thaliana. Nat. Commun. 14, 6259 (2023). https://doi.org/10.1038/s41467-023-42029-4
 
-# Submission metadata to complete
-
-| Field | Status |
-
-| --- | --- |
-
-| Authors and affiliations | To be supplied by authors |
-
-| Corresponding author | To be supplied by authors |
-
-| Funding | To be supplied by authors |
-
-| Competing interests | To be supplied by authors |
-
-| Public repository URL/DOI | To be supplied before external submission |
-
-| Target journal formatting | Plant Methods recommended; format after presubmission response |
+36. Candela, H. et al. MAPtools: command-line tools for mapping-by-sequencing and QTL-Seq analysis and visualization. Plant Methods 20, 107 (2024). https://doi.org/10.1186/s13007-024-01222-2
