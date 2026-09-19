@@ -1,6 +1,6 @@
 # 投稿Gate：PlantMR 1.1.0
 
-更新时间：2026-09-18
+更新时间：2026-09-19
 
 ## 当前可交付层级
 
@@ -9,10 +9,12 @@
 - 可安装、可测试的植物/作物摘要MR软件版本；
 - 有明确统计估计量、环境/LD协方差输入和限制；
 - 有500次/场景模拟、PNG/PDF图和机器结果；
+- 有4张论文图、6张结果/方法表和35篇可核验科学参考文献；
 - 有一个真实Arabidopsis数据契约案例和公开来源回执；
-- 有英文论文初稿 `docs/manuscript-draft.en.md`。
+- 有完整英文投稿稿 `docs/PlantMR_submission_manuscript.docx` 和同步Markdown稿 `docs/manuscript-draft.en.md`；
+- 有包含代码、测试、环境、图表和稿件的 `release/PlantMR_v1.1.0-paper_source.zip`。
 
-这足以作为“软件/方法论文初稿 + 可复现实验包”送合作者或内部预审，不足以支持不加限定的“已证明植物基因因果”应用论文。
+当前已经达到“完整软件/方法论文稿 + 可复现实验包 + 合作者预审”层级，可以开展Plant Methods预投稿咨询；仍不能把它写成“已证明植物基因因果”的应用论文。
 
 ## 已通过Gate
 
@@ -48,6 +50,15 @@
 - [x] 独立分层IVW作为比较；
 - [x] 结果和限制写入 `docs/real-case-arabidopsis.zh-CN.md`。
 
+### 投稿稿件
+
+- [x] Abstract、Introduction、Results、Discussion、Methods、Declarations和Availability齐全；
+- [x] Discussion扩展为主要发现、方法比较、协方差意义、植物应用、局限和验证路线；
+- [x] 所有正文引用编号均能对应35条参考文献；
+- [x] 35个DOI全部通过Crossref解析；
+- [x] DOCX结构、4张嵌入图、10个表格和源码归档通过机器检查；
+- [x] 旧的错误DOI `10.1093/ije/dyx233` 和 `10.1038/s41467-018-03940-5` 已删除。
+
 ## 投稿前仍不能伪造的事项
 
 ### 红色：如果目标是生物学因果论文，必须补
@@ -65,7 +76,7 @@
 1. 在独立干净环境重新执行测试；
 2. 构建Docker镜像并保存构建日志；当前主机没有Docker/Podman，因此未完成；
 3. 将本地仓库镜像到公开GitHub/GitLab并取得Zenodo DOI；当前没有配置远程仓库；
-4. 完成STROBE-MR逐项核对；
+4. 将STROBE-MR交叉表逐项绑定到最终稿页码/段落；当前已有交叉表，但Word分页尚未在Office渲染环境中复核；
 5. 将GxE模拟扩展到弱工具、LD错配和不同环境数量；当前已完成LD错配，弱工具和环境数量敏感性仍建议补。
 
 ## 投稿定位建议
