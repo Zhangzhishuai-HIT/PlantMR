@@ -6,6 +6,9 @@ dependencies:
   - numpy>=1.23
   - pandas>=1.5
   - scipy>=1.9
+  - statsmodels>=0.14
+  - matplotlib>=3.7
+  - psutil>=5.9
   - pytest>=8
   - pip
   - pip:

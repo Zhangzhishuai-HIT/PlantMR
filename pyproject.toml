@@ -12,6 +12,7 @@ dependencies = ["numpy>=1.23", "pandas>=1.5", "scipy>=1.9"]
 
 [project.optional-dependencies]
 test = ["pytest>=8"]
+research = ["statsmodels>=0.14", "matplotlib>=3.7", "psutil>=5.9"]
 
 [project.scripts]
 plantmr = "plant_mr.cli:main"
