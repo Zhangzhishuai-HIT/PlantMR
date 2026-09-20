@@ -131,6 +131,9 @@ plantmr run-gxe \
 - `docs/similar-article-writing-audit.zh-CN.md`
 - `docs/PlantMR_submission_manuscript.docx`
 - `docs/PlantMR_submission_manuscript.pdf`
+- `docs/PlantMR_submission_manuscript.zh-CN.docx`
+- `docs/PlantMR_submission_manuscript.zh-CN.pdf`
+- `docs/manuscript-draft.zh-CN.md`
 
 ## 许可证
 
