@@ -38,6 +38,32 @@
 - 参考文献加入MAPtools，全文参考文献增至36条，全部正文引用编号均已覆盖，36个DOI均通过Crossref解析。
 - 真实案例仍明确写成可复现数据契约演示，不写成AT1G11560因果验证。
 
+## 本次Discussion的逐段写法
+
+这次不是把原来的项目式小标题换一个标题，而是按照三篇文章常见的论证顺序重排Discussion。具体对应如下：
+
+| PlantMR段落 | 参考文章中的对应写法 | 本稿承担的内容 |
+| --- | --- | --- |
+| Principal findings，第1–3段 | MRBIGR开头先交代工具解决什么分析需要；metaGE随后说明方法为什么适用于多环境数据 | 先说明植物摘要统计MR中的元数据问题，再定义环境斜率，最后用模拟结果说明协方差会改变推断 |
+| Comparison with related methods，第1–3段 | metaGE的“Comparison to existing methods”；MRBIGR对工具模块和已有分析流程的定位 | 先放回标准MR框架，再区分summary-data MR-GxE、MR-GENIUS、MR-EILLS，最后说明PlantMR与MRBIGR、metaGE、MAPtools的任务差异 |
+| Simulation and covariance behavior，第1–3段 | metaGE先给竞争方法的模拟表现，再解释假阳性和校准问题 | 先解释植物群体和多环境数据为什么产生相关误差，再解释rank-aware Q，最后区分功效与零假设校准 |
+| Application to Arabidopsis data，第1–3段 | MRBIGR用玉米和水稻案例展示工具能完成什么；metaGE用Arabidopsis和作物数据展示方法表现 | 把Arabidopsis作为公开数据案例，报告主要结果，随后说明为什么不能把它写成因果发现，并解释表型相关性敏感性分析 |
+| Use in plant and crop studies，第1–3段 | MAPtools从案例回到不同植物、输入格式和可复用工作流；MRBIGR回到多组学应用 | 说明自然群体、育种群体、eQTL、异源多倍体和结构变异使用时需要记录的条件 |
+| Limitations，第1–3段 | 方法论文通常在Discussion末尾集中写适用条件、未覆盖场景和解释边界 | 把样本重叠、两环境斜率、未覆盖的多效性情形、LD输入和外部方法实现限制集中写清，不再列“验证阶梯” |
+| Conclusions | MAPtools和MRBIGR用一段话概括工具用途、证据和可解释边界 | 用一段话收束PlantMR能支持的分析以及不能替代的生物学证据 |
+
+## 图表如何对应参考文章
+
+| PlantMR图 | 参考文章中的相似图表 | 本稿的处理 |
+| --- | --- | --- |
+| Figure 1 workflow | MAPtools的工作流图；MRBIGR的模块架构图 | 展示输入契约、等位基因协调、工具变量筛选、协方差模型和报告输出 |
+| Figure 2 simulation calibration | metaGE的模拟结果图和性能表 | 展示零效应、环境斜率和方向性多效性场景，不只展示一个成功案例 |
+| Figure 3 LD stress | metaGE用于检验P值校准的诊断图 | 用正确协方差与独立性错配的并列结果展示假阳性和覆盖率变化 |
+| Figure 4 Arabidopsis case | MRBIGR的植物案例图；metaGE的真实多环境应用图 | 用三面板呈现分环境估计、斜率敏感性和工具变量审计 |
+| Figure 5 shared-input comparison | metaGE的竞争方法比较表和结果图 | 只在估计目标相同的场景评分，目标不同的输出保留为诊断，不制作总排行榜 |
+
+因此，当前5张图不是单纯增加数量，而是分别承担工作流、模拟、诊断、真实数据和方法比较五个常见软件/方法论文功能。
+
 ## 仍然存在的投稿风险
 
 Plant Methods软件标准通常希望用相关软件的直接比较证明显著推进。当前PlantMR已经有：
@@ -51,7 +77,7 @@ Plant Methods软件标准通常希望用相关软件的直接比较证明显著�
 
 这项比较不是完整复现MR-GxE论文中的个体水平分析，也没有声称已经完成MR-GENIUS或MR-EILLS的公平实现。稿件因此可以写“shared-input comparator”和“method-specific calibration”，不能写“PlantMR优于现有工具”或“性能最好”。
 
-下一步若继续扩展，最值得做的是把同样的输入契约和评分规则适配到另一个公开实现，并继续保持不同估计量分开报告。
+稿件当前只把这一结果写成shared-input comparator和method-specific calibration；如果以后加入其他公开实现，也应沿用相同输入契约并分别报告不同估计量。
 
 ## 结论
 

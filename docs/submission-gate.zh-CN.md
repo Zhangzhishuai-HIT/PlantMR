@@ -54,7 +54,7 @@
 ### 投稿稿件
 
 - [x] Structured abstract（Background/Results/Conclusions）、Background、Implementation、Results、Discussion、Conclusions、Availability、List of abbreviations和Declarations齐全；
-- [x] Discussion扩展为主要发现、方法比较、协方差意义、植物应用、局限和验证路线；
+- [x] Discussion扩展为主要发现、方法比较、协方差意义、植物应用和适用限制；
 - [x] 所有正文引用编号均能对应36条参考文献；
 - [x] 36个DOI全部通过Crossref解析；
 - [x] DOCX结构、5张嵌入图、13个表格和源码归档通过机器检查；
