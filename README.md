@@ -132,6 +132,7 @@ More detail is available in:
 - `docs/PlantMR_submission_manuscript.zh-CN.docx`
 - `docs/PlantMR_submission_manuscript.zh-CN.pdf`
 - `docs/manuscript-draft.zh-CN.md`
+- `docs/PlantMR-MRBIGR目标与超越路线.zh-CN.md`
 
 ## License
 
