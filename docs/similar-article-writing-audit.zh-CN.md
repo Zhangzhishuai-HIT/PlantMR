@@ -26,6 +26,22 @@
    - 写法特点：按用户实际操作顺序组织；列出硬件、软件、输入文件、步骤和输出；逐个解释Wald、IVW和MR-Egger。
    - 对PlantMR的启发：软件论文不能只讲统计公式，还必须说明输入列、命令、输出文件和复现顺序。
 
+## 本次真正用于植物MR结果和图形的文章
+
+上一版主要用软件论文确定章节结构，这不足以指导植物MR结果图。此次补充以下三篇植物方向文章，分别用于结果顺序、图形类型和生物学边界：
+
+1. Liu S et al. Mapping regulatory variants controlling gene expression in drought response and tolerance in maize. Genome Biology 21, 163 (2020). DOI：10.1186/s13059-020-02069-1。
+   - 文章把水分处理、表达变化、eQTL、MR候选基因和实验验证连成一条证据链。
+   - 对PlantMR的直接启发：图不能只有软件流程和模拟柱图，还要体现环境分层、分子关联和候选结果；PlantMR没有实验验证，因此只保留数据契约和诊断，不照搬“已验证基因”的语气。
+
+2. Feng X et al. Dual-trait genomic analysis in highly stratified Arabidopsis thaliana populations using genome-wide association summary statistics. Heredity 133, 11–20 (2024). DOI：10.1038/s41437-024-00688-z。
+   - 文章的SMR/HEIDI案例图把区域GWAS、eQTL、候选基因位置和LD结构放在同一个坐标体系中，并用独立表达数据复现候选基因。
+   - 对PlantMR的直接启发：Arabidopsis图改为区域关联轨道、48个工具变量的LD热图、分环境森林图和环境斜率；同时明确本案例缺少独立复现和精确样本重叠协方差。
+
+3. Liang X et al. Association study and Mendelian randomization analysis reveal effects of the genetic interaction between PtoMIR403b and PtoGT31B-1 on wood formation in Populus tomentosa. Frontiers in Plant Science 12, 704941 (2021). DOI：10.3389/fpls.2021.704941。
+   - 文章先展示遗传变异和表达关联，再进入上位性、MR和木材性状解释。
+   - 对PlantMR的直接启发：方法结果应先说明输入材料和环境，再报告遗传关联与MR估计，最后单独写能否支持生物学解释。
+
 ## 已应用到PlantMR稿件的变化
 
 - 摘要改为Plant Methods要求的Background、Results、Conclusions结构，当前约242词，不含参考文献引用。
@@ -35,7 +51,7 @@
 - 新增软件论文特有的Availability and requirements表，列出项目名、操作系统、编程语言、依赖、许可证和使用限制。
 - 新增List of abbreviations和完整Declarations字段。
 - Discussion中明确区分功能范围比较和性能比较；新增summary-data MR-GxE共享输入比较，但不把不同估计量放进一个总排行榜。
-- 参考文献加入MAPtools，全文参考文献增至36条，全部正文引用编号均已覆盖，36个DOI均通过Crossref解析。
+- 参考文献加入MAPtools和Populus植物MR案例，全文参考文献增至37条，全部正文引用编号均已覆盖，37个DOI均通过Crossref解析。
 - 真实案例仍明确写成可复现数据契约演示，不写成AT1G11560因果验证。
 
 ## 本次Discussion的逐段写法
@@ -56,11 +72,11 @@
 
 | PlantMR图 | 参考文章中的相似图表 | 本稿的处理 |
 | --- | --- | --- |
-| Figure 1 workflow | MAPtools的工作流图；MRBIGR的模块架构图 | 展示输入契约、等位基因协调、工具变量筛选、协方差模型和报告输出 |
-| Figure 2 simulation calibration | metaGE的模拟结果图和性能表 | 展示零效应、环境斜率和方向性多效性场景，不只展示一个成功案例 |
-| Figure 3 LD stress | metaGE用于检验P值校准的诊断图 | 用正确协方差与独立性错配的并列结果展示假阳性和覆盖率变化 |
-| Figure 4 Arabidopsis case | MRBIGR的植物案例图；metaGE的真实多环境应用图 | 用三面板呈现分环境估计、斜率敏感性和工具变量审计 |
-| Figure 5 shared-input comparison | metaGE的竞争方法比较表和结果图 | 只在估计目标相同的场景评分，目标不同的输出保留为诊断，不制作总排行榜 |
+| Figure 1 workflow | Liu等文章的环境处理/分子分析顺序；MAPtools和MRBIGR的工作流图 | 用四个面板展示植物环境背景、SNP×环境网格、协方差模型和报告输出 |
+| Figure 2 simulation calibration | metaGE的模拟结果图和性能表 | 用点估计、校准比例和方向性多效性散点展示结果，不再使用大块柱图 |
+| Figure 3 LD stress | metaGE用于检验P值校准的诊断图 | 用ECDF、采样分布、覆盖率和标准误比值展示独立性错配的后果 |
+| Figure 4 Arabidopsis case | Feng等文章的区域SMR/eQTL/LD图；Liu等文章的环境分层证据链 | 用区域关联轨道、LD热图、分环境森林图和环境斜率组成四面板案例图 |
+| Figure 5 shared-input comparison | metaGE的竞争方法比较表和结果图 | 用目标定义的森林图和覆盖率矩阵比较方法；目标不同的输出不进入评分 |
 
 因此，当前5张图不是单纯增加数量，而是分别承担工作流、模拟、诊断、真实数据和方法比较五个常见软件/方法论文功能。
 

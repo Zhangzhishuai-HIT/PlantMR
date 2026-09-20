@@ -111,7 +111,7 @@ def main():
     para(doc,'We evaluated four prespecified questions: (1) can the software enforce a plant-aware, auditable data contract; (2) does the covariance-aware environment-slope estimator recover known effects under correlated SNP and environment errors; (3) how much can inference deteriorate when LD and environment dependence are incorrectly treated as independent; and (4) can the same audit trail be executed on a real plant data contract without converting a demonstration into a causal-gene claim? The workflow in Figure 1 separates these questions into input provenance, harmonization, instrument selection, covariance specification, estimation and reporting.')
     if FIG_WORKFLOW.exists():
         doc.add_picture(str(FIG_WORKFLOW),width=Inches(6.55))
-        p=doc.add_paragraph('Figure 1. PlantMR reproducible workflow. Plant metadata and summary statistics are retained alongside allele harmonization, complete-grid quality control, covariance specification and machine-readable audit outputs.')
+        p=doc.add_paragraph('Figure 1. PlantMR workflow schematic. Plant context and repeated environments lead to a common SNP-by-environment grid, covariance-aware estimation and separate statistical and reproducibility outputs.')
         p.alignment=WD_ALIGN_PARAGRAPH.CENTER; p.runs[0].italic=True; p.runs[0].font.size=Pt(9)
     heading(doc,'PlantMR software contract and analysis workflow',2)
     para(doc,'PlantMR accepts exposure and outcome tables containing SNP, effect allele, other allele, beta, standard error and P value. Optional fields include effect-allele frequency and sample size. Plant metadata records species, reference assembly, trait, tissue, developmental stage, environment, ploidy and LD-panel provenance. The software validates numeric values and alleles, harmonizes reversed and complemented alleles, identifies ambiguous palindromic variants, applies P-value/MAF/F-statistic filters and records every exclusion.')
@@ -174,12 +174,12 @@ def main():
     para(doc,'The directional-pleiotropy scenario exposed an important limitation. The environment slope remained approximately unbiased when the true slope was zero, but the pooled intercept was biased by +0.216. Therefore, a stable environment slope cannot be interpreted as proof that the pooled causal relation is protected from horizontal pleiotropy.')
     if FIG.exists():
         doc.add_picture(str(FIG),width=Inches(6.35))
-        p=doc.add_paragraph('Figure 2. Primary simulation benchmark. The panels summarize slope estimation, rejection behavior and 95% confidence-interval coverage across null, causal environment-slope and directional-pleiotropy scenarios.')
+        p=doc.add_paragraph('Figure 2. Simulation calibration. (a) Mean slope estimates with 95% confidence intervals for the simulation mean; dashed segments mark the generating value. (b) Rejection proportion and (c) 95% coverage across scenarios. (d) Directional pleiotropy shifts the intercept while the environment slope remains near its target.')
         p.alignment=WD_ALIGN_PARAGRAPH.CENTER; p.runs[0].italic=True; p.runs[0].font.size=Pt(9)
 
     if FIG_LD.exists():
         doc.add_picture(str(FIG_LD),width=Inches(6.25))
-        p=doc.add_paragraph('Figure 3. LD stress benchmark. Treating correlated SNP and environment errors as independent preserved approximate point estimates but produced smaller standard errors, inflated null rejection from 0.044 to 0.126 and reduced coverage from 0.956 to 0.874.')
+        p=doc.add_paragraph('Figure 3. LD stress benchmark. (a) Empirical null P-value calibration, (b) slope sampling distributions, (c) coverage and (d) relative standard-error distortion under the supplied LD and environment dependence. The independence approximation inflated null rejection from 0.044 to 0.126 and reduced coverage from 0.956 to 0.874.')
         p.alignment=WD_ALIGN_PARAGRAPH.CENTER; p.runs[0].italic=True; p.runs[0].font.size=Pt(9)
 
     heading(doc,'Shared-input external-method comparison',2)
@@ -198,7 +198,7 @@ def main():
     para(doc,'The comparison supports complementarity rather than a winner. Under constant causal effect with directional pleiotropy, summary MR-GxE recovered the causal effect (mean 0.4983; coverage 0.938), while the PlantMR environment slope was a diagnostic signal caused by the violated exclusion restriction. Under true environment-effect heterogeneity without pleiotropy, PlantMR recovered the slope (mean 0.2515; coverage 0.942), while the summary MR-GxE output does not have the same causal estimand. The external comparator is therefore evidence about scope and assumptions, not a claim that one method dominates the other.')
     if FIG_COMPARE.exists():
         doc.add_picture(str(FIG_COMPARE),width=Inches(6.55))
-        p=doc.add_paragraph('Figure 5. Shared-input comparison. Panel A scores only method/scenario pairs with a defined target. Panel B retains out-of-target estimates as diagnostics and explicitly excludes them from bias and coverage scoring.')
+        p=doc.add_paragraph('Figure 5. Shared-input comparison. (a) Target-defined estimates with the generating value marked by a diamond. (b) Coverage is shown only for method/scenario pairs with a defined estimand; gray cells are not scored because the target differs.')
         p.alignment=WD_ALIGN_PARAGRAPH.CENTER; p.runs[0].italic=True; p.runs[0].font.size=Pt(9)
 
     heading(doc,'Arabidopsis data-contract case',2)
@@ -236,7 +236,7 @@ def main():
 
     if FIG_CASE.exists():
         doc.add_picture(str(FIG_CASE),width=Inches(6.55))
-        p=doc.add_paragraph('Figure 4. Arabidopsis data-contract case. (A) Environment-stratified comparator estimates; (B) primary and phenotype-correlation-proxy environment slopes; (C) the raw-to-final instrument audit. Error bars are 95% confidence intervals where applicable.')
+        p=doc.add_paragraph('Figure 4. Arabidopsis plant-MR case. (a) Aligned regional exposure and outcome association tracks for the AT1G11560 case. (b) LD among the 48 retained instruments. (c) Environment-stratified MR estimates and (d) the primary and phenotype-correlation-proxy environment slopes. Error bars are 95% confidence intervals.')
         p.alignment=WD_ALIGN_PARAGRAPH.CENTER; p.runs[0].italic=True; p.runs[0].font.size=Pt(9)
 
     heading(doc,'Reproducibility and runtime',2)
@@ -257,7 +257,7 @@ def main():
     heading(doc,'Comparison with related methods',2)
     para(doc,'PlantMR is intended to be used alongside established MR methods. IVW, MR-Egger, robust and median estimators, pleiotropy diagnostics, colocalization and fine-mapping address different sources of uncertainty.[3–12,28] The standard estimators included here provide a common audit trail; they do not make invalid instruments valid. The large Q statistic and non-zero Egger intercepts in the Arabidopsis case are therefore part of the result, not problems that can be removed by choosing another estimator.')
     para(doc,'The shared-input comparison also separates PlantMR from interaction-based MR. Summary-data MR-GxE uses gene-by-covariate interactions in the instrument–exposure associations and targets an invariant causal effect with a pleiotropy term.[14] MR-GENIUS uses a different identification strategy and requires its own conditions on interaction strength and heterogeneity.[15] MR-EILLS targets an invariant causal effect across heterogeneous GWAS summaries.[16] PlantMR instead estimates change along an observed environmental scale. The four quantities should not be treated as interchangeable.')
-    para(doc,'PlantMR occupies a narrower position than broad plant multi-omics toolboxes. MRBIGR integrates genotype, transcriptome, metabolome, GWAS and MR analyses in maize and demonstrates the workflow with maize and rice data.[17] metaGE addresses multi-environment GWAS meta-analysis and compares fixed-effect, random-effect and alternative meta-analysis procedures across plant datasets.[25] MAPtools emphasizes command-line workflow, published-data case studies and reproducible outputs.[36] PlantMR adopts the same practical sequence, from an explicit input workflow to controlled benchmarks and a plant case, while concentrating on covariance-aware summary-statistics MR.')
+    para(doc,'PlantMR also differs from biological plant MR applications in its evidentiary aim. Liu et al. combined drought-responsive maize expression, eQTLs, MR prioritization and experimental follow-up to nominate regulators of drought tolerance.[18] Feng et al. used regional Arabidopsis GWAS and eQTL summary statistics, SMR/HEIDI and independent expression data to prioritize AT1G11560.[19] In Populus, Liang et al. connected variants in a miRNA and its target gene to wood traits through association, epistasis, expression and MR analyses.[37] These studies provide the closer plant-MR precedent for the present figure sequence: environmental or tissue context, regional genetic evidence, molecular association, MR estimate and biological boundary. MRBIGR integrates genotype, transcriptome, metabolome, GWAS and MR analyses in maize and demonstrates the workflow with maize and rice data.[17] metaGE addresses multi-environment GWAS meta-analysis and compares fixed-effect, random-effect and alternative meta-analysis procedures across plant datasets.[25] MAPtools emphasizes command-line workflow, published-data case studies and reproducible outputs.[36] PlantMR adopts the evidence order of the plant studies while concentrating on covariance-aware summary-statistics MR rather than claiming a new biological discovery.')
 
     heading(doc,'Simulation and covariance behavior',2)
     para(doc,'Plant panels often contain related accessions, local haplotypes and uneven LD. The covariance of ratio estimates therefore cannot be assumed to be diagonal because the input has one row per SNP. Dependence can also arise across environments when accessions are phenotyped repeatedly, trials share controls or environmental measurements are related. In these settings, the covariance model affects standard errors and heterogeneity more directly than the point estimate.')
@@ -361,6 +361,7 @@ def main():
         '34. Chang, C. C. et al. Second-generation PLINK: rising to the challenge of larger and richer datasets. GigaScience 4, 7 (2015). https://doi.org/10.1186/s13742-015-0047-8',
         '35. Kang, M. et al. The pan-genome and local adaptation of Arabidopsis thaliana. Nat. Commun. 14, 6259 (2023). https://doi.org/10.1038/s41467-023-42029-4',
         '36. Candela, H. et al. MAPtools: command-line tools for mapping-by-sequencing and QTL-Seq analysis and visualization. Plant Methods 20, 107 (2024). https://doi.org/10.1186/s13007-024-01222-2',
+        '37. Liang, X. et al. Association study and Mendelian randomization analysis reveal effects of the genetic interaction between PtoMIR403b and PtoGT31B-1 on wood formation in Populus tomentosa. Front. Plant Sci. 12, 704941 (2021). https://doi.org/10.3389/fpls.2021.704941',
     ]
     for ref in refs:
         p=doc.add_paragraph(); p.paragraph_format.left_indent=Cm(0.45); p.paragraph_format.first_line_indent=Cm(-0.45); p.paragraph_format.space_after=Pt(3); p.add_run(ref).font.size=Pt(8.5)

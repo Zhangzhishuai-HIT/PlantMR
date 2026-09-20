@@ -18,7 +18,7 @@ Based on Nature Portfolio code/software and computational-tool reproducibility g
 - runtime and memory measurements on the verification host;
 - real plant data source ledger, checksums and access boundary;
 - version tag `v1.1.0`;
-- full English submission manuscript (`docs/PlantMR_submission_manuscript.docx`), synchronized Markdown text, 5 publication figures, 9 numbered manuscript tables and 36 DOI-verified scientific references;
+- full English submission manuscript (`docs/PlantMR_submission_manuscript.docx`), synchronized Markdown text, 5 publication figures, 9 numbered manuscript tables and 37 DOI-verified scientific references;
 - restricted-source archive containing code, tests, environment, figures and manuscript.
 
 ## Must be completed before external submission

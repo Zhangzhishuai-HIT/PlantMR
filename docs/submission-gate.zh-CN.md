@@ -55,8 +55,8 @@
 
 - [x] Structured abstract（Background/Results/Conclusions）、Background、Implementation、Results、Discussion、Conclusions、Availability、List of abbreviations和Declarations齐全；
 - [x] Discussion扩展为主要发现、方法比较、协方差意义、植物应用和适用限制；
-- [x] 所有正文引用编号均能对应36条参考文献；
-- [x] 36个DOI全部通过Crossref解析；
+- [x] 所有正文引用编号均能对应37条参考文献；
+- [x] 37个DOI全部通过Crossref解析；
 - [x] DOCX结构、5张嵌入图、13个表格和源码归档通过机器检查；
 - [x] 旧的错误DOI `10.1093/ije/dyx233` 和 `10.1038/s41467-018-03940-5` 已删除。
 

@@ -44,7 +44,7 @@ We evaluated four prespecified questions: (1) can the software enforce a plant-a
 
 ![Figure 1](figures/plantmr_workflow.png)
 
-Figure 1. PlantMR reproducible workflow. Plant metadata and summary statistics are retained alongside allele harmonization, complete-grid quality control, covariance specification and machine-readable audit outputs.
+Figure 1. PlantMR workflow schematic. Plant context and repeated environments lead to a common SNP-by-environment grid, covariance-aware estimation and separate statistical and reproducibility outputs.
 
 ## PlantMR software contract and analysis workflow
 
@@ -164,11 +164,11 @@ The directional-pleiotropy scenario exposed an important limitation. The environ
 
 ![Figure 2](figures/gxe_simulation.png)
 
-Figure 2. Primary simulation benchmark. The panels summarize slope estimation, rejection behavior and 95% confidence-interval coverage across null, causal environment-slope and directional-pleiotropy scenarios.
+Figure 2. Simulation calibration. (a) Mean slope estimates with 95% confidence intervals for the simulation mean; dashed segments mark the generating value. (b) Rejection proportion and (c) 95% coverage across scenarios. (d) Directional pleiotropy shifts the intercept while the environment slope remains near its target.
 
 ![Figure 3](figures/gxe_ld_stress.png)
 
-Figure 3. LD stress benchmark. Treating correlated SNP and environment errors as independent preserved approximate point estimates but produced smaller standard errors, inflated null rejection from 0.044 to 0.126 and reduced coverage from 0.956 to 0.874.
+Figure 3. LD stress benchmark. (a) Empirical null P-value calibration, (b) slope sampling distributions, (c) coverage and (d) relative standard-error distortion under the supplied LD and environment dependence. The independence approximation inflated null rejection from 0.044 to 0.126 and reduced coverage from 0.956 to 0.874.
 
 ## Shared-input external-method comparison
 
@@ -202,7 +202,7 @@ The comparison supports complementarity rather than a winner. Under constant cau
 
 ![Figure 5](figures/mr_gxe_head_to_head.png)
 
-Figure 5. Shared-input comparison. Panel A scores only method/scenario pairs with a defined target. Panel B retains out-of-target estimates as diagnostics and explicitly excludes them from bias and coverage scoring.
+Figure 5. Shared-input comparison. (a) Target-defined estimates with the generating value marked by a diamond. (b) Coverage is shown only for method/scenario pairs with a defined estimand; gray cells are not scored because the target differs.
 
 ## Arabidopsis data-contract case
 
@@ -280,7 +280,7 @@ A sensitivity run used the Pearson correlation between FT10 and FT16 across 1,12
 
 ![Figure 4](figures/arabidopsis_case.png)
 
-Figure 4. Arabidopsis data-contract case. (A) Environment-stratified comparator estimates; (B) primary and phenotype-correlation-proxy environment slopes; (C) the raw-to-final instrument audit. Error bars are 95% confidence intervals where applicable.
+Figure 4. Arabidopsis plant-MR case. (a) Aligned regional exposure and outcome association tracks for the AT1G11560 case. (b) LD among the 48 retained instruments. (c) Environment-stratified MR estimates and (d) the primary and phenotype-correlation-proxy environment slopes. Error bars are 95% confidence intervals.
 
 ## Reproducibility and runtime
 
@@ -316,7 +316,7 @@ PlantMR is intended to be used alongside established MR methods. IVW, MR-Egger, 
 
 The shared-input comparison also separates PlantMR from interaction-based MR. Summary-data MR-GxE uses gene-by-covariate interactions in the instrument–exposure associations and targets an invariant causal effect with a pleiotropy term.[14] MR-GENIUS uses a different identification strategy and requires its own conditions on interaction strength and heterogeneity.[15] MR-EILLS targets an invariant causal effect across heterogeneous GWAS summaries.[16] PlantMR instead estimates change along an observed environmental scale. The four quantities should not be treated as interchangeable.
 
-PlantMR occupies a narrower position than broad plant multi-omics toolboxes. MRBIGR integrates genotype, transcriptome, metabolome, GWAS and MR analyses in maize and demonstrates the workflow with maize and rice data.[17] metaGE addresses multi-environment GWAS meta-analysis and compares fixed-effect, random-effect and alternative meta-analysis procedures across plant datasets.[25] MAPtools emphasizes command-line workflow, published-data case studies and reproducible outputs.[36] PlantMR adopts the same practical sequence, from an explicit input workflow to controlled benchmarks and a plant case, while concentrating on covariance-aware summary-statistics MR.
+PlantMR also differs from biological plant MR applications in its evidentiary aim. Liu et al. combined drought-responsive maize expression, eQTLs, MR prioritization and experimental follow-up to nominate regulators of drought tolerance.[18] Feng et al. used regional Arabidopsis GWAS and eQTL summary statistics, SMR/HEIDI and independent expression data to prioritize AT1G11560.[19] In Populus, Liang et al. connected variants in a miRNA and its target gene to wood traits through association, epistasis, expression and MR analyses.[37] These studies provide the closer plant-MR precedent for the present figure sequence: environmental or tissue context, regional genetic evidence, molecular association, MR estimate and biological boundary. MRBIGR integrates genotype, transcriptome, metabolome, GWAS and MR analyses in maize and demonstrates the workflow with maize and rice data.[17] metaGE addresses multi-environment GWAS meta-analysis and compares fixed-effect, random-effect and alternative meta-analysis procedures across plant datasets.[25] MAPtools emphasizes command-line workflow, published-data case studies and reproducible outputs.[36] PlantMR adopts the evidence order of the plant studies while concentrating on covariance-aware summary-statistics MR rather than claiming a new biological discovery.
 
 ## Simulation and covariance behavior
 
@@ -507,3 +507,5 @@ Table 9. Plant Methods software availability and requirements.
 35. Kang, M. et al. The pan-genome and local adaptation of Arabidopsis thaliana. Nat. Commun. 14, 6259 (2023). https://doi.org/10.1038/s41467-023-42029-4
 
 36. Candela, H. et al. MAPtools: command-line tools for mapping-by-sequencing and QTL-Seq analysis and visualization. Plant Methods 20, 107 (2024). https://doi.org/10.1186/s13007-024-01222-2
+
+37. Liang, X. et al. Association study and Mendelian randomization analysis reveal effects of the genetic interaction between PtoMIR403b and PtoGT31B-1 on wood formation in Populus tomentosa. Front. Plant Sci. 12, 704941 (2021). https://doi.org/10.3389/fpls.2021.704941
