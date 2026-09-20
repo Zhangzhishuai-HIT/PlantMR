@@ -14,6 +14,7 @@ FIG=ROOT/'docs/figures/gxe_simulation.png'
 FIG_WORKFLOW=ROOT/'docs/figures/plantmr_workflow.png'
 FIG_LD=ROOT/'docs/figures/gxe_ld_stress.png'
 FIG_CASE=ROOT/'docs/figures/arabidopsis_case.png'
+FIG_COMPARE=ROOT/'docs/figures/mr_gxe_head_to_head.png'
 NAVY='17365D'; TEAL='0F6B78'; LIGHT='EAF3F5'; GREY='F4F6F8'; YELLOW='FFF2CC'
 
 
@@ -66,10 +67,11 @@ def hyperlink(paragraph,text,url):
 
 def page_field(p):
     r=p.add_run('Page '); r.font.size=Pt(8)
-    for typ in ['begin','separate','end']:
-        el=OxmlElement('w:fldChar'); el.set(qn('w:fldCharType'),typ); r._r.append(el)
-        if typ=='separate':
-            t=OxmlElement('w:t'); t.text='1'; r._r.append(t)
+    begin=OxmlElement('w:fldChar'); begin.set(qn('w:fldCharType'),'begin'); begin.set(qn('w:dirty'),'true'); r._r.append(begin)
+    instr=OxmlElement('w:instrText'); instr.set(qn('xml:space'),'preserve'); instr.text=' PAGE '; r._r.append(instr)
+    separate=OxmlElement('w:fldChar'); separate.set(qn('w:fldCharType'),'separate'); r._r.append(separate)
+    t=OxmlElement('w:t'); t.text='1'; r._r.append(t)
+    end=OxmlElement('w:fldChar'); end.set(qn('w:fldCharType'),'end'); r._r.append(end)
 
 def main():
     doc=Document(); sec=doc.sections[0]; sec.top_margin=Cm(2.0); sec.bottom_margin=Cm(1.8); sec.left_margin=Cm(2.0); sec.right_margin=Cm(2.0)
@@ -180,9 +182,28 @@ def main():
         p=doc.add_paragraph('Figure 3. LD stress benchmark. Treating correlated SNP and environment errors as independent preserved approximate point estimates but produced smaller standard errors, inflated null rejection from 0.044 to 0.126 and reduced coverage from 0.956 to 0.874.')
         p.alignment=WD_ALIGN_PARAGRAPH.CENTER; p.runs[0].italic=True; p.runs[0].font.size=Pt(9)
 
+    heading(doc,'Shared-input external-method comparison',2)
+    para(doc,'We implemented a narrow summary-data MR-GxE comparator following the three-step construction of Spiller et al.[14] The comparator forms one fixed weighted allele score from exposure associations only within each environment, obtains score–exposure and score–outcome associations, and regresses the latter on the former with an intercept. The same 20 SNPs, four environment strata, environment-correlation matrix, standard errors and 500 replicates per scenario were passed to both methods. The comparison is method-specific rather than a single performance leaderboard: PlantMR estimates an environment-effect slope, whereas summary MR-GxE estimates an invariant causal effect and a constant-pleiotropy intercept.')
+    para(doc,'Table 4. Shared-input PlantMR versus summary-data MR-GxE benchmark. Bias and coverage are reported only where the method’s estimand is defined by the simulated data-generating model; out-of-target outputs are retained as diagnostics.',after=2)
+    table(doc,['Scenario','Method / target','Mean estimate','Bias','Coverage','Rejection','Interpretation'],[
+        ['Null causal + pleiotropy','Summary MR-GxE / causal effect','−0.0021','−0.0021','0.934','0.066','Target-defined causal calibration'],
+        ['Null causal + pleiotropy','PlantMR / environment slope','−0.0692','—','—','—','Diagnostic only: pleiotropy makes slope non-causal'],
+        ['Constant effect, no pleiotropy','PlantMR / environment slope','0.0036','0.0036','0.938','0.062','Target-defined heterogeneity calibration'],
+        ['Constant effect, no pleiotropy','Summary MR-GxE / causal effect','0.5003','0.0003','0.958','1.000','Target-defined causal calibration'],
+        ['Constant effect + pleiotropy','Summary MR-GxE / causal effect','0.4983','−0.0017','0.938','1.000','Correct causal target under constant pleiotropy'],
+        ['Constant effect + pleiotropy','PlantMR / environment slope','−0.0653','—','—','—','Diagnostic only: not a causal slope'],
+        ['Environment-effect heterogeneity','PlantMR / environment slope','0.2515','0.0015','0.942','1.000','Correct environment-slope target'],
+        ['Environment-effect heterogeneity','Summary MR-GxE / causal effect','1.2143','—','—','—','Diagnostic only: invariant-effect target not defined'],
+    ],[3.4,4.0,2.4,1.8,2.1,2.0,5.0],7.1)
+    para(doc,'The comparison supports complementarity rather than a winner. Under constant causal effect with directional pleiotropy, summary MR-GxE recovered the causal effect (mean 0.4983; coverage 0.938), while the PlantMR environment slope was a diagnostic signal caused by the violated exclusion restriction. Under true environment-effect heterogeneity without pleiotropy, PlantMR recovered the slope (mean 0.2515; coverage 0.942), while the summary MR-GxE output does not have the same causal estimand. The external comparator is therefore evidence about scope and assumptions, not a claim that one method dominates the other.')
+    if FIG_COMPARE.exists():
+        doc.add_picture(str(FIG_COMPARE),width=Inches(6.55))
+        p=doc.add_paragraph('Figure 5. Shared-input comparison. Panel A scores only method/scenario pairs with a defined target. Panel B retains out-of-target estimates as diagnostics and explicitly excludes them from bias and coverage scoring.')
+        p.alignment=WD_ALIGN_PARAGRAPH.CENTER; p.runs[0].italic=True; p.runs[0].font.size=Pt(9)
+
     heading(doc,'Arabidopsis data-contract case',2)
     para(doc,'The Arabidopsis case was designed as a reproducibility and diagnostics demonstration rather than a new causal discovery. Baseline leaf expression of AT1G11560 was extracted from the GSE80744 normalized expression matrix, local genotypes were taken from the 1001 Genomes v3.1 matrix and flowering time at 10°C and 16°C was taken from AraPheno. The local association model used ordinary least squares with five whole-genome PCs, following the general principle that population structure and kinship must be modeled in plant association analyses,[29–34] but it was not presented as a reimplementation of the published mixed-model/SMR analysis.[19–24]')
-    para(doc,'Table 4. Arabidopsis data-contract inputs and local processing.',after=2)
+    para(doc,'Table 5. Arabidopsis data-contract inputs and local processing.',after=2)
     table(doc,['Layer','Public source','Local processing'],[
         ['Molecular exposure','GSE80744 normalized expression','AT1G11560 row; log1p transformation; baseline exposure'],
         ['Genotype','1001 Genomes v3.1','Chr1:3,861,124–3,901,085; 3,352 local SNPs; five PCs'],
@@ -191,7 +212,7 @@ def main():
         ['Alleles','1001 Genomes accession VCF','REF/ALT mapping for dosage-coded matrix'],
     ],[4.0,5.0,8.0],8.2)
     para(doc,'At P≤5×10−8, F≥10 and MAF≥0.05, 48 SNPs passed in both environments. They were strongly correlated, so the primary analysis supplied a signed LD correlation matrix. The primary diagonal-environment-covariance run estimated an intercept of 2.3601 (SE 0.4685, P=4.72×10−7) and an environment slope of −0.03705 (SE 0.15617, P=0.81249). Residual heterogeneity was Q=192.89 on 60 rank-adjusted degrees of freedom (P=7.33×10−16).')
-    para(doc,'Table 5. Instrument audit for the Arabidopsis case. Exclusion counts are overlapping diagnostics and must not be added as if they were mutually exclusive.',after=2)
+    para(doc,'Table 6. Instrument audit for the Arabidopsis case. Exclusion counts are overlapping diagnostics and must not be added as if they were mutually exclusive.',after=2)
     table(doc,['Audit stage','Count','Interpretation'],[
         ['Raw complete SNP×environment grid','172 SNPs / 344 rows','Two environments were available for every raw local SNP.'],
         ['Ambiguous palindromic exclusions','3 per environment','Removed during allele harmonization; 169 SNPs / 338 rows remained.'],
@@ -200,7 +221,7 @@ def main():
         ['Final complete-grid instruments','48 SNPs / 96 rows','Passed the prespecified P-value, F and MAF requirements in both environments.'],
         ['LD matrix / covariance rank','48×48 LD; rank(V)=62','Rank-aware Q used 62−2=60 residual degrees of freedom.'],
     ],[5.0,4.0,8.0],8.0)
-    para(doc,'Table 6. Environment-stratified comparator estimates. Estimates are local OLS summary-statistics demonstrations and are not independent validation of the causal model.',after=2)
+    para(doc,'Table 7. Environment-stratified comparator estimates. Estimates are local OLS summary-statistics demonstrations and are not independent validation of the causal model.',after=2)
     table(doc,['Environment','Estimator','Estimate','SE','P value','Q (P value)'],[
         ['10°C','Fixed IVW','6.6001','0.2038','4.999×10−230','84.90 (5.89×10−4)'],
         ['10°C','Random IVW','7.0842','0.2970','1.030×10−125','84.90 (5.89×10−4)'],
@@ -220,7 +241,7 @@ def main():
 
     heading(doc,'Reproducibility and runtime',2)
     para(doc,'The local runtime benchmark completed validation, a synthetic G×E run and the Arabidopsis case with return code 0. The three tasks required 9.70–9.93 seconds and peak resident memory of 126,664–133,424 KB in the frozen environment. These are reproducibility benchmarks on one host, not claims of universal performance or genome-wide scalability.')
-    para(doc,'Table 7. Local runtime benchmark for the frozen PlantMR implementation.',after=2)
+    para(doc,'Table 8. Local runtime benchmark for the frozen PlantMR implementation.',after=2)
     table(doc,['Task','Wall time (s)','Peak RSS (KB)','Return code'],[
         ['validate','9.7034','126,664','0'],
         ['gxe_synthetic','9.7974','129,736','0'],
@@ -259,8 +280,8 @@ def main():
     numbered(doc,'Only two outcome environments are used in the case. A two-point slope is a contrast along a prespecified scale; it cannot establish linearity, a threshold, or a general response curve.')
     numbered(doc,'The directional-pleiotropy simulation uses one structured scenario. It does not cover balanced pleiotropy, correlated pleiotropy, weak instruments, nonlinear effects, measurement error in the environmental score, winner’s curse or population-stratified LD mismatch.')
     numbered(doc,'The current implementation accepts supplied signed correlation matrices but does not estimate a causal LD panel, repair every possible non-positive-semidefinite input or model polyploid dosage and structural variation.')
-    numbered(doc,'Formal head-to-head implementations of MR-GxE, MR-GENIUS and MR-EILLS are not included in v1.1.0. Literature comparisons are conceptual and not benchmark claims.')
-    numbered(doc,'The source package is reproducible locally but a public repository, DOI, clean-environment rerun and independent validation are still required for a final software publication record.')
+    numbered(doc,'A full individual-level implementation of MR-GxE, or a head-to-head implementation of MR-GENIUS and MR-EILLS, is not included in v1.1.0. The present external comparator is a narrow summary-data MR-GxE benchmark with method-specific targets.')
+    numbered(doc,'The source package is reproducible locally but an archival DOI, clean-environment rerun and independent validation are still required for a final software publication record.')
 
     heading(doc,'Recommended validation ladder and future work',2)
     para(doc,'A credible next-stage biological application should proceed in layers. First, rerun the same exposure and outcome in non-overlapping accessions and estimate the exposure–outcome covariance under the actual GWAS design. Second, reproduce association statistics with a kinship-aware mixed model and use the matching LD panel. Third, compare PlantMR with formal colocalization/HEIDI and with a prespecified set of external interaction-MR methods under identical instruments, environments and outcome scales. Fourth, validate the direction and magnitude in an independent population or environment. Fifth, test a small number of genes with functional perturbation or expression validation before making pathway-level claims.')
@@ -272,7 +293,7 @@ def main():
     heading(doc,'Availability and requirements',1)
     para(doc,'PlantMR is released under the MIT License. The software snapshot is v1.1.0 and the complete manuscript/benchmark/Word-document package is frozen at tag v1.1.0-paper. The public repository is https://github.com/Zhangzhishuai-HIT/PlantMR, and the source archive `release/PlantMR_v1.1.0-paper_source.zip` is included for submission as supplementary software. A Zenodo or equivalent archival DOI remains to be assigned.')
     para(doc,'Public data sources include GSE80744 normalized expression data, AraPheno FT10/FT16, 1001 Genomes v3.1 and the Arabidopsis source publications. The large 1001 Genomes provider archive is not redistributed; the derived local genotype region, PC scores, allele mapping and provider checksums are included. The maize supplementary workbook, eQTL table and candidate table are included for audit but not used as a new causal result.')
-    para(doc,'Table 8. Plant Methods software availability and requirements.',after=2)
+    para(doc,'Table 9. Plant Methods software availability and requirements.',after=2)
     table(doc,['Field','Current value'],[
         ['Project name','PlantMR 1.1'],
         ['Project home page','https://github.com/Zhangzhishuai-HIT/PlantMR'],

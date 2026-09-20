@@ -168,11 +168,45 @@ Figure 2. Primary simulation benchmark. The panels summarize slope estimation, r
 
 Figure 3. LD stress benchmark. Treating correlated SNP and environment errors as independent preserved approximate point estimates but produced smaller standard errors, inflated null rejection from 0.044 to 0.126 and reduced coverage from 0.956 to 0.874.
 
+## Shared-input external-method comparison
+
+We implemented a narrow summary-data MR-GxE comparator following the three-step construction of Spiller et al.[14] The comparator forms one fixed weighted allele score from exposure associations only within each environment, obtains score–exposure and score–outcome associations, and regresses the latter on the former with an intercept. The same 20 SNPs, four environment strata, environment-correlation matrix, standard errors and 500 replicates per scenario were passed to both methods. The comparison is method-specific rather than a single performance leaderboard: PlantMR estimates an environment-effect slope, whereas summary MR-GxE estimates an invariant causal effect and a constant-pleiotropy intercept.
+
+Table 4. Shared-input PlantMR versus summary-data MR-GxE benchmark. Bias and coverage are reported only where the method’s estimand is defined by the simulated data-generating model; out-of-target outputs are retained as diagnostics.
+
+| Scenario | Method / target | Mean estimate | Bias | Coverage | Rejection | Interpretation |
+
+| --- | --- | --- | --- | --- | --- | --- |
+
+| Null causal + pleiotropy | Summary MR-GxE / causal effect | −0.0021 | −0.0021 | 0.934 | 0.066 | Target-defined causal calibration |
+
+| Null causal + pleiotropy | PlantMR / environment slope | −0.0692 | — | — | — | Diagnostic only: pleiotropy makes slope non-causal |
+
+| Constant effect, no pleiotropy | PlantMR / environment slope | 0.0036 | 0.0036 | 0.938 | 0.062 | Target-defined heterogeneity calibration |
+
+| Constant effect, no pleiotropy | Summary MR-GxE / causal effect | 0.5003 | 0.0003 | 0.958 | 1.000 | Target-defined causal calibration |
+
+| Constant effect + pleiotropy | Summary MR-GxE / causal effect | 0.4983 | −0.0017 | 0.938 | 1.000 | Correct causal target under constant pleiotropy |
+
+| Constant effect + pleiotropy | PlantMR / environment slope | −0.0653 | — | — | — | Diagnostic only: not a causal slope |
+
+| Environment-effect heterogeneity | PlantMR / environment slope | 0.2515 | 0.0015 | 0.942 | 1.000 | Correct environment-slope target |
+
+| Environment-effect heterogeneity | Summary MR-GxE / causal effect | 1.2143 | — | — | — | Diagnostic only: invariant-effect target not defined |
+
+
+
+The comparison supports complementarity rather than a winner. Under constant causal effect with directional pleiotropy, summary MR-GxE recovered the causal effect (mean 0.4983; coverage 0.938), while the PlantMR environment slope was a diagnostic signal caused by the violated exclusion restriction. Under true environment-effect heterogeneity without pleiotropy, PlantMR recovered the slope (mean 0.2515; coverage 0.942), while the summary MR-GxE output does not have the same causal estimand. The external comparator is therefore evidence about scope and assumptions, not a claim that one method dominates the other.
+
+![Figure 5](figures/mr_gxe_head_to_head.png)
+
+Figure 5. Shared-input comparison. Panel A scores only method/scenario pairs with a defined target. Panel B retains out-of-target estimates as diagnostics and explicitly excludes them from bias and coverage scoring.
+
 ## Arabidopsis data-contract case
 
 The Arabidopsis case was designed as a reproducibility and diagnostics demonstration rather than a new causal discovery. Baseline leaf expression of AT1G11560 was extracted from the GSE80744 normalized expression matrix, local genotypes were taken from the 1001 Genomes v3.1 matrix and flowering time at 10°C and 16°C was taken from AraPheno. The local association model used ordinary least squares with five whole-genome PCs, following the general principle that population structure and kinship must be modeled in plant association analyses,[29–34] but it was not presented as a reimplementation of the published mixed-model/SMR analysis.[19–24]
 
-Table 4. Arabidopsis data-contract inputs and local processing.
+Table 5. Arabidopsis data-contract inputs and local processing.
 
 | Layer | Public source | Local processing |
 
@@ -192,7 +226,7 @@ Table 4. Arabidopsis data-contract inputs and local processing.
 
 At P≤5×10−8, F≥10 and MAF≥0.05, 48 SNPs passed in both environments. They were strongly correlated, so the primary analysis supplied a signed LD correlation matrix. The primary diagonal-environment-covariance run estimated an intercept of 2.3601 (SE 0.4685, P=4.72×10−7) and an environment slope of −0.03705 (SE 0.15617, P=0.81249). Residual heterogeneity was Q=192.89 on 60 rank-adjusted degrees of freedom (P=7.33×10−16).
 
-Table 5. Instrument audit for the Arabidopsis case. Exclusion counts are overlapping diagnostics and must not be added as if they were mutually exclusive.
+Table 6. Instrument audit for the Arabidopsis case. Exclusion counts are overlapping diagnostics and must not be added as if they were mutually exclusive.
 
 | Audit stage | Count | Interpretation |
 
@@ -212,7 +246,7 @@ Table 5. Instrument audit for the Arabidopsis case. Exclusion counts are overlap
 
 
 
-Table 6. Environment-stratified comparator estimates. Estimates are local OLS summary-statistics demonstrations and are not independent validation of the causal model.
+Table 7. Environment-stratified comparator estimates. Estimates are local OLS summary-statistics demonstrations and are not independent validation of the causal model.
 
 | Environment | Estimator | Estimate | SE | P value | Q (P value) |
 
@@ -250,7 +284,7 @@ Figure 4. Arabidopsis data-contract case. (A) Environment-stratified comparator 
 
 The local runtime benchmark completed validation, a synthetic G×E run and the Arabidopsis case with return code 0. The three tasks required 9.70–9.93 seconds and peak resident memory of 126,664–133,424 KB in the frozen environment. These are reproducibility benchmarks on one host, not claims of universal performance or genome-wide scalability.
 
-Table 7. Local runtime benchmark for the frozen PlantMR implementation.
+Table 8. Local runtime benchmark for the frozen PlantMR implementation.
 
 | Task | Wall time (s) | Peak RSS (KB) | Return code |
 
@@ -318,9 +352,9 @@ The directional-pleiotropy simulation uses one structured scenario. It does not 
 
 The current implementation accepts supplied signed correlation matrices but does not estimate a causal LD panel, repair every possible non-positive-semidefinite input or model polyploid dosage and structural variation.
 
-Formal head-to-head implementations of MR-GxE, MR-GENIUS and MR-EILLS are not included in v1.1.0. Literature comparisons are conceptual and not benchmark claims.
+A full individual-level implementation of MR-GxE, or a head-to-head implementation of MR-GENIUS and MR-EILLS, is not included in v1.1.0. The present external comparator is a narrow summary-data MR-GxE benchmark with method-specific targets.
 
-The source package is reproducible locally but a public repository, DOI, clean-environment rerun and independent validation are still required for a final software publication record.
+The source package is reproducible locally but an archival DOI, clean-environment rerun and independent validation are still required for a final software publication record.
 
 ## Recommended validation ladder and future work
 
@@ -338,7 +372,7 @@ PlantMR is released under the MIT License. The software snapshot is v1.1.0 and t
 
 Public data sources include GSE80744 normalized expression data, AraPheno FT10/FT16, 1001 Genomes v3.1 and the Arabidopsis source publications. The large 1001 Genomes provider archive is not redistributed; the derived local genotype region, PC scores, allele mapping and provider checksums are included. The maize supplementary workbook, eQTL table and candidate table are included for audit but not used as a new causal result.
 
-Table 8. Plant Methods software availability and requirements.
+Table 9. Plant Methods software availability and requirements.
 
 | Field | Current value |
 

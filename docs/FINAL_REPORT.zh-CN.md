@@ -4,15 +4,15 @@
 
 PlantMR v1.1.0 is a local Python CLI and library for plant/crop summary-statistics MR. The repository is self-contained at `/home/user/zhangzhishuai/myhermes/plant_mr`.
 
-## Final product contract
+## What is in this release
 
-The final release accepts two summary-statistics tables and a JSON plant metadata file. It validates alleles and numeric values, harmonizes effects, filters instruments, optionally performs LD clumping, runs fixed/random IVW and MR-Egger, performs leave-one-out diagnostics, and writes JSON/TSV/Markdown results. `run-stratified` repeats the same contract by environment. `run-gxe` adds complete-grid, covariance-aware GLS for a pooled effect and environment slope.
+The release accepts two summary-statistics tables and a JSON plant metadata file. It validates alleles and numeric values, harmonizes effects, filters instruments, optionally performs LD clumping, runs fixed/random IVW and MR-Egger, performs leave-one-out diagnostics, and writes JSON/TSV/Markdown results. `run-stratified` repeats the analysis by environment. `run-gxe` adds complete-grid, covariance-aware GLS for a pooled effect and environment slope.
 
 ## Machine verification
 
-本次最终验收实际返回：
+本地验证结果：
 
-- `pytest -q`：23 passed；
+- `pytest -q`：26 passed；
 - `python -m compileall -q src`：通过；
 - 安装后的 `plantmr validate`：通过；
 - 安装后的普通 `plantmr run`：通过，LD clumping 移除1个高LD工具变量并保留2个；
@@ -22,15 +22,16 @@ The final release accepts two summary-statistics tables and a JSON plant metadat
 - `run-gxe`真实执行通过，生成GxE摘要、协方差来源、完整网格QC和报告；
 - 500次/场景的零模型、G×E功效和方向性多效性模拟已执行，生成TSV、JSON、PNG和PDF；
 - 额外LD+环境相关压力测试已执行：正确协方差零假阳性率0.044、覆盖率0.956；独立性错配零假阳性率0.126、覆盖率0.874；
+- summary-data MR-GxE外部比较已执行：4个共享输入场景、每场景500次重复，并按各自估计目标报告偏差和覆盖率；
 - Arabidopsis真实数据契约案例已执行，包含48个标准QC工具、LD协方差主分析和环境相关敏感性分析；
 - Git工作区在提交前后均通过范围和空白检查。
 
 当前机器没有 Docker/Podman 运行时，因此 Dockerfile 已纳入发布目录但未在本机执行镜像构建；Conda/本地pip安装路径已实际验证。
 
-## Scientific boundary
+## What the results do and do not show
 
-This is a reliable summary-MR product, not a claim that MR alone establishes plant gene causality. SMR/GSMR, coloc, MVMR, MR-PRESSO, functional validation, polyploid haplotype modeling and pan-genome SV causal models are deliberately outside the v1.1 built-in estimator contract. MR-GxE and MR-EILLS are existing methodological comparators; PlantMR does not claim to invent environment-interaction MR. Unsupported methods must be added as versioned adapters with their own tests rather than silently substituted.
+These analyses show that the input checks, covariance-aware estimator and reports run reproducibly on the tested examples. They do not show that MR alone establishes plant gene causality. SMR/GSMR, coloc, MVMR, MR-PRESSO, functional validation, polyploid haplotype modeling and pan-genome SV causal models are not included in this release. MR-GxE and MR-EILLS are existing methodological comparators; PlantMR does not claim to invent environment-interaction MR. If another method is added later, it should have its own implementation, tests and documentation rather than being hidden behind an existing command.
 
-## Release evidence
+## Files and verification
 
 The exact test command and observed output are recorded in the final session delivery. The repository includes `PLAN.md`, `CHANGELOG.md`, method definitions, synthetic inputs and the locked Conda specification used for verification.

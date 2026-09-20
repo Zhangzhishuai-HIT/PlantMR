@@ -1,0 +1,23 @@
+{
+  "seed": 20260920,
+  "replicates_per_scenario": 500,
+  "n_snp": 20,
+  "n_environment": 4,
+  "environment_rho": 0.5,
+  "ld_structure": "identity (same independent-SNP contract for both methods)",
+  "external_method": "summary-data MR-GxE three-step weighted-score regression",
+  "external_reference": "Spiller et al. 2019, https://doi.org/10.1093/ije/dyy204",
+  "fairness": [
+    "same simulated summary-statistics table",
+    "same SNPs and environment strata",
+    "same signed environment covariance",
+    "exposure-only weights for the external score",
+    "method-specific estimands; undefined target cells are not scored as bias or coverage"
+  ],
+  "scenarios": {
+    "constant_null_directional_pleiotropy": "MR-GxE causal target is zero; PlantMR environment slope is not scored because pleiotropy makes it non-causal.",
+    "constant_effect_no_pleiotropy": "Both methods have a defined causal/heterogeneity target under no pleiotropy.",
+    "constant_effect_directional_pleiotropy": "MR-GxE is designed for constant causal effect plus constant pleiotropy; PlantMR slope is diagnostic, not a causal target.",
+    "environment_effect_heterogeneity": "PlantMR has a defined environment slope; summary MR-GxE invariant-effect target is not scored."
+  }
+}

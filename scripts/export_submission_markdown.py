@@ -15,6 +15,7 @@ FIGS={
     2:'figures/gxe_simulation.png',
     3:'figures/gxe_ld_stress.png',
     4:'figures/arabidopsis_case.png',
+    5:'figures/mr_gxe_head_to_head.png',
 }
 
 def blocks(parent):

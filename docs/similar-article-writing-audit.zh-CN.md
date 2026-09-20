@@ -34,7 +34,7 @@
 - 新增“Comparison with related tools”表，比较PlantMR、MRBIGR、MR-Base/TwoSampleMR、metaGE和MAPtools的任务范围、植物元数据、环境/LD处理和证据类型。
 - 新增软件论文特有的Availability and requirements表，列出项目名、操作系统、编程语言、依赖、许可证和使用限制。
 - 新增List of abbreviations和完整Declarations字段。
-- Discussion中明确承认：当前是功能范围比较和受控校准，不是已经完成的外部MR软件头对头性能比较。
+- Discussion中明确区分功能范围比较和性能比较；新增summary-data MR-GxE共享输入比较，但不把不同估计量放进一个总排行榜。
 - 参考文献加入MAPtools，全文参考文献增至36条，全部正文引用编号均已覆盖，36个DOI均通过Crossref解析。
 - 真实案例仍明确写成可复现数据契约演示，不写成AT1G11560因果验证。
 
@@ -47,17 +47,12 @@ Plant Methods软件标准通常希望用相关软件的直接比较证明显著�
 - 运行时间和内存基准；
 - 明确的功能边界和失败边界。
 
-但当前还没有在相同输入、相同工具变量、相同环境和相同评价指标下，正式执行MR-GxE、MR-GENIUS、MR-EILLS或其他外部MR实现的头对头比较。因此稿件中只能写“scope comparison”“controlled calibration”和“software contract demonstration”，不能写“优于现有工具”或“性能最好”。
+现在已经在相同摘要统计输入、相同SNP、相同环境分层和相同协方差输入下，完成了summary-data MR-GxE的500次/场景比较。比较结果按各自的估计目标评分：恒定效应加方向性多效性场景评估MR-GxE的因果效应，环境效应异质性场景评估PlantMR的环境斜率，其他方法/场景组合只保留为诊断。
 
-如果要进一步提高Plant Methods接受概率，下一步最有价值的是：
+这项比较不是完整复现MR-GxE论文中的个体水平分析，也没有声称已经完成MR-GENIUS或MR-EILLS的公平实现。稿件因此可以写“shared-input comparator”和“method-specific calibration”，不能写“PlantMR优于现有工具”或“性能最好”。
 
-1. 选一个可公开获得且估计量相近的外部方法，明确转换输入契约；
-2. 在同一批模拟数据上比较点估计、覆盖率、假阳性率、功效和运行成本；
-3. 把比较规则、失败案例和适用边界全部写入表格；
-4. 不把不同目标的MR-GxE、MR-GENIUS、MR-EILLS和PlantMR硬凑成单一排行榜。
-
-该缺口已经在正文Discussion和投稿Gate中明确标记，不能用文字包装替代真实比较。
+下一步若继续扩展，最值得做的是把同样的输入契约和评分规则适配到另一个公开实现，并继续保持不同估计量分开报告。
 
 ## 结论
 
-当前稿件的叙事和章节已经按照Plant Methods软件文章的写法重构，不再是普通研究论文套用软件内容。文章现在具备正式软件方法稿的结构、图表、软件可用性、数据契约、验证和边界说明；公开仓库已发布为 https://github.com/Zhangzhishuai-HIT/PlantMR。正式投稿前真正剩下的是作者信息、Zenodo/等效归档DOI、Office视觉排版确认，以及是否补做至少一个公平的外部方法头对头比较。
+当前稿件的叙事和章节已经按照Plant Methods软件文章的写法重构，不再是普通研究论文套用软件内容。文章现在具备正式软件方法稿的结构、图表、软件可用性、数据契约、验证和边界说明；公开仓库已发布为 https://github.com/Zhangzhishuai-HIT/PlantMR，共享输入的summary-data MR-GxE比较也已经完成。正式投稿前剩下的是作者信息、Zenodo/等效归档DOI，以及提交前再核对一次目标期刊的在线格式要求。

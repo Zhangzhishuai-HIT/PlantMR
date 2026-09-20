@@ -1,38 +1,43 @@
-# PlantMR v1.1.0
+# PlantMR
 
-PlantMR 是面向植物和作物GWAS/QTL摘要数据的本地因果组学工具。v1.1.0 的产品边界是：在明确声明植物物种、参考组装、环境和LD假设的前提下，完成可复现的摘要数据MR、环境分层MR和协方差感知的环境交互MR。
+PlantMR is a small Python toolkit for Mendelian randomization with plant and crop summary statistics. It is designed for analyses in which the species, reference assembly, tissue, developmental stage, environment and LD reference panel need to stay attached to the results.
 
-## 已实现功能
+The current release provides three related workflows:
 
-- 摘要统计输入规范和植物元数据；
-- effect allele / other allele 协调、反向效应翻转、互补链识别；
-- 回文位点的等位基因频率判定；
-- P值、MAF、F统计量和非有限值检查；
-- 可选LD相关矩阵的贪心clumping（默认r²阈值0.01）；
-- Wald ratio、固定效应IVW、随机效应IVW、MR-Egger；
-- Cochran异质性Q检验、MR-Egger截距和逐工具变量留一分析；
-- `run-stratified` 按环境分别估计结果；
-- `run-gxe` 用完整SNP×环境网格和显式协方差估计总体效应与环境交互斜率；
-- JSON、TSV、Markdown报告；
-- 合成数据、自动化测试、Conda环境和Docker入口。
+- ordinary summary-statistics MR;
+- MR estimates reported separately for each environment;
+- a covariance-aware model for asking whether the MR effect changes along a prespecified environmental scale.
 
-v1.1.0的可复现证据还包括：
+The third workflow is intentionally narrow. It estimates an intercept and an environment slope from a complete SNP-by-environment grid. It is not an implementation of MR-GxE, MR-GENIUS or MR-EILLS, and it does not turn an MR association into an automatically validated causal gene.
 
-- `pytest -q`：23个测试；
-- `scripts/run_gxe_simulation.py`：零模型、G×E和方向性多效性模拟；
-- `scripts/run_gxe_ld_stress.py`：LD+环境相关错配压力测试；
-- `scripts/benchmark_runtime.py`：验证主机上的运行时间/RSS记录；
-- `LICENSE`：MIT许可。
+Repository: https://github.com/Zhangzhishuai-HIT/PlantMR
 
-## 安装
+## What is included
+
+- summary-statistics input validation and plant metadata;
+- allele harmonization, including reverse-strand handling and palindromic-allele checks;
+- P-value, MAF, F-statistic and non-finite-value checks;
+- optional signed LD clumping;
+- Wald ratio, fixed-effects IVW, random-effects IVW and MR-Egger;
+- Cochran's Q, MR-Egger intercept and leave-one-out diagnostics;
+- environment-stratified MR;
+- covariance-aware GLS for a complete SNP-by-environment grid;
+- explicit environment and LD correlation matrices;
+- JSON, TSV and Markdown reports;
+- a summary-data MR-GxE comparator used only for the external-method benchmark;
+- synthetic examples, real-data processing records and simulation scripts.
+
+## Installation
+
+Python 3.10 or later is required.
 
 ```bash
 python -m pip install -e .
 ```
 
-Python >= 3.10，依赖 NumPy、pandas、SciPy。
+The research environment is listed in `environment.yml`. The core package uses NumPy, pandas and SciPy; the benchmark and figure scripts additionally use statsmodels, matplotlib and psutil.
 
-## 普通摘要MR
+## Ordinary summary MR
 
 ```bash
 plantmr validate \
@@ -48,11 +53,11 @@ plantmr run \
   --outdir examples/synthetic/result
 ```
 
-`--ld-matrix` 为可选的方阵，第一列为SNP，表头为SNP，数值为带符号LD相关系数。没有LD矩阵时工具会保留分析，但在报告中明确警告没有重新验证工具变量独立性。
+The LD file is optional. When supplied, it is a square matrix of signed LD correlations with SNP identifiers in the first column and header. When it is omitted, the report says that independence was not checked with an LD panel.
 
-## 环境分层MR
+## Environment-stratified MR
 
-暴露和结局文件都需要增加 `environment` 列，同一SNP可以在不同环境重复出现：
+The exposure and outcome tables contain an `environment` column. A SNP can therefore occur once per environment.
 
 ```bash
 plantmr run-stratified \
@@ -62,11 +67,11 @@ plantmr run-stratified \
   --outdir stratified_result
 ```
 
-输出 `environment_results.tsv` 和 `results.json`，分别保存每个环境的估计、审计计数和警告。
+The output includes `environment_results.tsv`, `results.json` and `report.md`.
 
-## 协方差感知的环境交互MR
+## Covariance-aware environment-effect analysis
 
-暴露和结局文件都需要增加 `environment` 列；暴露文件还需要每个环境唯一的数值列 `environment_value`。同一SNP必须在所有环境都有记录，工具会在每个环境内协调等位基因，再只保留所有环境均通过P值、F统计量和MAF筛选的SNP。
+For this analysis, both tables contain `environment`, and the exposure table also contains one numeric `environment_value` for each environment. Every retained SNP must be present in every environment and must pass the instrument filters in every environment.
 
 ```bash
 plantmr run-gxe \
@@ -78,37 +83,53 @@ plantmr run-gxe \
   --outdir gxe_result
 ```
 
-模型对每个SNP×环境单元计算 `beta_outcome / beta_exposure`，用两列设计 `[1, environment_value]` 做广义最小二乘（GLS）。截距是 `environment_value=0` 时的总体MR效应，斜率是每增加一个环境值单位时MR效应的变化。环境相关矩阵和SNP-LD相关矩阵必须是带符号的相关矩阵；未提供时不会假装独立，而是在报告中写入警告并使用对角近似。
+For each SNP and environment, PlantMR calculates `beta_outcome / beta_exposure` and fits a two-column GLS model with `[1, environment_value]`. The intercept is the estimated effect at `environment_value = 0`; the slope is the change in that estimate per unit of the environmental score.
 
-这个模型不是MR-GxE的多效性校正实现，也不把截距解释成多效性项；它估计的是预先指定环境分数下的MR效应异质性。MR-GxE、MR-GENIUS和MR-EILLS是不同估计量，不能由`run-gxe`静默替代。
+The environment and LD matrices must be signed correlation matrices. If they are not supplied, PlantMR uses the diagonal approximation and states that choice in the report. The model is an effect-heterogeneity model. Its intercept should not be read as a horizontal-pleiotropy term.
 
-## 输入列
+## External-method comparison
 
-必需列：
+`scripts/run_mr_gxe_head_to_head.py` implements a narrow summary-data MR-GxE comparator based on the three-step score regression described by Spiller et al. The benchmark passes the same simulated summary-statistics tables to PlantMR and the comparator. Because the two methods estimate different quantities, the benchmark scores each method only in scenarios where its own target is defined; other outputs are shown as diagnostics rather than placed on a single leaderboard.
+
+The results and figure are in:
+
+- `results/benchmarks/mr_gxe_head_to_head/`
+- `docs/figures/mr_gxe_head_to_head.png`
+- `docs/figures/mr_gxe_head_to_head.pdf`
+
+## Input columns
+
+Required columns for ordinary MR:
 
 `SNP`, `effect_allele`, `other_allele`, `beta`, `se`, `pval`
 
-建议列：
+Recommended columns:
 
 `eaf`, `n`
 
-植物元数据至少应说明：
+Plant metadata should describe:
 
 `species`, `assembly`, `trait`, `tissue`, `stage`, `environment`, `ploidy`, `ld_panel`
 
-## 结果解释边界
+## Interpreting results
 
-- 工具输出的是工具变量假设下的MR证据，不是自动确认的“因果基因”；
-- MR-Egger和随机效应IVW不能消除所有水平多效性；
-- 环境分层结果是条件性估计，不等同于完整的结构化G×E因果模型；
-- v1.0不内置SMR/HEIDI、GSMR、共定位、精细定位、MVMR、MR-PRESSO或泛基因组SV因果模型；这些需要独立方法和版本锁定，不能静默替代；
-- 没有LD参考面板时，不应把结果解释为已经完成独立工具变量验证；
-- 真实研究仍需要跨群体/跨环境重复和实验功能验证。
+- The output is MR evidence conditional on the instrumental-variable assumptions; it is not an automatic declaration that a gene is causal.
+- MR-Egger and random-effects IVW do not remove every form of horizontal pleiotropy.
+- Environment-stratified estimates are conditional estimates, not a complete structural model of genotype-by-environment biology.
+- SMR/HEIDI, GSMR, colocalization, fine-mapping, MVMR, MR-PRESSO and polyploid or pan-genome SV models are not silently substituted by the commands in this release.
+- A real biological study still needs matching LD data, independent replication and functional evidence.
 
-完整的输入契约、统计假设和最终验收记录见：
+More detail is available in:
 
-- `PLAN.md`
 - `docs/methods/estimands.md`
 - `docs/methods/assumptions.md`
-- `docs/FINAL_REPORT.zh-CN.md`
 - `docs/methods/environment-aware-mr.md`
+- `docs/real-case-arabidopsis.zh-CN.md`
+- `docs/mr-gxe-head-to-head.zh-CN.md`
+- `docs/similar-article-writing-audit.zh-CN.md`
+- `docs/PlantMR_submission_manuscript.docx`
+- `docs/PlantMR_submission_manuscript.pdf`
+
+## License
+
+MIT License. See `LICENSE`.
