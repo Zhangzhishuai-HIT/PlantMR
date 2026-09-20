@@ -12,6 +12,21 @@ The third workflow is intentionally narrow. It estimates an intercept and an env
 
 Repository: https://github.com/Zhangzhishuai-HIT/PlantMR
 
+## PlantMR 2.x CLI-first platform
+
+The `platform-v2` development branch is rebuilding PlantMR as a practical,
+GUI-free plant causal multi-omics platform. It currently provides the
+`plantmr2` project workflow, shared input contracts, ordinary summary MR,
+transparent GWAS/QTL baselines, SMR/HEIDI, GO enrichment and causal-edge
+network summaries. The implementation is deliberately explicit about what
+is not yet a mixed-model GWAS, LD-aware multi-omics model or colocalization
+engine.
+
+Start with `plantmr2 init`, then `inspect`, `validate` and `run`. The full
+Chinese CLI and data-contract guide is in
+`docs/PlantMR2-CLI使用与数据契约.zh-CN.md`. The published v1.1.0 manuscript
+release remains on `main` and is not overwritten by this development work.
+
 ## What is included
 
 - summary-statistics input validation and plant metadata;
@@ -133,6 +148,7 @@ More detail is available in:
 - `docs/PlantMR_submission_manuscript.zh-CN.pdf`
 - `docs/manuscript-draft.zh-CN.md`
 - `docs/PlantMR-MRBIGR目标与超越路线.zh-CN.md`
+- `docs/PlantMR2-CLI使用与数据契约.zh-CN.md`
 
 ## License
 

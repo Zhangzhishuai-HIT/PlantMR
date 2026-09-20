@@ -14,6 +14,18 @@ PlantMR是一个用植物和作物GWAS/QTL摘要数据做孟德尔随机化（MR
 
 https://github.com/Zhangzhishuai-HIT/PlantMR
 
+## PlantMR 2.x：无图形界面的平台版
+
+`platform-v2`开发分支正在把PlantMR重新做成一个实用的命令行/Python API植物因果多组学平台，不提供GUI。当前已经有统一项目目录和输入契约、普通摘要MR、透明GWAS/QTL基线、SMR/HEIDI、GO富集和因果边网络汇总。
+
+这些模块会明确写出限制：当前GWAS不是混合线性模型，QTL不是完整的LD-aware模型，SMR/HEIDI不是共定位证明，网络模块也不会把输入边自动包装成已证实因果关系。
+
+使用顺序是`plantmr2 init`、`inspect`、`validate`、`run`。完整的中文命令和数据契约见：
+
+`docs/PlantMR2-CLI使用与数据契约.zh-CN.md`
+
+论文版v1.1.0仍保留在`main`，v2开发不会覆盖已经发布的论文和稳定版代码。
+
 ## 已实现的功能
 
 - 摘要统计和植物元数据检查；
@@ -135,6 +147,7 @@ plantmr run-gxe \
 - `docs/PlantMR_submission_manuscript.zh-CN.pdf`
 - `docs/manuscript-draft.zh-CN.md`
 - `docs/PlantMR-MRBIGR目标与超越路线.zh-CN.md`
+- `docs/PlantMR2-CLI使用与数据契约.zh-CN.md`
 
 ## 许可证
 
