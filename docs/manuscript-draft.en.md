@@ -330,11 +330,11 @@ Software development should add condition-number and positive-semidefinite diagn
 
 # Conclusions
 
-PlantMR is a reproducible plant-focused implementation for auditable summary-statistics MR and a narrowly defined environment-effect-heterogeneity analysis. Its strongest evidence is software-level: explicit provenance, complete-grid selection, covariance-aware GLS, rank-aware heterogeneity reporting, calibrated simulations and a real-data contract that preserves limitations. The evidence does not support calling AT1G11560 a causal gene or calling PlantMR the first plant environment-interaction MR method. A Plant Methods software submission is defensible after adding a public repository/DOI, clean-environment verification and completed author declarations; a biological discovery claim would require a substantially stronger validation program.
+PlantMR is a reproducible plant-focused implementation for auditable summary-statistics MR and a narrowly defined environment-effect-heterogeneity analysis. Its strongest evidence is software-level: explicit provenance, complete-grid selection, covariance-aware GLS, rank-aware heterogeneity reporting, calibrated simulations and a real-data contract that preserves limitations. The evidence does not support calling AT1G11560 a causal gene or calling PlantMR the first plant environment-interaction MR method. A Plant Methods software submission is defensible after adding an archival DOI, clean-environment verification and completed author declarations; a biological discovery claim would require a substantially stronger validation program.
 
 # Availability and requirements
 
-PlantMR is released under the MIT License. The software snapshot is v1.1.0 and the complete manuscript/benchmark/Word-document package is frozen at tag v1.1.0-paper. The source archive `release/PlantMR_v1.1.0-paper_source.zip` is suitable for submission as supplementary software. Before publication, the archive should be mirrored to a public repository and assigned a DOI.
+PlantMR is released under the MIT License. The software snapshot is v1.1.0 and the complete manuscript/benchmark/Word-document package is frozen at tag v1.1.0-paper. The public repository is https://github.com/Zhangzhishuai-HIT/PlantMR, and the source archive `release/PlantMR_v1.1.0-paper_source.zip` is included for submission as supplementary software. A Zenodo or equivalent archival DOI remains to be assigned.
 
 Public data sources include GSE80744 normalized expression data, AraPheno FT10/FT16, 1001 Genomes v3.1 and the Arabidopsis source publications. The large 1001 Genomes provider archive is not redistributed; the derived local genotype region, PC scores, allele mapping and provider checksums are included. The maize supplementary workbook, eQTL table and candidate table are included for audit but not used as a new causal result.
 
@@ -346,7 +346,7 @@ Table 8. Plant Methods software availability and requirements.
 
 | Project name | PlantMR 1.1 |
 
-| Project home page | Public GitHub/GitLab URL to be supplied before submission; local frozen source archive is included. |
+| Project home page | https://github.com/Zhangzhishuai-HIT/PlantMR |
 
 | Operating system(s) | Linux verified; platform-independent Python code intended. |
 
@@ -398,7 +398,7 @@ Table 8. Plant Methods software availability and requirements.
 
 | Consent for publication | Not applicable. |
 
-| Availability of data and materials | Public source data and derived audit materials are described above; public repository URL/DOI to be added. |
+| Availability of data and materials | Public source data and derived audit materials are described above; code is available at https://github.com/Zhangzhishuai-HIT/PlantMR; archival DOI pending. |
 
 | Competing interests | To be completed by authors. |
 

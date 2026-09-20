@@ -12,6 +12,7 @@
 - 有4张论文图、8张编号表和36篇可核验科学参考文献；
 - 有一个真实Arabidopsis数据契约案例和公开来源回执；
 - 有完整英文投稿稿 `docs/PlantMR_submission_manuscript.docx` 和同步Markdown稿 `docs/manuscript-draft.en.md`；
+- 有公开仓库 `https://github.com/Zhangzhishuai-HIT/PlantMR`；
 - 有包含代码、测试、环境、图表和稿件的 `release/PlantMR_v1.1.0-paper_source.zip`。
 
 当前已经达到“完整软件/方法论文稿 + 可复现实验包 + 合作者预审”层级，可以开展Plant Methods预投稿咨询；仍不能把它写成“已证明植物基因因果”的应用论文。
@@ -75,7 +76,7 @@
 
 1. 在独立干净环境重新执行测试；
 2. 构建Docker镜像并保存构建日志；当前主机没有Docker/Podman，因此未完成；
-3. 将本地仓库镜像到公开GitHub/GitLab并取得Zenodo DOI；当前没有配置远程仓库；
+3. 已完成公开GitHub仓库；仍需取得Zenodo或等效归档DOI；
 4. 将STROBE-MR交叉表逐项绑定到最终稿页码/段落；当前已有交叉表，但Word分页尚未在Office渲染环境中复核；
 5. 将GxE模拟扩展到弱工具、LD错配和不同环境数量；当前已完成LD错配，弱工具和环境数量敏感性仍建议补。
 

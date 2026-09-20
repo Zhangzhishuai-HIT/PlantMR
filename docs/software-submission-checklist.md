@@ -23,9 +23,9 @@ Based on Nature Portfolio code/software and computational-tool reproducibility g
 
 ## Must be completed before external submission
 
-- Push the exact tagged snapshot to a public GitHub/GitLab repository;
+- Exact tagged snapshot pushed to `https://github.com/Zhangzhishuai-HIT/PlantMR`;
 - Archive the repository at Zenodo or an equivalent DOI service;
-- Replace the local-path code statement with the public URL and DOI;
+- Replace the remaining local-path/placeholder statements with the repository URL and archival DOI;
 - Re-run the full package from a clean environment/container and preserve logs;
 - Build and test Docker/Apptainer if the target journal/reviewer requires it;
 - Ask an unfamiliar colleague to install and run the synthetic demo;
