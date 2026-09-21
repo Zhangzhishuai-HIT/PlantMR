@@ -13,7 +13,7 @@
 ## Current implementation status
 
 The CLI/API platform work in Tasks 1–9 is implemented on `platform-v2` and
-covered by 73 automated tests. The implementation includes genotype/phenotype
+covered by 77 automated tests. The implementation includes genotype/phenotype
 QC, VCF/PLINK-raw/HapMap readers, PCA/kinship/t-SNE/UPGMA, OLS and
 kinship-aware GLS GWAS, QTL, SAL/annotation, ordinary/stratified/environment
 MR, SMR/HEIDI, coloc, MVMR, bidirectional networks/modules, GO, plots and
