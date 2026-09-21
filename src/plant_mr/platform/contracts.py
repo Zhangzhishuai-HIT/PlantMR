@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import gzip
 from pathlib import Path
 from typing import Any, Mapping
 
@@ -78,6 +79,25 @@ def validate_input_file(
     if role not in _CONTRACTS:
         return {"contract": "untyped", "path": str(path), "exists": path.exists()}
     contract, required = _CONTRACTS[role]
+    if role == "genotype" and (path.name.endswith(".vcf") or path.name.endswith(".vcf.gz")):
+        opener = gzip.open if path.name.endswith(".gz") else open
+        header = None
+        try:
+            with opener(path, "rt", encoding="utf-8", errors="replace") as handle:
+                for line in handle:
+                    if line.startswith("#CHROM"):
+                        header = line.rstrip("\n").split("\t")
+                        break
+        except OSError as exc:
+            raise InputContractError(f"genotype: cannot read VCF {path}: {exc}") from exc
+        if header is None or len(header) < 10:
+            raise InputContractError("genotype: VCF is missing a valid #CHROM header with samples")
+        return {
+            "contract": "genotype-vcf",
+            "path": str(path),
+            "exists": True,
+            "samples": int(len(header) - 9),
+        }
     df = read_table(path)
     if df.empty:
         raise InputContractError(f"{role}: input table is empty")

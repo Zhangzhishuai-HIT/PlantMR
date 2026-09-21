@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import warnings
 
 from plant_mr.platform.gwas_models import run_matrix_gwas
 from plant_mr.platform.genotype import kinship_matrix
@@ -39,3 +40,21 @@ def test_matrix_gwas_supports_covariates_and_kinship_model():
     assert set(mlm["model"]) == {"gemma_mlm"}
     assert mlm.loc[mlm["variant_id"] == "s_causal", "pval"].iloc[0] < 1e-6
     assert (mlm["n_covariates"] == 1).all()
+
+
+def test_matrix_gwas_skips_all_missing_variants_without_runtime_warning():
+    samples = ["p1", "p2", "p3", "p4"]
+    genotype = pd.DataFrame(
+        {"usable": [0.0, 1.0, 2.0, 1.0], "all_missing": [np.nan] * 4},
+        index=samples,
+    )
+    phenotype = pd.DataFrame(
+        {"sample_id": samples, "trait": "height", "value": [1.0, 2.0, 3.0, 2.0]}
+    )
+
+    with warnings.catch_warnings(record=True) as caught:
+        warnings.simplefilter("always")
+        result = run_matrix_gwas(genotype, phenotype, trait="height")
+
+    assert not any("Mean of empty slice" in str(item.message) for item in caught)
+    assert set(result["variant_id"]) == {"usable"}

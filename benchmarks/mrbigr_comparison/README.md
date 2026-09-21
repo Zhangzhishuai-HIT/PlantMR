@@ -2,6 +2,9 @@
 
 本目录保存PlantMR 2.x的功能对照和可复现验证入口。MRBIGR功能基线来自Xu等人的论文及补充材料（Plant Communications, DOI: 10.1016/j.xplc.2024.101197）。
 
+真实公开玉米fixture的下载、样本交集、运行结果和MRBIGR源码审计见：
+`docs/PlantMR-MRBIGR真实公开玉米fixture验证报告.zh-CN.md`。
+
 ## 对照矩阵
 
 | MRBIGR模块 | PlantMR 2.x实现 | 实际入口 | 证据/限制 |
@@ -31,6 +34,12 @@ plantmr2 validate demo/plantmr.toml --json
 plantmr2 status demo/plantmr.toml --json
 plantmr2 explain environment-slope --json
 ```
+
+## 当前对标状态
+
+已经完成真实公开文件的PlantMR端到端fixture验证：VCF QC、表型QC、GWAS、QTL、SMR/HEIDI、coloc、MVMR、SAL、AGPv4注释、GO和网络均有run目录与结果回执。该fixture只保留了8个VCF×表型直接同名材料和5个VCF×表达直接同名材料，属于工程验证，不是正式生物学发现。
+
+MRBIGR源码已下载并审计，但同输入头对头运行仍未完成：其入口依赖pandas-plink、pyranges、rpy2、R和外部工具；当前主机GCC 4.8.5无法编译sorted-nearest，Rscript/GEMMA/PLINK运行链也不齐。报告中没有把MRBIGR未运行解释成PlantMR胜出。
 
 ## 不把适配器说成内置算法
 

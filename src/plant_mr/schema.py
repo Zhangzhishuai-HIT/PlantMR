@@ -54,10 +54,13 @@ def validate_summary(data: pd.DataFrame, label: str) -> ValidationResult:
     if ((result["pval"] < 0) | (result["pval"] > 1)).any():
         raise SchemaError(f"{label}: pval must be within [0, 1]")
     if "eaf" in result.columns:
-        _finite_numeric(result, "eaf", label)
-        result["eaf"] = pd.to_numeric(result["eaf"])
-        if ((result["eaf"] <= 0) | (result["eaf"] >= 1)).any():
-            raise SchemaError(f"{label}: eaf must be within (0, 1)")
+        if result["eaf"].isna().all():
+            result["eaf"] = np.nan
+        else:
+            _finite_numeric(result, "eaf", label)
+            result["eaf"] = pd.to_numeric(result["eaf"])
+            if ((result["eaf"] <= 0) | (result["eaf"] >= 1)).any():
+                raise SchemaError(f"{label}: eaf must be within (0, 1)")
     else:
         result["eaf"] = np.nan
     for column in ("effect_allele", "other_allele"):

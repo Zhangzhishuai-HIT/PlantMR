@@ -104,6 +104,9 @@ def _build_parser() -> argparse.ArgumentParser:
     run.add_argument("manifest")
     run.add_argument("--analysis")
     run.add_argument("--run-id")
+    run.add_argument("--p-threshold", type=float, default=5e-8)
+    run.add_argument("--f-threshold", type=float, default=10.0)
+    run.add_argument("--maf-threshold", type=float, default=0.01)
     run.add_argument("--trait")
     run.add_argument("--feature-role", default="expression")
     run.add_argument("--feature-id")
@@ -197,6 +200,9 @@ def main(argv=None) -> int:
                 manifest,
                 analysis=args.analysis,
                 run_id=args.run_id,
+                p_threshold=args.p_threshold,
+                f_threshold=args.f_threshold,
+                maf_threshold=args.maf_threshold,
                 trait=args.trait,
                 feature_role=args.feature_role,
                 feature_id=args.feature_id,

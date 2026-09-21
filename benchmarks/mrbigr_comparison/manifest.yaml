@@ -8,11 +8,15 @@ status:
   internal_cli_api: implemented
   gui: intentionally_not_provided
   external_gemma_gapit_rmvp: adapter_only
-  matched_public_maize_benchmark: not_yet_run
+  matched_public_maize_benchmark: bounded_fixture_completed_not_head_to_head
   matched_rice_benchmark: not_yet_run
+  mrbigr_source_audit: completed
+  mrbigr_head_to_head: blocked_dependency_chain
   ld_aware_fine_mapping: not_implemented
   polyploid_pangenome_specialized_models: not_implemented
 verification:
   test_command: pytest -q
   compile_command: python -m compileall -q src scripts
   source_of_truth: src/plant_mr/platform
+  public_maize_report: docs/PlantMR-MRBIGR真实公开玉米fixture验证报告.zh-CN.md
+  mrbigr_source_commit: 7c80d44cb88260a2b5e1b90b453f3747244ac1ce

@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-from plant_mr.platform.cli import main
+from plant_mr.platform.cli import _build_parser, main
 
 
 def test_init_creates_user_facing_project_skeleton(tmp_path, capsys):
@@ -56,3 +56,22 @@ outcome = "data/outcome.tsv"
     assert payload["missing_inputs"] == ["exposure", "outcome"]
     assert "genotype" in payload["missing_optional_inputs"]
     assert not (tmp_path / "runs").exists()
+
+
+def test_run_parser_exposes_instrument_thresholds():
+    args = _build_parser().parse_args(
+        [
+            "run",
+            "plantmr.toml",
+            "--p-threshold",
+            "0.05",
+            "--f-threshold",
+            "1.0",
+            "--maf-threshold",
+            "0.01",
+        ]
+    )
+
+    assert args.p_threshold == 0.05
+    assert args.f_threshold == 1.0
+    assert args.maf_threshold == 0.01

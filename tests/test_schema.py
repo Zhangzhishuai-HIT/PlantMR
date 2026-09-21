@@ -37,3 +37,10 @@ def test_invalid_allele_and_standard_error_are_rejected():
     table.loc[1, "se"] = 0
     with pytest.raises(SchemaError, match="allele|se"):
         validate_summary(table, label="exposure")
+
+
+def test_optional_missing_eaf_survives_repeated_validation():
+    table = valid_table().drop(columns=["eaf"])
+    first = validate_summary(table, label="exposure").data
+    second = validate_summary(first, label="exposure").data
+    assert second["eaf"].isna().all()

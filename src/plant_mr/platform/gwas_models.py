@@ -99,7 +99,10 @@ def run_matrix_gwas(
         x = geno[variant_id].to_numpy(dtype=float)
         missing_x = ~np.isfinite(x)
         if missing_x.any():
-            x[missing_x] = np.nanmean(x)
+            observed = x[~missing_x]
+            if len(observed) == 0:
+                continue
+            x[missing_x] = np.mean(observed)
         if not np.isfinite(x).all() or np.std(x) == 0:
             continue
         beta, se, pval = _fit_one(y, x, base, vinv, model)

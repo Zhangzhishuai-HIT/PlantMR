@@ -27,6 +27,7 @@
 - `plantmr2 --help`：通过；
 - `init → inspect → validate`：通过；
 - 多分析无GUI端到端run：普通MR、GWAS、QTL、QC、SMR、coloc、MVMR、GO、SAL、annotation、network、stratified MR、environment heterogeneity均有测试或运行验证；
+- 真实公开玉米fixture：Panzea chr10 VCF、Maizego表达/表型、NCBI AGPv4 GFF和MaizeGDB GO均已下载并有SHA-256回执；Plantheight GWAS、两个表达QTL、SMR/HEIDI、coloc、MVMR、SAL、注释、GO和网络均真实运行；详细边界见`docs/PlantMR-MRBIGR真实公开玉米fixture验证报告.zh-CN.md`；
 - 安全检查：外部命令适配器固定`shell=False`，不使用eval/exec/pickle，run_id拒绝路径穿越。
 
 ## 与MRBIGR的准确关系
@@ -38,6 +39,6 @@ PlantMR 2.x已经覆盖MRBIGR七个功能模块的内部CLI/API主链，但“�
 - 当前没有完整LD-aware共定位/精细定位和样本重叠协方差模型；
 - 多倍体复杂等位基因、PAV/SV和泛基因组专用模型没有被普通剂量矩阵静默替代；
 - 没有GUI，用户体验通过CLI、JSON、Markdown、TSV、帮助、status和explain实现；
-- 公开植物案例的同数据、同split、同工具版本头对头基准尚未伪造，需取得数据和外部软件后另行运行。
+- 已完成PlantMR在真实公开玉米fixture上的独立运行，但该fixture只有8个VCF×表型直接同名样本和5个VCF×表达直接同名样本；MRBIGR源码头对头运行仍被其旧Python/R依赖链阻塞，因此尚未形成同输入数值胜负表。
 
 因此，本交付可以称为“完整的PlantMR 2.x内部CLI/API平台实现”，但不能称为“已经在所有维度击败MRBIGR”。超过MRBIGR的结论只应在实际公开数据头对头结果产生后，对具体维度单独声明。

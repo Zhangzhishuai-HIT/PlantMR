@@ -1,3 +1,4 @@
+import gzip
 import json
 
 from plant_mr.platform.cli import main
@@ -74,3 +75,19 @@ def test_validate_rejects_malformed_declared_expression(tmp_path, capsys):
     payload = json.loads(capsys.readouterr().out)
     assert payload["valid"] is False
     assert any("expression" in item for item in payload["errors"])
+
+
+def test_validate_accepts_compressed_vcf_genotype_contract(tmp_path, capsys):
+    data = _summary_files(tmp_path)
+    with gzip.open(data / "genotype.vcf.gz", "wt", encoding="utf-8") as handle:
+        handle.write("##fileformat=VCFv4.2\n")
+        handle.write("##contig=<ID=1>\n")
+        handle.write("#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tplant_01\n")
+        handle.write("1\t10\ts1\tA\tG\t.\tPASS\t.\tGT\t0/1\n")
+    manifest = _manifest(tmp_path, "\ngenotype = \"data/genotype.vcf.gz\"\n")
+
+    rc = main(["validate", str(manifest), "--json"])
+
+    assert rc == 0
+    payload = json.loads(capsys.readouterr().out)
+    assert payload["inputs"]["genotype"]["contract"] == "genotype-vcf"
