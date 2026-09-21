@@ -10,6 +10,22 @@
 
 ---
 
+## Current implementation status
+
+The CLI/API platform work in Tasks 1–9 is implemented on `platform-v2` and
+covered by 73 automated tests. The implementation includes genotype/phenotype
+QC, VCF/PLINK-raw/HapMap readers, PCA/kinship/t-SNE/UPGMA, OLS and
+kinship-aware GLS GWAS, QTL, SAL/annotation, ordinary/stratified/environment
+MR, SMR/HEIDI, coloc, MVMR, bidirectional networks/modules, GO, plots and
+input hash receipts.
+
+Task 10 remains an evidence task rather than an empty code placeholder:
+running matched public maize/rice cases requires the external datasets and
+GEMMA/GAPIT3/rMVP installations. PlantMR provides a safe external-command
+adapter but does not invent those benchmark results. Therefore the repository
+does not claim `MRBIGR_SURPASSED_IN_DEFINED_DIMENSIONS` until those runs have
+real receipts.
+
 ## Product rules
 
 1. `main` remains the v1.1.0 manuscript/software release. Platform work stays on `platform-v2` until a separate release decision.
