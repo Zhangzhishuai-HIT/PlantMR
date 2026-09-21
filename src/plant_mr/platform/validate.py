@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from typing import Any
 
-from ..schema import SchemaError, read_summary
-from .contracts import InputContractError, validate_input_file
+from ..schema import SchemaError, read_summary, validate_summary
+from .contracts import InputContractError, read_table, validate_input_file
 from .project import ProjectManifest
 
 REQUIRED_INPUTS = {"exposure", "outcome"}
@@ -16,7 +16,7 @@ def required_inputs_for_analysis(
     *,
     feature_role: str = "expression",
 ) -> set[str]:
-    if analysis in {"ordinary-mr", "mr", "smr"}:
+    if analysis in {"ordinary-mr", "mr", "smr", "coloc", "mvmr", "stratified-mr", "environment-heterogeneity"}:
         return {"exposure", "outcome"}
     if analysis == "gwas":
         return {"genotype", "phenotype"}
@@ -26,6 +26,16 @@ def required_inputs_for_analysis(
         return {"go_annotation", "selected_features"}
     if analysis == "network":
         return {"edges"}
+    if analysis == "genotype-qc":
+        return {"genotype"}
+    if analysis == "phenotype-qc":
+        return {"phenotype"}
+    if analysis == "environment-merge":
+        return {"phenotype"}
+    if analysis == "sal":
+        return {"gwas"}
+    if analysis == "annotate":
+        return {"gwas", "gene_annotation"}
     return set()
 
 
@@ -33,6 +43,8 @@ def validate_project(
     manifest: ProjectManifest,
     *,
     required_inputs: set[str] | None = None,
+    allow_multi_exposure: bool = False,
+    allow_environment_repeats: bool = False,
 ) -> dict[str, Any]:
     errors: list[str] = []
     warnings: list[str] = []
@@ -50,7 +62,20 @@ def validate_project(
             continue
         try:
             if role in {"exposure", "outcome"}:
-                result = read_summary(str(path), role)
+                if role == "exposure" and allow_multi_exposure:
+                    raw = read_table(path)
+                    if "exposure_id" not in raw.columns:
+                        raise SchemaError("exposure: MVMR input requires exposure_id")
+                    for exposure_id, group in raw.groupby("exposure_id", sort=True):
+                        validate_summary(group, f"exposure[{exposure_id}]")
+                    result = type("Result", (), {"data": raw})
+                elif allow_environment_repeats and "environment" in read_table(path).columns:
+                    raw = read_table(path)
+                    for environment, group in raw.groupby("environment", sort=True):
+                        validate_summary(group, f"{role}[{environment}]")
+                    result = type("Result", (), {"data": raw})
+                else:
+                    result = read_summary(str(path), role)
                 inputs[role] = {
                     "path": str(path),
                     "rows": int(len(result.data)),

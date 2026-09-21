@@ -16,9 +16,9 @@ https://github.com/Zhangzhishuai-HIT/PlantMR
 
 ## PlantMR 2.x：无图形界面的平台版
 
-`platform-v2`开发分支正在把PlantMR重新做成一个实用的命令行/Python API植物因果多组学平台，不提供GUI。当前已经有统一项目目录和输入契约、普通摘要MR、透明GWAS/QTL基线、SMR/HEIDI、GO富集和因果边网络汇总。
+`platform-v2`开发分支正在把PlantMR重新做成一个实用的命令行/Python API植物因果多组学平台，不提供GUI。当前已经有统一项目目录和输入契约、基因型/表型QC、OLS和亲缘矩阵感知GWAS、QTL、SAL/变异注释、SMR/HEIDI、ABF共定位、MVMR、GO富集、双向MR网络/模块、输入SHA-256回执和PNG/PDF图表。
 
-这些模块会明确写出限制：当前GWAS不是混合线性模型，QTL不是完整的LD-aware模型，SMR/HEIDI不是共定位证明，网络模块也不会把输入边自动包装成已证实因果关系。
+这些模块会明确写出限制：`gemma_mlm`是内部亲缘矩阵GLS，不是GEMMA二进制复现；SMR/HEIDI不是共定位证明；网络、SAL和最近基因注释也不会自动包装成已证实因果关系。原始PLINK/HapMap转换、GEMMA/GAPIT3/rMVP外部适配、完整LD-aware精细定位、多倍体和泛基因组专用模型仍单列验证。
 
 使用顺序是`plantmr2 init`、`inspect`、`validate`、`run`。完整的中文命令和数据契约见：
 
@@ -148,6 +148,8 @@ plantmr run-gxe \
 - `docs/manuscript-draft.zh-CN.md`
 - `docs/PlantMR-MRBIGR目标与超越路线.zh-CN.md`
 - `docs/PlantMR2-CLI使用与数据契约.zh-CN.md`
+- `docs/PlantMR-2.0-evidence-report.zh-CN.md`
+- `benchmarks/mrbigr_comparison/README.md`
 
 ## 许可证
 

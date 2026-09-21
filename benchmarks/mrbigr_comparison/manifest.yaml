@@ -1,0 +1,18 @@
+version: 1
+project: PlantMR-2.x
+reference:
+  name: MRBIGR
+  doi: 10.1016/j.xplc.2024.101197
+  supplement: https://pmc.ncbi.nlm.nih.gov/articles/instance/11956086/bin/mmc1.pdf
+status:
+  internal_cli_api: implemented
+  gui: intentionally_not_provided
+  external_gemma_gapit_rmvp: adapter_only
+  matched_public_maize_benchmark: not_yet_run
+  matched_rice_benchmark: not_yet_run
+  ld_aware_fine_mapping: not_implemented
+  polyploid_pangenome_specialized_models: not_implemented
+verification:
+  test_command: pytest -q
+  compile_command: python -m compileall -q src scripts
+  source_of_truth: src/plant_mr/platform

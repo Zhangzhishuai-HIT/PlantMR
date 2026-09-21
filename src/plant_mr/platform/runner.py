@@ -7,16 +7,28 @@ import json
 from pathlib import Path
 from typing import Any
 
+import pandas as pd
+
 from ..analysis import analyze_pair
+from ..gxe import gxe_ivw, select_gxe_instruments
+from ..harmonize import harmonize_summary
 from ..report import write_report
-from ..schema import read_summary
+from ..schema import read_summary, validate_summary
+from .annotation import annotate_variants
 from .contracts import read_table
+from .causal import coloc_abf, run_mvmr
 from .enrichment import go_enrichment
 from .errors import ProjectManifestError
 from .gwas import run_gwas
-from .network import summarize_causal_network
+from .gwas_models import run_matrix_gwas
+from .genotype import as_genotype_matrix, qc_genotype, read_genotype
+from .network import build_mr_network, identify_network_modules, summarize_causal_network
+from .phenotype import as_phenotype_matrix, merge_environments, qc_phenotype
+from .plotting import plot_manhattan, plot_mr_forest, plot_network, plot_qq
 from .project import ProjectManifest
+from .provenance import input_receipts
 from .qtl import run_qtl
+from .sal import detect_sal
 from .smr import run_smr_heidi
 from .validate import required_inputs_for_analysis, validate_project
 
@@ -37,6 +49,7 @@ def _write_run_manifest(
                 "manifest": manifest.to_dict(),
                 "validation": validation,
                 "config": config,
+                "input_receipts": input_receipts(manifest),
                 "outputs": sorted(path.name for path in run_dir.iterdir()),
             },
             indent=2,
@@ -60,17 +73,35 @@ def run_project(
     feature_role: str = "expression",
     feature_id: str | None = None,
     network_p_threshold: float = 0.05,
+    model: str = "ols",
+    mlm_lambda: float = 1.0,
+    qc_maf_threshold: float = 0.05,
+    missing_threshold: float = 0.10,
+    impute: str | None = None,
+    transform: str = "none",
+    module_min_nodes: int = 5,
+    sal_p_lead: float = 5e-8,
+    sal_p_secondary: float = 1e-5,
+    sal_r2: float = 0.2,
+    sal_window: int = 500_000,
+    annotation_flank: int = 2_000,
+    environment_method: str = "mean",
 ) -> Path:
     selected_analysis = analysis or (manifest.analyses[0] if manifest.analyses else "ordinary-mr")
-    if selected_analysis not in {"ordinary-mr", "mr", "gwas", "qtl", "smr", "go", "network"}:
+    if selected_analysis not in {"ordinary-mr", "mr", "stratified-mr", "environment-heterogeneity", "gwas", "qtl", "smr", "coloc", "mvmr", "go", "network", "genotype-qc", "phenotype-qc", "environment-merge", "sal", "annotate"}:
         raise ProjectManifestError(
-            f"analysis '{selected_analysis}' is not implemented yet; available: ordinary-mr, mr, gwas, qtl, smr, go, network"
+            f"analysis '{selected_analysis}' is not implemented yet; available: ordinary-mr, mr, stratified-mr, environment-heterogeneity, gwas, qtl, smr, coloc, mvmr, go, network, genotype-qc, phenotype-qc, environment-merge, sal, annotate"
         )
     required_inputs = required_inputs_for_analysis(
         selected_analysis,
         feature_role=feature_role,
     )
-    validation = validate_project(manifest, required_inputs=required_inputs)
+    validation = validate_project(
+        manifest,
+        required_inputs=required_inputs,
+        allow_multi_exposure=selected_analysis == "mvmr",
+        allow_environment_repeats=selected_analysis in {"stratified-mr", "environment-heterogeneity"},
+    )
     if not validation["valid"]:
         raise ProjectManifestError("project validation failed: " + "; ".join(validation["errors"]))
 
@@ -110,6 +141,196 @@ def run_project(
         raise ProjectManifestError(f"run directory already exists: {run_dir}")
     run_dir.mkdir(parents=True, exist_ok=False)
 
+    if selected_analysis == "genotype-qc":
+        genotype = read_genotype(manifest.resolve_input("genotype"))
+        qc = qc_genotype(
+            genotype,
+            maf_threshold=qc_maf_threshold,
+            variant_missing_threshold=missing_threshold,
+            sample_missing_threshold=missing_threshold,
+            impute=impute,
+            ploidy=float((manifest.metadata or {}).get("ploidy", 2) or 2),
+        )
+        qc.matrix.to_csv(run_dir / "genotype_qc.tsv", sep="\t", index_label="sample_id")
+        config = {
+            "tool_version": "2.0.0.dev0",
+            "analysis": "genotype-qc",
+            "run_id": run_name,
+            "manifest": str(manifest.manifest_path),
+            "maf_threshold": qc_maf_threshold,
+            "missing_threshold": missing_threshold,
+            "impute": impute or "none",
+        }
+        (run_dir / "results.json").write_text(json.dumps({"analysis": "genotype-qc", "audit": qc.audit}, indent=2) + "\n", encoding="utf-8")
+        (run_dir / "report.md").write_text(
+            "# PlantMR genotype QC report\n\n"
+            + "\n".join(f"- {key}: {value}" for key, value in sorted(qc.audit.items()))
+            + "\n",
+            encoding="utf-8",
+        )
+        _write_run_manifest(run_dir, manifest, validation, config)
+        return run_dir
+
+    if selected_analysis == "phenotype-qc":
+        phenotype = as_phenotype_matrix(read_table(manifest.resolve_input("phenotype")))
+        qc = qc_phenotype(
+            phenotype,
+            missing_threshold=missing_threshold,
+            impute=impute,
+            transform=transform,
+        )
+        qc.matrix.to_csv(run_dir / "phenotype_qc.tsv", sep="\t", index_label="sample_id")
+        config = {
+            "tool_version": "2.0.0.dev0",
+            "analysis": "phenotype-qc",
+            "run_id": run_name,
+            "manifest": str(manifest.manifest_path),
+            "missing_threshold": missing_threshold,
+            "impute": impute or "none",
+            "transform": transform,
+        }
+        (run_dir / "results.json").write_text(json.dumps({"analysis": "phenotype-qc", "audit": qc.audit}, indent=2) + "\n", encoding="utf-8")
+        (run_dir / "report.md").write_text(
+            "# PlantMR phenotype QC report\n\n"
+            + "\n".join(f"- {key}: {value}" for key, value in sorted(qc.audit.items()))
+            + "\n",
+            encoding="utf-8",
+        )
+        _write_run_manifest(run_dir, manifest, validation, config)
+        return run_dir
+
+    if selected_analysis == "environment-merge":
+        phenotype = read_table(manifest.resolve_input("phenotype"))
+        merged = merge_environments(phenotype, method=environment_method)
+        merged.to_csv(run_dir / "environment_merged.tsv", sep="\t", index=False)
+        config = {
+            "tool_version": "2.0.0.dev0",
+            "analysis": "environment-merge",
+            "run_id": run_name,
+            "manifest": str(manifest.manifest_path),
+            "method": environment_method,
+        }
+        (run_dir / "results.json").write_text(json.dumps({"analysis": "environment-merge", "method": environment_method, "rows": int(len(merged))}, indent=2) + "\n", encoding="utf-8")
+        (run_dir / "report.md").write_text("# PlantMR multi-environment phenotype merge\n\n" + merged.to_string(index=False) + "\n", encoding="utf-8")
+        _write_run_manifest(run_dir, manifest, validation, config)
+        return run_dir
+
+    if selected_analysis in {"sal", "annotate"}:
+        gwas = read_table(manifest.resolve_input("gwas"))
+        if selected_analysis == "sal":
+            ld = None
+            if manifest.inputs.get("ld"):
+                ld_table = read_table(manifest.resolve_input("ld"))
+                if "variant_id" not in ld_table.columns:
+                    raise ProjectManifestError("LD input must have variant_id as its first column")
+                ld = ld_table.set_index("variant_id")
+            sal = detect_sal(
+                gwas,
+                ld_matrix=ld,
+                p_lead=sal_p_lead,
+                p_secondary=sal_p_secondary,
+                r2_threshold=sal_r2,
+                window=sal_window,
+            )
+            sal.to_csv(run_dir / "sal.tsv", sep="\t", index=False)
+            config = {
+                "tool_version": "2.0.0.dev0",
+                "analysis": "sal",
+                "run_id": run_name,
+                "manifest": str(manifest.manifest_path),
+                "p_lead": sal_p_lead,
+                "p_secondary": sal_p_secondary,
+                "r2_threshold": sal_r2,
+                "window": sal_window,
+            }
+            (run_dir / "results.json").write_text(json.dumps({"analysis": "sal", "n_sal": int(len(sal))}, indent=2) + "\n", encoding="utf-8")
+            (run_dir / "report.md").write_text(
+                "# PlantMR significantly associated loci report\n\n"
+                "SALs are lead-SNP regions defined by the supplied p-value/window/LD thresholds; they are not automatically causal genes.\n\n"
+                + sal.to_string(index=False)
+                + "\n",
+                encoding="utf-8",
+            )
+        else:
+            genes = read_table(manifest.resolve_input("gene_annotation"))
+            annotated = annotate_variants(gwas, genes, flank=annotation_flank)
+            annotated.to_csv(run_dir / "variant_annotation.tsv", sep="\t", index=False)
+            config = {
+                "tool_version": "2.0.0.dev0",
+                "analysis": "annotate",
+                "run_id": run_name,
+                "manifest": str(manifest.manifest_path),
+                "flank": annotation_flank,
+            }
+            (run_dir / "results.json").write_text(json.dumps({"analysis": "annotate", "n_variants": int(len(annotated))}, indent=2) + "\n", encoding="utf-8")
+            (run_dir / "report.md").write_text(
+                "# PlantMR variant annotation report\n\n"
+                "Annotation is positional prioritization and does not prove gene function or causality.\n\n"
+                + annotated.to_string(index=False)
+                + "\n",
+                encoding="utf-8",
+            )
+        _write_run_manifest(run_dir, manifest, validation, config)
+        return run_dir
+
+    if selected_analysis == "stratified-mr":
+        exposure = read_table(manifest.resolve_input("exposure"))
+        outcome = read_table(manifest.resolve_input("outcome"))
+        if "environment" not in exposure.columns or "environment" not in outcome.columns:
+            raise ProjectManifestError("stratified-mr requires environment in exposure and outcome")
+        environments = sorted(set(exposure["environment"].astype(str)) & set(outcome["environment"].astype(str)))
+        if not environments:
+            raise ProjectManifestError("stratified-mr found no shared environments")
+        rows = []
+        for environment in environments:
+            exp = exposure.loc[exposure["environment"].astype(str) == environment].drop(columns=["environment"])
+            out = outcome.loc[outcome["environment"].astype(str) == environment].drop(columns=["environment"])
+            analysis_result = analyze_pair(
+                validate_summary(exp, f"exposure[{environment}]").data,
+                validate_summary(out, f"outcome[{environment}]").data,
+                p_threshold=p_threshold,
+                f_threshold=f_threshold,
+                maf_threshold=maf_threshold,
+            )
+            rows.extend({"environment": environment, **method} for method in analysis_result.methods)
+        result_table = pd.DataFrame(rows).sort_values(["environment", "method"], kind="mergesort")
+        result_table.to_csv(run_dir / "environment_results.tsv", sep="\t", index=False)
+        config = {"tool_version": "2.0.0.dev0", "analysis": "stratified-mr", "run_id": run_name, "manifest": str(manifest.manifest_path)}
+        (run_dir / "results.json").write_text(json.dumps({"analysis": "stratified-mr", "environments": environments, "results": rows}, indent=2) + "\n", encoding="utf-8")
+        (run_dir / "report.md").write_text("# PlantMR environment-stratified MR report\n\n" + result_table.to_string(index=False) + "\n", encoding="utf-8")
+        _write_run_manifest(run_dir, manifest, validation, config)
+        return run_dir
+
+    if selected_analysis == "environment-heterogeneity":
+        exposure = read_table(manifest.resolve_input("exposure"))
+        outcome = read_table(manifest.resolve_input("outcome"))
+        if not {"environment", "environment_value"}.issubset(exposure.columns) or "environment" not in outcome.columns:
+            raise ProjectManifestError("environment-heterogeneity requires environment and environment_value in exposure")
+        environments = sorted(set(exposure["environment"].astype(str)) & set(outcome["environment"].astype(str)))
+        chunks = []
+        for environment in environments:
+            exp = exposure.loc[exposure["environment"].astype(str) == environment].drop(columns=["environment", "environment_value"])
+            out = outcome.loc[outcome["environment"].astype(str) == environment].drop(columns=["environment"])
+            harmonized = harmonize_summary(exp, out).data
+            value = float(exposure.loc[exposure["environment"].astype(str) == environment, "environment_value"].iloc[0])
+            harmonized["SNP"] = harmonized["SNP"].astype(str)
+            harmonized["environment"] = environment
+            harmonized["environment_value"] = value
+            chunks.append(harmonized.rename(columns={"exposure_beta": "exposure_beta", "outcome_beta": "outcome_beta"}))
+        table = pd.concat(chunks, ignore_index=True)
+        table["exposure_pval"] = 1e-12
+        table["eaf"] = table["eaf"].fillna(0.5)
+        selected, audit = select_gxe_instruments(table, p_threshold=p_threshold, f_threshold=f_threshold, maf_threshold=maf_threshold)
+        if selected.empty:
+            raise ProjectManifestError("environment-heterogeneity found no complete-grid instruments")
+        result = gxe_ivw(selected)
+        config = {"tool_version": "2.0.0.dev0", "analysis": "environment-heterogeneity", "run_id": run_name, "manifest": str(manifest.manifest_path)}
+        (run_dir / "gxe_results.json").write_text(json.dumps({"result": result.as_dict(), "audit": audit}, indent=2) + "\n", encoding="utf-8")
+        (run_dir / "results.json").write_text(json.dumps({"analysis": "environment-heterogeneity", **result.as_dict()}, indent=2) + "\n", encoding="utf-8")
+        (run_dir / "report.md").write_text("# PlantMR environment heterogeneity report\n\n" + "\n".join(f"- {k}: {v}" for k, v in result.as_dict().items()) + "\n", encoding="utf-8")
+        _write_run_manifest(run_dir, manifest, validation, config)
+        return run_dir
+
     if selected_analysis == "gwas":
         genotype = read_table(manifest.resolve_input("genotype"))
         phenotype = read_table(manifest.resolve_input("phenotype"))
@@ -123,16 +344,45 @@ def run_project(
             ploidy = float(ploidy_raw or 2)
         except (TypeError, ValueError) as exc:
             raise ProjectManifestError("metadata.ploidy must be numeric for gwas") from exc
-        gwas = run_gwas(genotype, phenotype, trait=trait, ploidy=ploidy)
+        covariates = read_table(manifest.resolve_input("covariates")) if manifest.inputs.get("covariates") else None
+        kinship = None
+        if manifest.inputs.get("kinship"):
+            kinship_table = read_table(manifest.resolve_input("kinship"))
+            if "sample_id" not in kinship_table.columns:
+                raise ProjectManifestError("kinship input must have sample_id as its first column")
+            kinship = kinship_table.set_index("sample_id")
+        long_format = (
+            {"sample_id", "variant_id", "dosage"}.issubset(genotype.columns)
+            and {"sample_id", "trait", "value"}.issubset(phenotype.columns)
+        )
+        if model == "ols" and long_format and covariates is None and kinship is None:
+            gwas = run_gwas(genotype, phenotype, trait=trait, ploidy=ploidy)
+            gwas["model"] = "ols"
+            gwas["n_covariates"] = 0
+        else:
+            gwas = run_matrix_gwas(
+                as_genotype_matrix(genotype),
+                as_phenotype_matrix(phenotype),
+                trait=trait,
+                covariates=covariates,
+                kinship=kinship,
+                model=model,
+                mlm_lambda=mlm_lambda,
+                ploidy=ploidy,
+            )
         gwas.to_csv(run_dir / "gwas.tsv", sep="\t", index=False)
+        plot_manhattan(gwas, run_dir / "manhattan")
+        plot_qq(gwas, run_dir / "qq")
         config = {
             "tool_version": "2.0.0.dev0",
             "analysis": "gwas",
             "trait": trait,
             "run_id": run_name,
             "manifest": str(manifest.manifest_path),
-            "model": "ordinary-least-squares",
-            "covariates": [],
+            "model": model,
+            "covariates": sorted(covariates.columns.tolist()) if covariates is not None else [],
+            "kinship": bool(kinship is not None),
+            "mlm_lambda": mlm_lambda if model in {"mlm", "gemma_mlm"} else None,
         }
         metadata = {
             "project_name": manifest.project_name,
@@ -143,7 +393,7 @@ def run_project(
         top = gwas.head(20).to_dict(orient="records")
         (run_dir / "results.json").write_text(
             json.dumps(
-                {"analysis": "gwas", "trait": trait, "n_variants": int(len(gwas)), "top_hits": top},
+                {"analysis": "gwas", "trait": trait, "model": model, "n_variants": int(len(gwas)), "top_hits": top},
                 indent=2,
                 ensure_ascii=False,
                 sort_keys=True,
@@ -159,8 +409,8 @@ def run_project(
             f"- Trait: {trait}",
             f"- Variants tested: {len(gwas)}",
             "",
-            "This run uses ordinary least squares without population-structure or other covariates.",
-            "Treat it as a transparent baseline, not as a mixed-model GWAS.",
+            f"This run uses the {model} model.",
+            "The mlm/gemma_mlm path is kinship-aware GLS with the supplied covariance and is not a wrapper around the GEMMA binary.",
             "",
             "## Top associations",
             "",
@@ -258,7 +508,12 @@ def run_project(
     if selected_analysis == "network":
         edges = read_table(manifest.resolve_input("edges"))
         network, summary = summarize_causal_network(edges, p_threshold=network_p_threshold)
+        mr_network = build_mr_network(edges, p_threshold=network_p_threshold)
+        modules = identify_network_modules(mr_network, min_nodes=module_min_nodes)
         network.to_csv(run_dir / "network.tsv", sep="\t", index=False)
+        mr_network.to_csv(run_dir / "mr_network.tsv", sep="\t", index=False)
+        modules.to_csv(run_dir / "network_modules.tsv", sep="\t", index=False)
+        plot_network(mr_network.rename(columns={"node_a": "source", "node_b": "target"}), run_dir / "network")
         config = {
             "tool_version": "2.0.0.dev0",
             "analysis": "network",
@@ -266,10 +521,17 @@ def run_project(
             "manifest": str(manifest.manifest_path),
             "p_threshold": network_p_threshold,
             "interpretation": "edge-summary-not-causal-proof",
+            "module_min_nodes": module_min_nodes,
         }
         (run_dir / "results.json").write_text(
             json.dumps(
-                {"analysis": "network", "summary": summary, "edges": network.to_dict(orient="records")},
+                {
+                    "analysis": "network",
+                    "summary": summary,
+                    "edges": network.to_dict(orient="records"),
+                    "mr_network_edges": int(len(mr_network)),
+                    "modules": modules.to_dict(orient="records"),
+                },
                 indent=2,
                 ensure_ascii=False,
                 sort_keys=True,
@@ -335,6 +597,59 @@ def run_project(
                 f"{row.pval:.8g} | {row.qval:.8g} |"
             )
         (run_dir / "report.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+        _write_run_manifest(run_dir, manifest, validation, config)
+        return run_dir
+
+    if selected_analysis == "coloc":
+        exposure = read_summary(str(manifest.resolve_input("exposure")), "exposure").data.rename(columns={"SNP": "variant_id"})
+        outcome = read_summary(str(manifest.resolve_input("outcome")), "outcome").data.rename(columns={"SNP": "variant_id"})
+        result = coloc_abf(exposure, outcome)
+        config = {
+            "tool_version": "2.0.0.dev0",
+            "analysis": "coloc",
+            "run_id": run_name,
+            "manifest": str(manifest.manifest_path),
+            "method": "Wakefield-ABF",
+        }
+        (run_dir / "results.json").write_text(json.dumps({"analysis": "coloc", **result}, indent=2) + "\n", encoding="utf-8")
+        (run_dir / "coloc.tsv").write_text(
+            "hypothesis\tposterior\n" + "\n".join(f"PP{i}\t{result[f'PP{i}']:.12g}" for i in range(5)) + "\n",
+            encoding="utf-8",
+        )
+        (run_dir / "report.md").write_text(
+            "# PlantMR colocalization report\n\n"
+            "Wakefield approximate-BF posterior probabilities are reported for H0-H4. "
+            "PP4 supports a shared variant under the supplied priors; it is not experimental validation.\n\n"
+            + "\n".join(f"- {key}: {value}" for key, value in result.items())
+            + "\n",
+            encoding="utf-8",
+        )
+        _write_run_manifest(run_dir, manifest, validation, config)
+        return run_dir
+
+    if selected_analysis == "mvmr":
+        exposure = read_table(manifest.resolve_input("exposure")).rename(columns={"SNP": "variant_id"})
+        outcome = read_summary(str(manifest.resolve_input("outcome")), "outcome").data.rename(columns={"SNP": "variant_id"})
+        if "exposure_id" not in exposure.columns:
+            raise ProjectManifestError("mvmr requires exposure input column exposure_id")
+        result = run_mvmr(exposure, outcome)
+        result.to_csv(run_dir / "mvmr.tsv", sep="\t", index=False)
+        config = {
+            "tool_version": "2.0.0.dev0",
+            "analysis": "mvmr",
+            "run_id": run_name,
+            "manifest": str(manifest.manifest_path),
+            "method": "inverse-variance-weighted-mvmr",
+        }
+        (run_dir / "results.json").write_text(json.dumps({"analysis": "mvmr", "results": result.to_dict(orient="records")}, indent=2) + "\n", encoding="utf-8")
+        (run_dir / "report.md").write_text(
+            "# PlantMR multivariable MR report\n\n"
+            "The model estimates conditional effects using the supplied exposure summary statistics. "
+            "Exposure covariance and horizontal pleiotropy are not automatically resolved.\n\n"
+            + result.to_string(index=False)
+            + "\n",
+            encoding="utf-8",
+        )
         _write_run_manifest(run_dir, manifest, validation, config)
         return run_dir
 
@@ -429,12 +744,14 @@ def run_project(
         warnings=warnings,
         config=config,
     )
+    plot_mr_forest(pd.DataFrame(result.methods), run_dir / "mr_forest")
     (run_dir / "run_manifest.json").write_text(
         json.dumps(
             {
                 "manifest": manifest.to_dict(),
                 "validation": validation,
                 "config": config,
+                "input_receipts": input_receipts(manifest),
                 "outputs": sorted(path.name for path in run_dir.iterdir()),
             },
             indent=2,

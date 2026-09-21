@@ -15,12 +15,13 @@ Repository: https://github.com/Zhangzhishuai-HIT/PlantMR
 ## PlantMR 2.x CLI-first platform
 
 The `platform-v2` development branch is rebuilding PlantMR as a practical,
-GUI-free plant causal multi-omics platform. It currently provides the
-`plantmr2` project workflow, shared input contracts, ordinary summary MR,
-transparent GWAS/QTL baselines, SMR/HEIDI, GO enrichment and causal-edge
-network summaries. The implementation is deliberately explicit about what
-is not yet a mixed-model GWAS, LD-aware multi-omics model or colocalization
-engine.
+GUI-free plant causal multi-omics platform. It now provides shared input
+contracts, genotype/phenotype QC, OLS and kinship-aware GLS GWAS, QTL,
+SAL/variant annotation, SMR/HEIDI, ABF colocalization, MVMR, GO enrichment,
+bidirectional MR networks/modules, provenance receipts and non-interactive
+plots. External GEMMA/GAPIT3/rMVP execution, full LD-aware fine-mapping and
+polyploid/pangenome-specialized models remain explicit follow-up dimensions,
+not silently claimed capabilities.
 
 Start with `plantmr2 init`, then `inspect`, `validate` and `run`. The full
 Chinese CLI and data-contract guide is in
@@ -149,6 +150,8 @@ More detail is available in:
 - `docs/manuscript-draft.zh-CN.md`
 - `docs/PlantMR-MRBIGR目标与超越路线.zh-CN.md`
 - `docs/PlantMR2-CLI使用与数据契约.zh-CN.md`
+- `docs/PlantMR-2.0-evidence-report.zh-CN.md`
+- `benchmarks/mrbigr_comparison/README.md`
 
 ## License
 

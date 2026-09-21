@@ -18,12 +18,37 @@ OPTIONAL_INPUTS = {
     "edges",
     "expression",
     "genotype",
+    "gwas",
+    "gene_annotation",
+    "kinship",
+    "covariates",
     "ld",
     "metabolite",
     "phenotype",
     "protein",
     "go_annotation",
     "selected_features",
+}
+
+EXPLANATIONS = {
+    "environment-slope": {
+        "estimand": "GLS slope of SNP-specific MR ratios against a prespecified environmental score",
+        "definition": "Change in the estimated MR effect per one unit increase of the supplied environment score.",
+        "assumptions": ["complete SNP-by-environment grid", "specified LD/environment covariance is adequate", "instrument validity is not created by the model"],
+        "not": ["not a generic MR-GxE implementation", "not a pleiotropy intercept", "not proof of a causal gene"],
+    },
+    "ordinary-mr": {
+        "estimand": "Effect of exposure on outcome under the instrumental-variable assumptions",
+        "definition": "The estimate uses harmonized genetic instruments and the selected MR estimator.",
+        "assumptions": ["relevance", "independence from unmeasured confounding", "exclusion restriction"],
+        "not": ["not randomized-trial evidence", "not immune to horizontal pleiotropy", "not automatic gene validation"],
+    },
+    "smr": {
+        "estimand": "Ratio effect of a molecular feature on a trait using the strongest molecular QTL",
+        "definition": "SMR combines the top exposure QTL with the outcome association; HEIDI diagnoses heterogeneity across shared SNPs.",
+        "assumptions": ["aligned alleles", "independent samples or negligible overlap covariance", "top QTL is a valid instrument"],
+        "not": ["not proof of colocalization", "not a complete LD-aware fine-mapping result"],
+    },
 }
 
 
@@ -83,7 +108,26 @@ def _build_parser() -> argparse.ArgumentParser:
     run.add_argument("--feature-role", default="expression")
     run.add_argument("--feature-id")
     run.add_argument("--network-p-threshold", type=float, default=0.05)
+    run.add_argument("--module-min-nodes", type=int, default=5)
+    run.add_argument("--model", choices=["ols", "mlm", "gemma_mlm"], default="ols")
+    run.add_argument("--mlm-lambda", type=float, default=1.0)
+    run.add_argument("--qc-maf-threshold", type=float, default=0.05)
+    run.add_argument("--missing-threshold", type=float, default=0.10)
+    run.add_argument("--impute", choices=["random", "mean0", "mean2", "mode", "mean", "median", "most_frequent"])
+    run.add_argument("--transform", choices=["none", "zscore", "log1p", "boxcox"], default="none")
+    run.add_argument("--sal-p-lead", type=float, default=5e-8)
+    run.add_argument("--sal-p-secondary", type=float, default=1e-5)
+    run.add_argument("--sal-r2", type=float, default=0.2)
+    run.add_argument("--sal-window", type=int, default=500000)
+    run.add_argument("--annotation-flank", type=int, default=2000)
+    run.add_argument("--environment-method", choices=["mean", "blue", "blup"], default="mean")
     run.add_argument("--json", action="store_true")
+    status = sub.add_parser("status", help="read existing run manifests without rerunning analyses")
+    status.add_argument("manifest")
+    status.add_argument("--json", action="store_true")
+    explain = sub.add_parser("explain", help="explain an estimand and its limits")
+    explain.add_argument("estimand", choices=sorted(EXPLANATIONS))
+    explain.add_argument("--json", action="store_true")
     return parser
 
 
@@ -138,7 +182,12 @@ def main(argv=None) -> int:
             payload = {
                 "command": "validate",
                 "analysis": selected_analysis,
-                **validate_project(manifest, required_inputs=required_inputs),
+                **validate_project(
+                    manifest,
+                    required_inputs=required_inputs,
+                    allow_multi_exposure=selected_analysis == "mvmr",
+                    allow_environment_repeats=selected_analysis in {"stratified-mr", "environment-heterogeneity"},
+                ),
             }
             _emit(payload, args.json)
             return 0 if payload["valid"] else 2
@@ -152,6 +201,19 @@ def main(argv=None) -> int:
                 feature_role=args.feature_role,
                 feature_id=args.feature_id,
                 network_p_threshold=args.network_p_threshold,
+                module_min_nodes=args.module_min_nodes,
+                model=args.model,
+                mlm_lambda=args.mlm_lambda,
+                qc_maf_threshold=args.qc_maf_threshold,
+                missing_threshold=args.missing_threshold,
+                impute=args.impute,
+                transform=args.transform,
+                sal_p_lead=args.sal_p_lead,
+                sal_p_secondary=args.sal_p_secondary,
+                sal_r2=args.sal_r2,
+                sal_window=args.sal_window,
+                annotation_flank=args.annotation_flank,
+                environment_method=args.environment_method,
             )
             _emit(
                 {
@@ -163,6 +225,33 @@ def main(argv=None) -> int:
                 },
                 args.json,
             )
+            return 0
+        if args.command == "status":
+            manifest = ProjectManifest.from_file(args.manifest)
+            output_dir = manifest.resolve_output_dir()
+            runs = []
+            if output_dir.exists():
+                for run_dir in sorted(path for path in output_dir.iterdir() if path.is_dir()):
+                    receipt = run_dir / "run_manifest.json"
+                    if not receipt.exists():
+                        continue
+                    try:
+                        data = json.loads(receipt.read_text(encoding="utf-8"))
+                        config = data.get("config", {})
+                        runs.append(
+                            {
+                                "run_id": run_dir.name,
+                                "analysis": config.get("analysis", ""),
+                                "complete": (run_dir / "results.json").exists() and (run_dir / "report.md").exists(),
+                                "outputs": sorted(path.name for path in run_dir.iterdir()),
+                            }
+                        )
+                    except (OSError, TypeError, ValueError) as exc:
+                        runs.append({"run_id": run_dir.name, "complete": False, "error": str(exc)})
+            _emit({"command": "status", "output_dir": str(output_dir), "runs": runs}, args.json)
+            return 0
+        if args.command == "explain":
+            _emit({"command": "explain", "name": args.estimand, **EXPLANATIONS[args.estimand]}, args.json)
             return 0
     except (ProjectManifestError, OSError, TypeError, ValueError, KeyError) as exc:
         if getattr(args, "json", False):
